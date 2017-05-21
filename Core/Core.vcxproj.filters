@@ -468,9 +468,6 @@
     <ClInclude Include="mpl\type_traits\is_function.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\type_traits\is_member.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\type_traits\is_member_ptr.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
@@ -563,6 +560,9 @@
     </ClInclude>
     <ClInclude Include="mpl\logic_equal.h">
       <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\is_base_same.h">
+      <Filter>mpl\type_traits</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

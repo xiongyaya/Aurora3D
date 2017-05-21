@@ -140,6 +140,7 @@
     <ClInclude Include="mpl\type_traits\is_arithmetic.h" />
     <ClInclude Include="mpl\type_traits\is_assignable.h" />
     <ClInclude Include="mpl\type_traits\is_base_of.h" />
+    <ClInclude Include="mpl\type_traits\is_base_same.h" />
     <ClInclude Include="mpl\type_traits\is_class.h" />
     <ClInclude Include="mpl\type_traits\is_compound.h" />
     <ClInclude Include="mpl\type_traits\is_const.h" />
@@ -156,7 +157,6 @@
     <ClInclude Include="mpl\type_traits\is_function.h" />
     <ClInclude Include="mpl\type_traits\is_fundamental.h" />
     <ClInclude Include="mpl\type_traits\is_integral.h" />
-    <ClInclude Include="mpl\type_traits\is_member.h" />
     <ClInclude Include="mpl\type_traits\is_member_fn_ptr.h" />
     <ClInclude Include="mpl\type_traits\is_member_obj_ptr.h" />
     <ClInclude Include="mpl\type_traits\is_member_ptr.h" />

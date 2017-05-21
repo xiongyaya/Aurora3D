@@ -9,13 +9,16 @@ using namespace std;
 
 int main()
 {
+	
+	//int& a = 1.1;
+
 	//std::is_enum<int>;
 	//ProcessTool();
 	//TestProprecessor();
-	//TestTypeTraits();
+	TestTypeTraits();
 	//std::bool_constant
 	//std::underlying_type<int>::type;
-	TestMpl();
+	//TestMpl();
 	getchar();
 	return 0;
 }

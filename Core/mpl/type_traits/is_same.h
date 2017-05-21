@@ -1,6 +1,6 @@
 #pragma once
 
-#include"../bool_.h"
+#include<Core/mpl/bool_.h>
 
 namespace Aurora3D
 {
@@ -9,5 +9,7 @@ namespace Aurora3D
 		//ingore const volatile
 		template<typename A,typename B> struct IsSame : public False_ {};
 		template<typename T> struct IsSame<T, T> :public True_ {};
+
+		
 	}
 }

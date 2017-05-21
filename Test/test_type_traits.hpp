@@ -2,6 +2,9 @@
 
 
 #include<iostream>
+#include<vector>
+#include<tuple>
+#include<string>
 #include<core/mpl/type_traits/add_const.h>
 #include<core/mpl/type_traits/add_volatile.h>
 #include<core/mpl/type_traits/add_cv.h>
@@ -27,6 +30,11 @@
 #include<Core/mpl/type_traits/is_member_ptr.h>
 #include<Core/mpl/type_traits/is_member_fn_ptr.h>
 #include<Core/mpl/type_traits/is_member_obj_ptr.h>
+#include<Core/mpl/type_traits/is_pointer.h>
+#include<Core/mpl/type_traits/is_array.h>
+#include<Core/mpl/type_traits/is_base_of.h>
+#include<Core/mpl/type_traits/is_assignable.h>
+#include<Core/mpl/type_traits/is_convertible.h>
 #include<core/mpl/type_traits/add_lvalue_ref.h>
 #include<core/mpl/type_traits/add_rvalue_ref.h>
 #include<core/mpl/type_traits/first_template_type.h>
@@ -57,14 +65,23 @@ using namespace std;
 using namespace Aurora3D::mpl;
 
 union TestUnion { int a; };
-class TestAbstract { public: virtual void Test() = 0; };
+class TestAbstract { public: virtual void Test() = 0; static void TestStatic() {}; };
 class TestDrivied :public TestAbstract { public: virtual void Test() override {};  void VPrintf(int a,...) {} int data; };
 class TestFinal final {};
 class TestEmpty {};
 
+class TestTrivialConstruct1
+{
+public:
+	TestTrivialConstruct1() :a(0) {}
+private:
+	int a;
+};
+
 enum TestNormalEnum { EnumValue = 0 };
 enum class TestEnumClassInt8 :Aurora3D::int8 { value = 1 };
 enum class TestEnumClassUint8 :Aurora3D::uint8 { value = 1 };
+
 
 inline void __stdcall TestStdCall()
 {}
@@ -114,8 +131,6 @@ inline void TestTypeTraits()
 	//TEST_TYPE_CONVERTER_BATCH(AddPointer);
 	//TEST_TYPE_CONVERTER_BATCH(boost::add_pointer);
 
-	IntegralType<int, 1> value1;
-
 	cout << " test AddLValueRef" << endl;
 	//TEST_TYPE_CONVERTER_BATCH(AddLValueRef);
 	//TEST_TYPE_CONVERTER_BATCH(boost::add_lvalue_reference);
@@ -149,9 +164,6 @@ inline void TestTypeTraits()
 	cout << " test ArrayLen" << endl;
 	//TEST_TYPE_VALUE_BATCH(ArrayLen, (int, int[3], const int[4], volatile int[4][5], const volatile int[3][4][5], int[], int[][3]));
 
-
-	//std::is_member_function_pointer<T>
-
 	cout << " test AlignmentOf" << endl;
 	//TEST_TYPE_VALUE_BATCH(AlignmentOf, (int, char, short, long long, int[2], int *, long long *, int&&, int&));
 	
@@ -166,7 +178,6 @@ inline void TestTypeTraits()
 	//std::aligned_storage<4, 128>::type data6;
 	//cout << " data size:" << sizeof(data5) <<" size2:"<<sizeof(data6) << endl;
 
-	
 	cout << " test IsConst" << endl;
 	//TEST_TYPE_VALUE_BATCH(IsConst, (void, char, const int, volatile const float, double const [2], double const * const, double& const, long * const [2] ))
 
@@ -185,11 +196,39 @@ inline void TestTypeTraits()
 	//TEST_TYPE_VALUE_BATCH(IsMemberPtr, (int, decltype(printf), decltype(TestStdCall), decltype(&TestDrivied::Test), decltype(&TestDrivied::VPrintf), decltype(&TestDrivied::data), decltype(&TestAbstract::Test)));
 	//TEST_TYPE_VALUE_BATCH(IsMemberObjPtr, (int, decltype(printf), decltype(TestStdCall), decltype(&TestDrivied::Test), decltype(&TestDrivied::VPrintf), decltype(&TestDrivied::data), decltype(&TestAbstract::Test)));
 
+	cout << " test IsBaseOf" << endl;
+	cout << " is base of value:" << IsBaseOf<int, int>::value << endl;
+	cout << " is base of value:" << IsBaseOf<TestAbstract, TestDrivied>::value << endl;
+	cout << " is base of value:" << IsBaseOf<TestDrivied, TestDrivied>::value << endl;
+	cout << " is derive from value:" << IsDeriveFrom<int, int>::value << endl;
+	cout << " is derive from value:" << IsDeriveFrom<TestDrivied, TestAbstract>::value << endl;
+	cout << " is derive from value:" << IsDeriveFrom<TestDrivied, TestDrivied>::value << endl;
+
+	cout << " test IsAssignable/IsConvertible" << endl;
+	
+	cout << " is RValueAssignable:" << IsRValueAssignable<int,int>::value << endl;
+	cout << " is RValueAssignable:" << IsRValueAssignable<int,double>::value << endl;
+	cout << " is RValueAssignable:" << IsRValueAssignable<string, double>::value << endl;
+	cout << " is RValueAssignable:" << IsRValueAssignable<TestAbstract*, TestDrivied*>::value << endl;
+	cout << " is LValueAssignable:" << IsLValueAssignable<int, int>::value << endl;
+	cout << " is LValueAssignable:" << IsLValueAssignable<const int, int>::value << endl;
+
+	cout << " is LValueAssignable:" << IsLValueAssignable<int, double>::value << endl;
+	cout << " is LValueAssignable:" << IsLValueAssignable<string, double>::value << endl;
+	cout << " is LValueAssignable:" << IsLValueAssignable<TestAbstract*, TestDrivied*>::value << endl;
+	cout << " is LValueAssignable:" << IsLValueAssignable<TestAbstract, TestDrivied>::value << endl;
+
+	cout << " is Convertible:" << IsConvertible<int, int>::value << endl;
+	cout << " is Convertible:" << IsConvertible<const int, int>::value << endl;
+	cout << " is Convertible:" << IsConvertible<double, int>::value << endl;
+	cout << " is Convertible:" << IsConvertible<double, string>::value << endl;
+	cout << " is Convertible:" << IsConvertible<TestDrivied*, TestAbstract*>::value << endl;
+	cout << " is Convertible:" << IsConvertible<TestDrivied, TestAbstract>::value << endl;
 
 
 	cout << " test IsFunction" << endl;
-	auto lamda = []() {};
-	TEST_TYPE_VALUE_BATCH(IsFunction, (decltype(printf), decltype(TestTypeTraits), decltype(lamda), decltype(TestStdCall), decltype(TestFastCall), decltype(TestNoExcept)));
+	//auto lamda = []() {};
+	//TEST_TYPE_VALUE_BATCH(IsFunction, (decltype(printf), decltype(TestTypeTraits), decltype(lamda), decltype(TestStdCall), decltype(TestFastCall), decltype(TestNoExcept)));
 	//TEST_TYPE_VALUE_BATCH(std::is_function, (decltype(printf), decltype(TestTypeTraits), decltype(lamda), decltype(TestStdCall), decltype(TestFastCall)));
 
 	cout << " test IsIntegral" << endl;
@@ -219,6 +258,36 @@ inline void TestTypeTraits()
 	cout << " 10. test IsRef " << endl;
 	//TEST_TYPE_VALUE_BATCH(IsRef, A3D_PP_COMPOSE((int, int const, int volatile, int const volatile), (A3D_PP_NULL, &, &&, *)));
 
+	cout << " test IsPointer" << endl;
+	//TEST_TYPE_VALUE_BATCH(IsPointer, (void, void * const, void*&, int **,void(*)(int), decltype(&TestFastCall), decltype(&TestAbstract::TestStatic) ) );
+	
+	cout << " test IsArray" << endl;
+	//typedef int Int2[2];
+	//TEST_TYPE_VALUE_BATCH(IsArray, (void, char volatile [], int *[2], int[2], Int2 const, char[4]));
+
+	
+	/*cout << " test __is_pod/IsPod" << endl;
+	cout << " void      value:" << __is_pod(void) << endl;
+	cout << " nullptr_t value:" << __is_pod(nullptr_t) << endl;
+	cout << " int       value:" << __is_pod(int) << endl;
+	cout << " float     value:" << __is_pod(float) << endl;
+	cout << " function ptr value:" << __is_pod(int(*)(char)) << endl;
+	cout << " int*      value:" << __is_pod(int*) << endl;
+	cout << " memfnptr  value:" << __is_pod(decltype(&TestDrivied::Test)) << endl;
+	cout << " memobjptr value:" << __is_pod(decltype(&TestDrivied::data)) << endl;
+	cout << " enum class value:" << __is_pod(TestEnumClassInt8) << endl;
+	cout << " enum normal value:" << __is_pod(TestNormalEnum) << endl;
+	cout << " union      value:" << __is_pod(TestUnion) << endl;
+	cout << " empty class value:" << __is_pod(TestEmpty) << endl;
+	cout << " trivial value:" << __is_pod(TestTrivialConstruct1) << endl;
+	cout << " trivial value:" << __has_trivial_constructor(TestTrivialConstruct1) << endl;
+	cout << " abstract class value:" << __is_pod(TestAbstract) << endl;
+	cout << " virtual class value:" << __is_pod(TestDrivied) << endl;
+	cout << " array value:" << __is_pod(int[2]) << endl;
+	cout << " lref  value:" << __is_pod(int&) << endl;
+	cout << " rref  value:" << __is_pod(int&&) << endl;
+	cout << " function value:" << __is_pod(void(int)) << endl;*/
+	
 	cout << " 12. test RemoveConst " << endl;
 	//TEST_TYPE_CONVERTER_BATCH(RemoveConst);
 	//TEST_TYPE_CONVERTER_BATCH(boost::remove_const);
