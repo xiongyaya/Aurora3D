@@ -1,0 +1,24 @@
+#pragma once
+
+//lookup table
+#define A3D_PP_BIT2x2_ADD(x1,x0,y1,y0)      A3D_PP_BIT2x2_ADD_FAST(x1,x0,y1,y0)
+#define A3D_PP_BIT2x2_ADD_FAST(x1,x0,y1,y0) A3D_PP_BIT2x2_ADD_VALUE##x1##x0##y1##y0
+//   result (sign,high,low)
+//   sign = 1 means carry one for high bit2x2
+//   sign = 0 means no carry
+#define A3D_PP_BIT2x2_ADD_VALUE0000 0,0,0
+#define A3D_PP_BIT2x2_ADD_VALUE0001 0,0,1
+#define A3D_PP_BIT2x2_ADD_VALUE0010 0,1,0
+#define A3D_PP_BIT2x2_ADD_VALUE0011 0,1,1
+#define A3D_PP_BIT2x2_ADD_VALUE0100 0,0,1
+#define A3D_PP_BIT2x2_ADD_VALUE0101 0,1,0
+#define A3D_PP_BIT2x2_ADD_VALUE0110 0,1,1
+#define A3D_PP_BIT2x2_ADD_VALUE0111 1,0,0
+#define A3D_PP_BIT2x2_ADD_VALUE1000 0,1,0
+#define A3D_PP_BIT2x2_ADD_VALUE1001 0,1,1
+#define A3D_PP_BIT2x2_ADD_VALUE1010 1,0,0
+#define A3D_PP_BIT2x2_ADD_VALUE1011 1,0,1
+#define A3D_PP_BIT2x2_ADD_VALUE1100 0,1,1
+#define A3D_PP_BIT2x2_ADD_VALUE1101 1,0,0
+#define A3D_PP_BIT2x2_ADD_VALUE1110 1,0,1
+#define A3D_PP_BIT2x2_ADD_VALUE1111 1,1,0

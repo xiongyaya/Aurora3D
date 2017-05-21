@@ -1,0 +1,9 @@
+*.sdf
+*.opensdf
+Debug/*
+Release/*
+*.VC.db
+.vs
+3rd/*
+!3rd/boost/*
+x64/*
