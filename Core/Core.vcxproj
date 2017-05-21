@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{9CF25D83-D719-4757-B9E5-D21517BD5A7C}</ProjectGuid>
     <RootNamespace>Core</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -101,12 +102,14 @@
     <ClInclude Include="math\vector2.h" />
     <ClInclude Include="math\vector3.h" />
     <ClInclude Include="math\vector4.h" />
+    <ClInclude Include="mpl\arithmetic_max.h" />
+    <ClInclude Include="mpl\arithmetic_min.h" />
     <ClInclude Include="mpl\decay.h" />
+    <ClInclude Include="mpl\integral_type.h" />
     <ClInclude Include="mpl\logic_less.h" />
     <ClInclude Include="mpl\logic_not_equal.h" />
     <ClInclude Include="mpl\logic_equal.h" />
     <ClInclude Include="mpl\logic_and.h" />
-    <ClInclude Include="mpl\arithmetic.h" />
     <ClInclude Include="mpl\bool_.h" />
     <ClInclude Include="mpl\logic_less_equal.h" />
     <ClInclude Include="mpl\ratio.h" />
@@ -124,16 +127,28 @@
     <ClInclude Include="mpl\type_traits\add_lvalue_ref.h" />
     <ClInclude Include="mpl\type_traits\add_pointer.h" />
     <ClInclude Include="mpl\type_traits\add_rvalue_ref.h" />
+    <ClInclude Include="mpl\type_traits\add_signed.h" />
+    <ClInclude Include="mpl\type_traits\add_unsigned.h" />
     <ClInclude Include="mpl\type_traits\add_volatile.h" />
     <ClInclude Include="mpl\type_traits\aligned_storage.h" />
+    <ClInclude Include="mpl\type_traits\aligned_union.h" />
     <ClInclude Include="mpl\type_traits\align_of.h" />
     <ClInclude Include="mpl\type_traits\array_dim.h" />
     <ClInclude Include="mpl\type_traits\array_len.h" />
+    <ClInclude Include="mpl\type_traits\common_type.h" />
     <ClInclude Include="mpl\type_traits\is_abstract.h" />
     <ClInclude Include="mpl\type_traits\is_arithmetic.h" />
+    <ClInclude Include="mpl\type_traits\is_assignable.h" />
+    <ClInclude Include="mpl\type_traits\is_base_of.h" />
     <ClInclude Include="mpl\type_traits\is_class.h" />
     <ClInclude Include="mpl\type_traits\is_compound.h" />
     <ClInclude Include="mpl\type_traits\is_const.h" />
+    <ClInclude Include="mpl\type_traits\is_constructible.h" />
+    <ClInclude Include="mpl\type_traits\is_convertible.h" />
+    <ClInclude Include="mpl\type_traits\is_copy_assignable.h" />
+    <ClInclude Include="mpl\type_traits\is_copy_constructible.h" />
+    <ClInclude Include="mpl\type_traits\is_default_constructible.h" />
+    <ClInclude Include="mpl\type_traits\is_destructible.h" />
     <ClInclude Include="mpl\type_traits\is_empty.h" />
     <ClInclude Include="mpl\type_traits\is_enum.h" />
     <ClInclude Include="mpl\type_traits\is_final.h" />
@@ -145,15 +160,20 @@
     <ClInclude Include="mpl\type_traits\is_member_fn_ptr.h" />
     <ClInclude Include="mpl\type_traits\is_member_obj_ptr.h" />
     <ClInclude Include="mpl\type_traits\is_member_ptr.h" />
+    <ClInclude Include="mpl\type_traits\is_move_assignable.h" />
+    <ClInclude Include="mpl\type_traits\is_move_constructible.h" />
     <ClInclude Include="mpl\type_traits\is_nullptr_t.h" />
+    <ClInclude Include="mpl\type_traits\is_object.h" />
     <ClInclude Include="mpl\type_traits\is_pod.h" />
     <ClInclude Include="mpl\type_traits\is_pointer.h" />
+    <ClInclude Include="mpl\type_traits\is_polymorphic.h" />
     <ClInclude Include="mpl\type_traits\is_same.h" />
-    <ClInclude Include="mpl\type_traits\get_first_type.h" />
+    <ClInclude Include="mpl\type_traits\first_template_type.h" />
     <ClInclude Include="mpl\type_traits\is_array.h" />
     <ClInclude Include="mpl\type_traits\is_lvalue_ref.h" />
     <ClInclude Include="mpl\type_traits\is_ref.h" />
     <ClInclude Include="mpl\type_traits\is_rvalue_ref.h" />
+    <ClInclude Include="mpl\type_traits\is_scalar.h" />
     <ClInclude Include="mpl\type_traits\is_signed.h" />
     <ClInclude Include="mpl\type_traits\is_union.h" />
     <ClInclude Include="mpl\type_traits\is_unsigned.h" />
@@ -168,6 +188,7 @@
     <ClInclude Include="mpl\type_traits\remove_top_const.h" />
     <ClInclude Include="mpl\type_traits\remove_ref.h" />
     <ClInclude Include="mpl\type_traits\remove_volatile.h" />
+    <ClInclude Include="mpl\type_traits\underlying_type.h" />
     <ClInclude Include="preprocessor\bit4x4_add.h" />
     <ClInclude Include="preprocessor\bit4x4_equal.h" />
     <ClInclude Include="preprocessor\bit4x4_less.h" />

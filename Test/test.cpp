@@ -3,6 +3,7 @@
 #include<tuple>
 #include"test_proprecessor.hpp"
 #include"test_type_traits.hpp"
+#include"test_mpl.hpp"
 
 using namespace std;
 
@@ -11,8 +12,10 @@ int main()
 	//std::is_enum<int>;
 	//ProcessTool();
 	//TestProprecessor();
-	TestTypeTraits();
-
+	//TestTypeTraits();
+	//std::bool_constant
+	//std::underlying_type<int>::type;
+	TestMpl();
 	getchar();
 	return 0;
 }

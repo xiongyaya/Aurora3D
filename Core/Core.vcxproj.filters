@@ -108,9 +108,6 @@
     <ClInclude Include="mpl\if.h">
       <Filter>mpl</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\arithmetic.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
     <ClInclude Include="container\vector.h">
       <Filter>container</Filter>
     </ClInclude>
@@ -175,9 +172,6 @@
       <Filter>mpl</Filter>
     </ClInclude>
     <ClInclude Include="mpl\logic_and.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\logic_equal.h">
       <Filter>mpl</Filter>
     </ClInclude>
     <ClInclude Include="mpl\logic_not_equal.h">
@@ -411,9 +405,6 @@
     <ClInclude Include="mpl\tuple.h">
       <Filter>mpl</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\type_traits\get_first_type.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
     <ClInclude Include="preprocessor\seq_foreach_2p.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
@@ -503,6 +494,75 @@
     </ClInclude>
     <ClInclude Include="mpl\type_traits\is_nullptr_t.h">
       <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\is_scalar.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\is_object.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\is_polymorphic.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\is_constructible.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\is_default_constructible.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\is_copy_constructible.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\is_move_constructible.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\is_assignable.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\is_copy_assignable.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\is_move_assignable.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\is_destructible.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\is_base_of.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\is_convertible.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\add_unsigned.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\common_type.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\underlying_type.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\aligned_union.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\first_template_type.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\add_signed.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\integral_type.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\arithmetic_min.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\arithmetic_max.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\logic_equal.h">
+      <Filter>mpl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

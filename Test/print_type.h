@@ -2,7 +2,7 @@
 #include<iostream>
 #include<string>
 #include<iomanip>
-#include<Core/mpl/type_traits/get_first_type.h>
+#include<Core/mpl/type_traits/first_template_type.h>
 using namespace std;
 
 
@@ -133,6 +133,6 @@ struct TypeName
 {
 	void operator()()
 	{
-		cout<<"      "<< left<<setw(40) <<TypeNameHelper<typename FirstTemplParam<T>::type >{}()<<" ==> " << TypeNameHelper<typename T::type >{}() << endl;
+		cout<<"      "<< left<<setw(40) <<TypeNameHelper<typename FirstTemplateType<T>::type >{}()<<" ==> " << TypeNameHelper<typename T::type >{}() << endl;
 	}
 };

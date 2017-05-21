@@ -6,6 +6,8 @@
 #include<core/mpl/type_traits/add_volatile.h>
 #include<core/mpl/type_traits/add_cv.h>
 #include<core/mpl/type_traits/add_top_const.h>
+#include<core/mpl/type_traits/add_unsigned.h>
+#include<core/mpl/type_traits/add_signed.h>
 #include<core/mpl/type_traits/remove_top_const.h>
 #include<core/mpl/type_traits/is_void.h>
 #include<core/mpl/type_traits/is_lvalue_ref.h>
@@ -27,7 +29,7 @@
 #include<Core/mpl/type_traits/is_member_obj_ptr.h>
 #include<core/mpl/type_traits/add_lvalue_ref.h>
 #include<core/mpl/type_traits/add_rvalue_ref.h>
-#include<core/mpl/type_traits/get_first_type.h>
+#include<core/mpl/type_traits/first_template_type.h>
 #include<core/mpl/type_traits/remove_cv.h>
 #include<core/mpl/type_traits/remove_volatile.h>
 #include<core/mpl/type_traits/remove_const.h>
@@ -43,6 +45,8 @@
 #include<core/preprocessor/seq_foreach_2p.h>
 #include<core/preprocessor/seq_compose.h>
 #include<core/preprocessor/sign.h>
+#include<Core/mpl/integral_type.h>
+#include<Core/type.h>
 
 #include<boost/type_traits.hpp>
 
@@ -58,7 +62,9 @@ class TestDrivied :public TestAbstract { public: virtual void Test() override {}
 class TestFinal final {};
 class TestEmpty {};
 
-
+enum TestNormalEnum { EnumValue = 0 };
+enum class TestEnumClassInt8 :Aurora3D::int8 { value = 1 };
+enum class TestEnumClassUint8 :Aurora3D::uint8 { value = 1 };
 
 inline void __stdcall TestStdCall()
 {}
@@ -84,18 +90,9 @@ inline void TestTypeTraits()
 #define TEST_TYPE_CONVERTER(Type, Converter) TypeName<Converter<Type>>{}();
 //#define TEST_PRINT_2VALUE(value1, value2, Templ1, Templ2 )    cout<<" value 1:"<< Templ1<value1, value2> <<" value 2:"<<value2<<endl;
 //#define TEST_PRINT_2VALUE_BATCH(Func, Seq1, Seq2)    A3D_PP_FOREACH_2P( TEST_PRINT_2VALUE, Seq1, Seq2);  cout << endl;
-#define TEST_TYPE_CONVERTER_BATCH(Func)      A3D_PP_FOREACH(TEST_TYPE_CONVERTER, A3D_PP_COMPOSE_EX( (int, const int, volatile int, const volatile int), (A3D_PP_NULL, &, &&, *, [2], [2][3], []), void), Func) cout << endl;
-#define TEST_TYPE_VALUE_BATCH(Func, Seq)     A3D_PP_FOREACH( TEST_TYPE_VALUE, Seq, Func);  cout << endl;
-
-	//int * ptr[2];
-	//int a, b;
-	//ptr[0] = &a;
-	//ptr[1] = &b;
-	//int array2[2];
-	//int(*arr_ptr)[2];
-	//arr_ptr = &array2;
-
-	
+#define TEST_TYPE_CONVERTER_BATCH(Func)         A3D_PP_FOREACH(TEST_TYPE_CONVERTER, A3D_PP_COMPOSE_EX( (int, const int, volatile int, const volatile int), (A3D_PP_NULL, &, &&, *, [2], [2][3], []), void), Func) cout << endl;
+#define TEST_TYPE_CONVERTER_BATCH_SP(Func, Seq) A3D_PP_FOREACH(TEST_TYPE_CONVERTER, Seq, Func) cout << endl;
+#define TEST_TYPE_VALUE_BATCH(Func, Seq)        A3D_PP_FOREACH( TEST_TYPE_VALUE, Seq, Func);  cout << endl;
 
 	cout << "  test AddConst " << endl;
 	//TEST_TYPE_CONVERTER_BATCH(AddConst);
@@ -113,13 +110,11 @@ inline void TestTypeTraits()
 	//TEST_TYPE_CONVERTER_BATCH(AddTopConst);
 	//TEST_TYPE_CONVERTER_BATCH(RemoveTopConst);
 
-	cout << " test RemoveRef" << endl;
-	//TEST_TYPE_CONVERTER_BATCH(RemoveRef);
-	//TEST_TYPE_CONVERTER_BATCH(boost::remove_reference);
-
 	cout << " test AddPointer" << endl;
 	//TEST_TYPE_CONVERTER_BATCH(AddPointer);
 	//TEST_TYPE_CONVERTER_BATCH(boost::add_pointer);
+
+	IntegralType<int, 1> value1;
 
 	cout << " test AddLValueRef" << endl;
 	//TEST_TYPE_CONVERTER_BATCH(AddLValueRef);
@@ -132,6 +127,15 @@ inline void TestTypeTraits()
 	cout << " test AddPointer" << endl;
 	//TEST_TYPE_CONVERTER_BATCH(AddPointer);
 	//TEST_TYPE_CONVERTER_BATCH(boost::add_pointer);
+
+	cout << " test UnderlyingType/AddUnsigned/AddSigned" << endl;
+	//TEST_TYPE_CONVERTER_BATCH_SP(UnderlyingType, (TestEnumClass1, TestEnumClass2, TestNormalEnum, TestAbstract));
+	//TEST_TYPE_CONVERTER_BATCH_SP(AddUnsigned, (unsigned char, char, signed char, short, signed short, unsigned short, long int, TestEnumClassInt8, TestEnumClassUint8, TestNormalEnum));
+	//TEST_TYPE_CONVERTER_BATCH_SP(AddSigned, (unsigned char, char, signed char, short, unsigned short, long int, TestEnumClassInt8, TestEnumClassUint8, TestNormalEnum));
+
+	cout << " test RemoveRef" << endl;
+	//TEST_TYPE_CONVERTER_BATCH(RemoveRef);
+	//TEST_TYPE_CONVERTER_BATCH(boost::remove_reference);
 
 	cout << " test RemoveAllExtent" << endl;
 	//TEST_TYPE_CONVERTER_BATCH(RemoveAllExtent);
@@ -181,9 +185,11 @@ inline void TestTypeTraits()
 	//TEST_TYPE_VALUE_BATCH(IsMemberPtr, (int, decltype(printf), decltype(TestStdCall), decltype(&TestDrivied::Test), decltype(&TestDrivied::VPrintf), decltype(&TestDrivied::data), decltype(&TestAbstract::Test)));
 	//TEST_TYPE_VALUE_BATCH(IsMemberObjPtr, (int, decltype(printf), decltype(TestStdCall), decltype(&TestDrivied::Test), decltype(&TestDrivied::VPrintf), decltype(&TestDrivied::data), decltype(&TestAbstract::Test)));
 
+
+
 	cout << " test IsFunction" << endl;
-	//auto lamda = []() {};
-	//TEST_TYPE_VALUE_BATCH(IsFunction, (decltype(printf), decltype(TestTypeTraits), decltype(lamda), decltype(TestStdCall), decltype(TestFastCall), decltype(TestNoExcept)));
+	auto lamda = []() {};
+	TEST_TYPE_VALUE_BATCH(IsFunction, (decltype(printf), decltype(TestTypeTraits), decltype(lamda), decltype(TestStdCall), decltype(TestFastCall), decltype(TestNoExcept)));
 	//TEST_TYPE_VALUE_BATCH(std::is_function, (decltype(printf), decltype(TestTypeTraits), decltype(lamda), decltype(TestStdCall), decltype(TestFastCall)));
 
 	cout << " test IsIntegral" << endl;

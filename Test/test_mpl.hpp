@@ -6,6 +6,11 @@ using namespace std;
 #include<Core/mpl/logic_or.h>
 #include<Core/mpl/logic_not.h>
 #include<Core/mpl/bool_.h>
+#include<Core/mpl/arithmetic_max.h>
+#include<Core/mpl/arithmetic_min.h>
+#include<Core/mpl/type_traits/aligned_union.h>
+#include<Core/mpl/int_.h>
+
 using namespace Aurora3D::mpl;
 
 inline void TestMpl()
@@ -44,4 +49,22 @@ inline void TestMpl()
 	cout << "value£º" << And<False_, True_>::value << endl;
 	cout << "value£º" << And<True_, True_, True_>::value << endl;
 	cout << "value£º" << And<True_, False_, True_>::value << endl;
+
+	cout << "value:" << Max<int, 1, 2, 3, 2, 1>::value << endl;
+	cout << "value:" << TypeMax<Int_<1>, Int_<2>, Int_<3>, Int_<2>, Int_<1> >::value << endl;
+	cout << "value:" << Min<int, 4, 2, 3, 2, 4>::value << endl;
+	cout << "value:" << TypeMin<Int_<1>, Int_<2>, Int_<3>, Int_<2>, Int_<1> >::value << endl;
+
+	AlignUnionType<1, int, double, float, long double>::type data;
+	cout << typeid(decltype(data)).name() << endl;
+
+
+	//cout << "value" << Max<int, 1>::value << endl;
+	//cout << "value" << Max<int, 1, 2>::value << endl;
+	
+	//cout << "value" << TypeMax<Int_<1> >::value << endl;
+	//cout << "value" << TypeMax<Int_<1>, Int_<2>>::value << endl;
+
+
+
 }

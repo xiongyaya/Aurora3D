@@ -16,10 +16,7 @@ namespace Aurora3D
 			template<typename T, bool IsVoid = IsVoid<T>::value> struct AddRValueRefHelper { typedef T&& type; };
 			template<typename T>                                 struct AddRValueRefHelper<T, true> { typedef T type; };
 		}
-
-		
 		template<typename T> struct AddRValueRef: public detail::AddRValueRefHelper<T>{};
-
 	}
 }
 

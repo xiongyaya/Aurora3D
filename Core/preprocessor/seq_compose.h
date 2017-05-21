@@ -23,7 +23,7 @@
 #define A3D_PP_COMPOSE3(seq1, seq2, seq3) A3D_PP_COMPOSE(A3D_PP_COMPOSE(seq1,seq2), seq3)
 #define A3D_PP_COMPOSE3_EX(seq1, seq2, seq3,...)   A3D_PP_COMPOSE_EX(A3D_PP_COMPOSE(seq1,seq2), seq3, __VA_ARGS__)
 
-#define A3D_PP_COMPOSE_HELPER(seq1, seq2, size1, size2)         A3D_PP_WHILE(A3D_PP_COMPOSE_CONDI, A3D_PP_COMPOSE_UPDATE,A3D_PP_COMPOSE_REPEAT, seq1, seq2, size2, size1, size2)
+#define A3D_PP_COMPOSE_HELPER(seq1, seq2, size1, size2)         (A3D_PP_WHILE(A3D_PP_COMPOSE_CONDI, A3D_PP_COMPOSE_UPDATE,A3D_PP_COMPOSE_REPEAT, seq1, seq2, size2, size1, size2))
 #define A3D_PP_COMPOSE_EX_HELPER(seq1, seq2, size1, size2, ...) ( __VA_ARGS__, A3D_PP_WHILE(A3D_PP_COMPOSE_CONDI, A3D_PP_COMPOSE_UPDATE,A3D_PP_COMPOSE_REPEAT, seq1, seq2, size2, size1, size2))
 
 

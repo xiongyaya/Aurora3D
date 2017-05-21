@@ -12,7 +12,6 @@ namespace Aurora3D
 			template<size_t len, size_t align, typename T, bool align_less> struct Align;
 		}
 		
-
 		template<size_t len, size_t align> struct AlignedStorage :public detail::Align<len, align, int8, align <= alignof(int8)> {};
 		template<typename T>               struct AlignedTypeStorage :public AlignedStorage<sizeof(T), alignof(T)> {};
 
@@ -60,7 +59,6 @@ namespace Aurora3D
 			template<size_t len, size_t align>             struct Align<len, align, int32, false> { typedef typename Align<len, align, int64, align <= alignof(int64)>::type  type; };
 			template<size_t len, size_t align>             struct Align<len, align, int16, false> { typedef typename Align<len, align, int32, align <= alignof(int32)>::type  type; };
 			template<size_t len, size_t align>             struct Align<len, align, int8, false> { typedef typename Align<len, align, int16, align <= alignof(int16)>::type  type; };
-
 		} //detail
 
 		
