@@ -17,6 +17,7 @@ int main()
 	//TestProprecessor();
 	TestTypeTraits();
 	std::has_virtual_destructor<int>;
+	
 	//std::bool_constant
 	//std::underlying_type<int>::type;
 	//TestMpl();

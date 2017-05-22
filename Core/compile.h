@@ -1,18 +1,50 @@
 #pragma once
 
-//make event macro useful, or event macro called with empty
-#define AURORA3D_EVENT
-
-//check c++ version
-#if __cplusplus < 201103L && _MSC_VER<1800
-#	error "only compile with standard greater or equal to c++11!"
+//OS
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+#	define AURORA3D_OS_WINDOW
+#	define A3D_MAX_PATH        MAX_PATH
+#	define A3D_ANSI_LINE_TERMINATOR "\r\n"
+#	define A3D_WIDE_LINE_TERMINATOR WSTR("\r\n")
+#elif defined(linux) || defined(__linux) || defined(__linux__)
+#   if defined(ANDROID) || defined(__ANDROID__)
+#		define AURORA3D_OS_ANDROID
+#   else
+#		define AURORA3D_OS_LINUX
+#   endif
+#	define A3D_MAX_PATH    PATH_MAX
+#	define A3D_ANSI_LINE_TERMINATOR "\n"
+#	define A3D_WIDE_LINE_TERMINATOR WSTR("\n")
+#elif  defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
+#	if defined(__IPHONEOS__)
+#      define  AURORA3D_OS_APPLE
+#   else
+#      define  AURORA3D_OS_MAC
+#   endif
+#	define A3D_MAX_PATH    1024
+#	define A3D_ANSI_LINE_TERMINATOR "\r"
+#	define A3D_WIDE_LINE_TERMINATOR L##"\r"
+#else
+#error "OS not support"
 #endif
 
-//check platform
-#if !defined(linux) && !defined(__linux) && !defined(__linux__) && \
-	!defined(_WIN32) && !defined(_WIN64)  && !defined(__APPLE__) || defined(__arm__)
-#	error "platform not support!"
+
+//compiler
+#if defined(_MSC_VER) && _MSC_VER>=1800
+#define A3D_COMPILER_MSVC
+#elif defined(__clang__) && __cplusplus >=201103L
+#define A3D_COMPILER_CLANG
+#elif defined(__GNUC__) && !defined(__ibmxl__) && __cplusplus >=201103L
+#define A3D_COMPILER_GCC
+#elif defined(__INTEL_COMPILER) || defined(__ICL) || defined(__ICC) || defined(__ECC) && __cplusplus >=201103L
+#define A3D_COMPILER_INTEL
+#else
+#error "compiler not support"
 #endif
+
+//window, linux, apple are all little endian
+#define AURORA3D_LITTLE_ENDIAN                                       1
+#define AURORA3D_CACHE_OPT                                           1
 
 //archecture 
 #if (defined(__x86_64__) || defined(_M_X64) || defined(_WIN64) \
@@ -24,43 +56,24 @@
 #  define AURORA3D_ARCH64                                            0
 #endif
 
-//window, linux, apple are all little endian
-#define AURORA3D_LITTLE_ENDIAN                                       1
+
+//vector math support
+#	if defined(_M_IX86) || defined(__i386__) || defined(_M_X64) || defined(__x86_64__) || defined(__amd64__) //intel or amd
+#		define AURORA3D_SSE                                         	 
+#   elif  defined(_M_ARM) || defined(_M_ARM64) //mali 
+#		define AURORA3D_NEON                          
+#	else
+#		define AURORA3D_FPU  //float compute
+#	endif
 
 
-//platform. window, linux, android, apple, mac
-#if defined(_WIN32) || defined(_WIN64) 
-#	define  AURORA3D_DESKTOP										 1
-#	define  AURORA3D_WINDOW
-#	undef max
-#	undef min
-#elif defined(linux) || defined(__linux) || defined(__linux__)
-#	define AURORA3D_LINUX
-#   if defined(ANDROID) || defined(__ANDROID__)
-#		define AURORA3D_DESKTOP                                      0
-#   else
-#		define AURORA3D_DESKTOP                                      1
-#   endif
-#elif defined(__APPLE__)
-#	define AURORA3D_MAC
-#	if defined(__IPHONEOS__)
-#		define AURORA3D_DESKTOP                                      0
-#   else 
-#		define AURORA3D_DESKTOP                                      1
-#   endif
-#else
-#   error "platform not support!"
-#endif
-
-//compile mode. debug and release
+//compile mode. debug or release
 #if  defined(DEBUG) || defined _DEBUG
-#define  AURORA3D_DEBUG												1
+#define  AURORA3D_DEBUG												 1
 #endif
 
-#define  WSTR(str)  L##str
-#   define AURORA3D_CACHE_OPT  
-#if  defined(_MSC_VER)  ///ms-vs
-#   define A3D_COMPILER_MSVC
+
+#if  defined(A3D_COMPILER_MSVC)  
 #	define A3D_MS_ALIGN(n)     __declspec(align(n))
 #	define A3D_GCC_ALIGN(n) 
 #	define A3D_DLLEXPORT       __declspec(dllexport)    //building as a library
@@ -74,16 +87,12 @@
 #	define A3D_STDCALL	       __stdcall										
 #	define A3D_FORCEINLINE     __forceinline						
 #	define A3D_FORCENOINLINE   __declspec(noinline)
-#	define A3D_MAX_PATH        MAX_PATH
-#	define AURORA3D_SSE        
-#	define A3D_ANSI_LINE_TERMINATOR "\r\n"
-#	define A3D_WIDE_LINE_TERMINATOR WSTR("\r\n")
-#elif defined(AURORA3D_LINUX) && defined(__clang__) ///linux or window clang
+#elif defined(A3D_COMPILER_GCC) ||  defined(A3D_COMPILER_CLANG) //linux or  clang
 #	define A3D_MS_ALIGN(n) 
 #	define A3D_GCC_ALIGN(n)	__attribute__((aligned(n)))
 #	define A3D_DLLEXPORT	__attribute__((visibility("default")))
 #	define A3D_DLLIMPORT	__attribute__((visibility("default")))
-#	define A3D_DEPRECATED(version, msg) __attribute__((deprecated(MESSAGE "please update your code")))
+#	define A3D_DEPRECATED(version, msg) __attribute__((deprecated(msg "please update your code")))
 #	define A3D_LIKELY(state)   __builtin_expect(!!(x),1)
 #	define A3D_UNLIKELY(state) __builtin_expect(!!(x),0)
 #	define A3D_CDECL	  		
@@ -91,17 +100,6 @@
 #	define A3D_STDCALL	  
 #	define A3D_FORCEINLINE inline __attribute__ ((always_inline))
 #	define A3D_FORCENOINLINE __attribute__((noinline))	
-#	define A3D_MAX_PATH    PATH_MAX
-#	if defined(_M_IX86) || defined(__i386__) || defined(_M_X64)
-	|| defined(__x86_64__) || defined (__amd64__) 
-#		define AURORA3D_SSE                                         	 
-#   elif  defined(_M_ARM) || defined(_M_ARM64) //mali 
-#		define AURORA3D_NEON                          
-#	else
-#		define AURORA3D_FPU  //float compute
-#	endif
-#	define A3D_ANSI_LINE_TERMINATOR "\n"
-#	define A3D_WIDE_LINE_TERMINATOR WSTR("\n")
 #else ///mac
 #	define A3D_MS_ALIGN(n) 
 #	define A3D_GCC_ALIGN(n)	__attribute__((aligned(n)))
@@ -119,13 +117,9 @@
 #		define A3D_FORCEINLINE inline __attribute__ ((always_inline))
 #	endif
 #	define A3D_FORCENOINLINE __attribute__((noinline))	
-#	define A3D_MAX_PATH    1024
-#   define AURORA3D_SSE 
-#	define A3D_ANSI_LINE_TERMINATOR "\r"
-#	define A3D_WIDE_LINE_TERMINATOR WSTR("\r")
 #endif
 
-
+//lib or dll import export
 #define AURORA3D_STATIC
 #if defined(AURORA3D_STATIC)
 #	define AURORA3D_API 
@@ -136,6 +130,8 @@
 #		define AURORA3D_API A3D_DLLIMPORT
 #	endif
 #endif
+
+
 
 
 

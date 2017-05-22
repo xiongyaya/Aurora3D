@@ -6,6 +6,6 @@ namespace Aurora3D
 {
 	namespace mpl
 	{
-		template<int N> struct Int_:public Integral_<int, N>{};
+		template<size_t N> struct Sizet_:public Integral_<size_t, N>{};
 	}
 }

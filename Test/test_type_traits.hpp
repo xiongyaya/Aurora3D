@@ -6,7 +6,14 @@
 #include<tuple>
 #include<string>
 
+// pp lib
+#include<core/preprocessor/seq_foreach.h>
+#include<core/preprocessor/seq_foreach_2p.h>
+#include<core/preprocessor/seq_compose.h>
+#include<core/preprocessor/sign.h>
 
+// tt lib
+#include<Core/type.h>
 #include<core/mpl/type_traits/is_void.h>
 #include<core/mpl/type_traits/is_lvalue_ref.h>
 #include<core/mpl/type_traits/is_rvalue_ref.h>
@@ -28,10 +35,10 @@
 #include<Core/mpl/type_traits/is_pointer.h>
 #include<Core/mpl/type_traits/is_array.h>
 #include<Core/mpl/type_traits/is_base_of.h>
-#include<Core/mpl/type_traits/is_assignable.h>
 #include<Core/mpl/type_traits/is_convertible.h>
-#include<Core/mpl/type_traits/is_constructible.h>
-#include<Core/mpl/type_traits/is_destructible.h>
+#include<Core/mpl/type_traits/has_assigner.h>
+#include<Core/mpl/type_traits/has_constructor.h>
+#include<Core/mpl/type_traits/has_destructor.h>
 #include<core/mpl/type_traits/add_lvalue_ref.h>
 #include<core/mpl/type_traits/add_rvalue_ref.h>
 #include<core/mpl/type_traits/add_const.h>
@@ -41,7 +48,7 @@
 #include<core/mpl/type_traits/add_top_const.h>
 #include<core/mpl/type_traits/add_unsigned.h>
 #include<core/mpl/type_traits/add_signed.h>
-#include<core/mpl/type_traits/first_template_type.h>
+#include<core/mpl/type_traits/add_pointer.h>
 #include<core/mpl/type_traits/remove_cv.h>
 #include<core/mpl/type_traits/remove_top_const.h>
 #include<core/mpl/type_traits/remove_volatile.h>
@@ -49,17 +56,13 @@
 #include<core/mpl/type_traits/remove_ref.h>
 #include<core/mpl/type_traits/remove_all_extent.h>
 #include<core/mpl/type_traits/remove_extent.h>
-#include<core/mpl/type_traits/add_pointer.h>
+#include<core/mpl/type_traits/first_template.h>
 #include<core/mpl/type_traits/align_of.h>
 #include<core/mpl/type_traits/aligned_storage.h>
 #include<core/mpl/type_traits/array_dim.h>
 #include<core/mpl/type_traits/array_len.h>
-#include<core/preprocessor/seq_foreach.h>
-#include<core/preprocessor/seq_foreach_2p.h>
-#include<core/preprocessor/seq_compose.h>
-#include<core/preprocessor/sign.h>
-#include<Core/mpl/integral_type.h>
-#include<Core/type.h>
+
+
 #include<boost/type_traits.hpp>
 
 #include"print_type.h"
