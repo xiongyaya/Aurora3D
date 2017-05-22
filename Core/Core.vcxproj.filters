@@ -504,22 +504,7 @@
     <ClInclude Include="mpl\type_traits\is_constructible.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\type_traits\is_default_constructible.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\is_copy_constructible.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\is_move_constructible.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\type_traits\is_assignable.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\is_copy_assignable.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\is_move_assignable.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\is_destructible.h">
@@ -562,6 +547,12 @@
       <Filter>mpl</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\is_base_same.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\is_stand_layout.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\add_const_lref.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
   </ItemGroup>

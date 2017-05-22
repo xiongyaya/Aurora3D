@@ -17,6 +17,7 @@ namespace Aurora3D
 		
 		template<typename T> struct AddLValueRef:public detail::AddLValueRefHelper<T>{};
 
+
 	}
 }
 

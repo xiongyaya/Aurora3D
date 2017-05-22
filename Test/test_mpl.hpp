@@ -17,6 +17,7 @@ inline void TestMpl()
 {
 	std::is_polymorphic<int>;
 	std::is_base_of<int, int>;
+	
 	//test replace_type
 	//TypeName<replace_type<const int, int, long>::type>{}();
 	//TypeName<replace_type< volatile int, int, long>::type>{}();

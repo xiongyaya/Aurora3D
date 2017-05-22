@@ -6,9 +6,8 @@ namespace Aurora3D
 {
 	namespace mpl
 	{
-		//implicitly convertible
-		//string a = 1.1; not works  no suitable construction
-		// const int a = (const int)1; works
+		//implicitly convertible, use no-explicit-construction
+		//e.g.string a = 1.1; not works  no suitable construction
 		template<typename From, typename To> struct IsConvertible :public Bool_<__is_convertible_to(From,To)> {};
 	}
 }

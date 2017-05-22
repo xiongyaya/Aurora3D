@@ -123,6 +123,7 @@
     <ClInclude Include="mpl\size_t_.h" />
     <ClInclude Include="mpl\tuple.h" />
     <ClInclude Include="mpl\type_traits\add_const.h" />
+    <ClInclude Include="mpl\type_traits\add_const_lref.h" />
     <ClInclude Include="mpl\type_traits\add_cv.h" />
     <ClInclude Include="mpl\type_traits\add_lvalue_ref.h" />
     <ClInclude Include="mpl\type_traits\add_pointer.h" />
@@ -146,9 +147,6 @@
     <ClInclude Include="mpl\type_traits\is_const.h" />
     <ClInclude Include="mpl\type_traits\is_constructible.h" />
     <ClInclude Include="mpl\type_traits\is_convertible.h" />
-    <ClInclude Include="mpl\type_traits\is_copy_assignable.h" />
-    <ClInclude Include="mpl\type_traits\is_copy_constructible.h" />
-    <ClInclude Include="mpl\type_traits\is_default_constructible.h" />
     <ClInclude Include="mpl\type_traits\is_destructible.h" />
     <ClInclude Include="mpl\type_traits\is_empty.h" />
     <ClInclude Include="mpl\type_traits\is_enum.h" />
@@ -160,8 +158,6 @@
     <ClInclude Include="mpl\type_traits\is_member_fn_ptr.h" />
     <ClInclude Include="mpl\type_traits\is_member_obj_ptr.h" />
     <ClInclude Include="mpl\type_traits\is_member_ptr.h" />
-    <ClInclude Include="mpl\type_traits\is_move_assignable.h" />
-    <ClInclude Include="mpl\type_traits\is_move_constructible.h" />
     <ClInclude Include="mpl\type_traits\is_nullptr_t.h" />
     <ClInclude Include="mpl\type_traits\is_object.h" />
     <ClInclude Include="mpl\type_traits\is_pod.h" />
@@ -175,6 +171,7 @@
     <ClInclude Include="mpl\type_traits\is_rvalue_ref.h" />
     <ClInclude Include="mpl\type_traits\is_scalar.h" />
     <ClInclude Include="mpl\type_traits\is_signed.h" />
+    <ClInclude Include="mpl\type_traits\is_stand_layout.h" />
     <ClInclude Include="mpl\type_traits\is_union.h" />
     <ClInclude Include="mpl\type_traits\is_unsigned.h" />
     <ClInclude Include="mpl\type_traits\is_void.h" />

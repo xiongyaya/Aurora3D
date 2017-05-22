@@ -44,9 +44,6 @@ struct vector4_
 	T3 t3;
 };
 
-
-
-
 inline void TestProprecessor()
 {	
 	//BOOST_PP_ARRAY_ELEM()
