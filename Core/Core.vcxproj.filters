@@ -657,7 +657,7 @@
     <ClInclude Include="mpl\type_traits\has_binary_op.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\type_traits\has_plus_op.h">
+    <ClInclude Include="mpl\type_traits\has_plus.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
   </ItemGroup>

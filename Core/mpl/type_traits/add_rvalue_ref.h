@@ -1,6 +1,6 @@
 #pragma once
-#include"is_void.h"
-#include"is_ref.h"
+
+#include<Core/mpl/type_traits/is_void.h>
 
 namespace Aurora3D
 {

@@ -7,18 +7,34 @@
 #include<Core/mpl/logic_not.h>
 #include<Core/mpl/type_traits/is_void.h>
 #include<Core/mpl/type_traits/declval.h>
-
+#include<Core/mpl/type_traits/remove_cv.h>
+#include<Core/mpl/type_traits/remove_pointer.h>
+#include<Core/mpl/type_traits/remove_ref.h>
 namespace Aurora3D
 {
 	namespace mpl
 	{
 		namespace detail
 		{
+
+			template<typename Left, typename Right> struct ForbiddenHelper
+			{
+				typedef typename RemoveRef<Left>::type   lnoref;
+				typedef typename RemoveRef<Right>::type  rnoref;
+				typedef typename RemoveCV<lnoref>::type  lnocv;
+				typedef typename RemoveCV<rnoref>::type  rnocv;
+				typedef typename RemoveCV<typename RemoveRef< typename RemovePointer< lnoref>::type >::type>::type lnoptr;
+				typedef typename RemoveCV<typename RemoveRef< typename RemovePointer< rnoref>::type >::type>::type rnoptr;
+			};
+
+			//forbidden if one parameter is void
+			template<typename Left, typename Right> struct ForbiddenCommonHelper:public ForbiddenHelper<Left,Right>
+			{
+				static constexpr bool value = IsVoid<lnocv>::value || IsVoid<rnocv>::value;
+			};
+
 			//common forbidden case like int op void
-			template<typename Left, typename Right> struct ForbiddenCommon :False_ {};
-			template<typename T> struct ForbiddenCommon<T, void> :public True_ {};
-			template<typename T> struct ForbiddenCommon<void, T> :public True_ {};
-			template<> struct ForbiddenCommon<void, void> :public True_ {};
+			template<typename Left, typename Right> struct ForbiddenCommon :Bool_<ForbiddenCommonHelper<Left, Right>::value> {};
 
 			//test type
 			struct NoOperation { char pad[1]; };
@@ -37,8 +53,10 @@ namespace Aurora3D
 			//test return type
 			template<typename T> struct ReturnConvert
 			{
+				//match every type except NoOperation
 				static  constexpr HasOperation Convert(const T&) { return Declval<HasOperation>(); };
-				static  constexpr NoOperation  Convert(NoOperation) { return Declval<NoOperation>(); };
+				//match NoOperation
+				static  constexpr NoOperation  Convert(ImplicitConverted) { return Declval<NoOperation>(); };
 			};
 
 			//if   Left op Right exists,  BinaryOp::Op() return Non-NoOperation type, GET HasOperation type
@@ -60,6 +78,8 @@ namespace Aurora3D
 				public Bool_< sizeof(HasOperation) == sizeof((BinaryOp::Op(),Declval<HasVoidReturn>()))> {};
 			template<typename BinaryOp> struct HasBinaryOpReturnVoid<BinaryOp, ingore_t> : public True_ {};
 
+			//operation overload contained in class(member function) left imply type is a left value reference, so Left can't be const T 
+			//Left or Right type qualified with & and && passed to operation will miss
 			template<typename ForbiddenSpecial, typename BinaryOp, typename Left, typename Right, typename Ret, bool is_void = IsVoid<Ret>::value >
 			struct HasBinaryOp :public And<
 				Not< ForbiddenCommon<Left, Right>>,

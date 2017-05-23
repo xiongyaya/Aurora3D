@@ -1,4 +1,5 @@
 #pragma once
+
 #include<Core/mpl/type_traits/is_enum.h>
 
 namespace Aurora3D

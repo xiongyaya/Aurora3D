@@ -233,7 +233,7 @@ inline void TestTypeTraits()
 	//TEST_TYPE_VALUE_BATCH(std::is_function, (decltype(printf), decltype(TestTypeTraits), decltype(lamda), decltype(TestStdCall), decltype(TestFastCall)));
 
 	cout << " test IsIntegral" << endl;
-	//TEST_TYPE_VALUE_BATCH(IsIntegral, (void, char, char16_t, char32_t, wchar_t, short, int, long long, long, float, double, long double, nullptr_t));
+	//TEST_TYPE_VALUE_BATCH(IsIntegral, (void, char, char&,int&&, char16_t, char32_t, wchar_t, short, int, long long, long, float, double, long double, nullptr_t));
 
 	cout << " test IsFloat" << endl;
 	//TEST_TYPE_VALUE_BATCH(IsFloat, (void, char, char16_t, char32_t, wchar_t, short, int, long long, long, const float, double, long double, nullptr_t));

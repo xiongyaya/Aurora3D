@@ -16,31 +16,20 @@ using namespace std;
 class Test
 {
 public:
-	Test operator+(const Test&) {};
-	void operator&(int) {};
+	void print() { cout << " type: " << TypeNameHelper<decltype(*this)>{}() << endl;; }
+	Test operator+(int) { return Test{}; };
+	
+	void operator&(int) { Test{}; };
 };
-
+static Test operator+(Test, Test) { Test{}; };
 
 int main()
 {
-	std::tuple<int>;
-	//std::tuple_cat
-	//int& a = 1.1;
-	//std::is_enum<int>;
 	//ProcessTool();
 	//TestProprecessor();
 	TestTypeTraits();
-	std::has_virtual_destructor<int>;
-	cout << " + :" << boost::has_plus<Test, Test, int*>::value << endl;
-	cout << " - :" << boost::has_minus<Test, std::string, void>::value << endl;
-	cout << " & :" << boost::has_bit_and<Test, int>::value << endl;
-
-	using namespace Aurora3D::mpl;
-	cout << " value:" << HasPlusOperation<int, int,int>::value << endl;
-	
-	//std::bool_constant
-	//std::underlying_type<int>::type;
 	//TestMpl();
+
 	getchar();
 	return 0;
 }
