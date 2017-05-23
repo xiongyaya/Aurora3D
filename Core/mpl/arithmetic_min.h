@@ -18,7 +18,7 @@ namespace Aurora3D
 		template<typename First, typename... Others> struct TypeMin : public Min<typename First::value_type, First::value, TypeMin<Others...>::value> {};
 		template<typename T> struct TypeMin<T> :public Integral_<typename T::value_type, T::value> {};
 
-		//for int and size_t min version
+		//for int and size_t min version 
 		template<int t1, int... others> struct IntMin :public Min<int, t1, others...> {};
 		template<size_t t1, size_t... others> struct SizetMin :public Min<size_t, t1, others...> {};
 	}

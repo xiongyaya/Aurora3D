@@ -1,23 +1,20 @@
 #pragma once
 
-#include<core/preprocessor/seq_compose.h>
-#include<core/preprocessor/seq_foreach.h>
-#include<core/preprocessor/sign.h>
+#include<Core/preprocessor/seq_foreach.h>
 
 namespace Aurora3D
 {
 	namespace mpl
 	{
-
 		template<typename T> struct FirstTemplateType { typedef T type; };
 
-#define FIRST_TEMPLATE_TYPE(TemplateType)                                                                \
-		template<typename T> struct TemplateType;                                                        \
+#define FIRST_TEMPLATE_TYPE(TemplateType)                                                           \
+		template<typename T> struct TemplateType;                                                   \
 		template<typename T> struct FirstTemplateType< TemplateType<T> > :public FirstTemplateType<T> {};
 
-#define TEMPLATE_SET  (AddConst, AddCV, AddLValueRef, AddRValueRef, AddPointer, AddUnsigned, AddVolatile,        \
+#define TEMPLATE_SET  (AddConst, AddCV, AddLValueRef, AddRValueRef, AddPointer, AddUnsigned, AddVolatile,\
                 AddSigned, AddConstLRef,\
-				RemoveAllExtent, RemoveConst, RemoveCV, RemoveExtent, RemovePointer, RemoveRef, RemoveTopConst,  \
+				RemoveAllExtent, RemoveConst, RemoveCV, RemoveExtent, RemovePointer, RemoveRef, RemoveTopConst,\
 				RemoveVolatile, UnderlyingType)
 		A3D_PP_FOREACH(FIRST_TEMPLATE_TYPE, TEMPLATE_SET);
 #undef FIRST_TEMPLATE_TYPE

@@ -25,6 +25,9 @@
     <Filter Include="preprocessor">
       <UniqueIdentifier>{aaa970fb-831d-4f26-8748-97760875ca7f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mpl\function">
+      <UniqueIdentifier>{3c46b793-a52e-4ac8-9059-8a936f6d4f72}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="math\capsule.h">
@@ -102,9 +105,6 @@
     <ClInclude Include="mpl\placeholder.h">
       <Filter>mpl</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\param.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\if.h">
       <Filter>mpl</Filter>
     </ClInclude>
@@ -128,9 +128,6 @@
     </ClInclude>
     <ClInclude Include="container\skip_set.h">
       <Filter>container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\pair.h">
-      <Filter>mpl</Filter>
     </ClInclude>
     <ClInclude Include="container\concurrent_hash_map.h">
       <Filter>container</Filter>
@@ -157,9 +154,6 @@
       <Filter>mpl</Filter>
     </ClInclude>
     <ClInclude Include="mpl\logic_less_equal.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\ratio.h">
       <Filter>mpl</Filter>
     </ClInclude>
     <ClInclude Include="mpl\bool_.h">
@@ -336,9 +330,6 @@
     <ClInclude Include="preprocessor\while.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\tuple.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
     <ClInclude Include="preprocessor\seq_foreach_2p.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
@@ -487,9 +478,6 @@
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\has_not_equal.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\has_plus.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\has_post_dec.h">
@@ -659,6 +647,18 @@
     </ClInclude>
     <ClInclude Include="mpl\sizet_.h">
       <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\ingore_t.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\declval.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\has_binary_op.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\has_plus_op.h">
+      <Filter>mpl\type_traits</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

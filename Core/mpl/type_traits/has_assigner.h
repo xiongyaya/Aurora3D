@@ -1,6 +1,6 @@
 #pragma once
 
-#include"../bool_.h"
+#include<Core/mpl/bool_.h>
 #include<Core/mpl/logic_or.h>
 #include<Core/mpl/type_traits/remove_cv.h>
 #include<Core/mpl/type_traits/is_base_same.h>
@@ -35,9 +35,9 @@ namespace Aurora3D
 		template<typename T> struct HasNoThrowCopyAssigner :public Bool_<HAS_NOTHROW_ASSIGNER(typename AddLValueRef<T>::type, typename AddConstLRef<T>::type)> {};
 
 		//T a = T&& b
-		template<typename T> struct HasMoveAssigner :public Bool_<IS_ASSIGNABLE(typename AddLValueRef<T>::type, T)> {};
-		template<typename T> struct HasTriviallyMoveAssigner :public Bool_<IS_TRIVIALLY_ASSIGNABLE(typename AddLValueRef<T>::type, T)> {};
-		template<typename T> struct HasNoThrowMoveAssigner :public Bool_<IS_NOTHROW_ASSIGNABLE(typename AddLValueRef<T>::type, T)> {};
+		template<typename T> struct HasMoveAssigner :public Bool_<HAS_ASSIGNER(typename AddLValueRef<T>::type, T)> {};
+		template<typename T> struct HasTriviallyMoveAssigner :public Bool_<HAS_TRIVIAL_ASSIGNER(typename AddLValueRef<T>::type, T)> {};
+		template<typename T> struct HasNoThrowMoveAssigner :public Bool_<HAS_NOTHROW_ASSIGNER(typename AddLValueRef<T>::type, T)> {};
 
 #undef HAS_ASSIGNER
 #undef HAS_TRIVIAL_ASSIGNER

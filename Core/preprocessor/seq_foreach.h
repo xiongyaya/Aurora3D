@@ -1,8 +1,9 @@
 #pragma once
 
-
 #include<core/preprocessor/seq_size.h>
 #include<core/preprocessor/seq_at.h>
+
+
 
 //seq max length 63
 #define A3D_PP_FOREACH(call, seq, ...)  A3D_PP_FOREACH_STEP1(seq, call, __VA_ARGS__)

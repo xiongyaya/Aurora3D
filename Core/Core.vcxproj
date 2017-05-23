@@ -104,6 +104,7 @@
     <ClInclude Include="math\vector4.h" />
     <ClInclude Include="mpl\arithmetic_max.h" />
     <ClInclude Include="mpl\arithmetic_min.h" />
+    <ClInclude Include="mpl\ingore_t.h" />
     <ClInclude Include="mpl\integral_.h" />
     <ClInclude Include="mpl\logic_less.h" />
     <ClInclude Include="mpl\logic_not_equal.h" />
@@ -111,16 +112,12 @@
     <ClInclude Include="mpl\logic_and.h" />
     <ClInclude Include="mpl\bool_.h" />
     <ClInclude Include="mpl\logic_less_equal.h" />
-    <ClInclude Include="mpl\ratio.h" />
     <ClInclude Include="mpl\if.h" />
     <ClInclude Include="mpl\int_.h" />
     <ClInclude Include="mpl\logic_not.h" />
     <ClInclude Include="mpl\logic_or.h" />
-    <ClInclude Include="mpl\pair.h" />
-    <ClInclude Include="mpl\param.h" />
     <ClInclude Include="mpl\placeholder.h" />
     <ClInclude Include="mpl\sizet_.h" />
-    <ClInclude Include="mpl\tuple.h" />
     <ClInclude Include="mpl\type_traits\add_const.h" />
     <ClInclude Include="mpl\type_traits\add_const_lref.h" />
     <ClInclude Include="mpl\type_traits\add_const_ref.h" />
@@ -139,8 +136,10 @@
     <ClInclude Include="mpl\type_traits\array_len.h" />
     <ClInclude Include="mpl\type_traits\common.h" />
     <ClInclude Include="mpl\type_traits\decay.h" />
+    <ClInclude Include="mpl\type_traits\declval.h" />
     <ClInclude Include="mpl\type_traits\first_template.h" />
     <ClInclude Include="mpl\type_traits\has_assigner.h" />
+    <ClInclude Include="mpl\type_traits\has_binary_op.h" />
     <ClInclude Include="mpl\type_traits\has_bit_and.h" />
     <ClInclude Include="mpl\type_traits\has_bit_not.h" />
     <ClInclude Include="mpl\type_traits\has_bit_or.h" />
@@ -168,7 +167,7 @@
     <ClInclude Include="mpl\type_traits\has_negate.h" />
     <ClInclude Include="mpl\type_traits\has_new.h" />
     <ClInclude Include="mpl\type_traits\has_not_equal.h" />
-    <ClInclude Include="mpl\type_traits\has_plus.h" />
+    <ClInclude Include="mpl\type_traits\has_plus_op.h" />
     <ClInclude Include="mpl\type_traits\has_post_dec.h" />
     <ClInclude Include="mpl\type_traits\has_post_inc.h" />
     <ClInclude Include="mpl\type_traits\has_refer_member.h" />
