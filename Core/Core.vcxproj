@@ -92,7 +92,6 @@
     <ClInclude Include="math\capsule.h" />
     <ClInclude Include="math\color4.h" />
     <ClInclude Include="math\euler.h" />
-    <ClInclude Include="math\int_rect.h" />
     <ClInclude Include="math\math_fwd.h" />
     <ClInclude Include="math\math_impl.h" />
     <ClInclude Include="math\matrix4.h" />
@@ -279,15 +278,6 @@
     <ClInclude Include="preprocessor\uint8_to_byte.h" />
     <ClInclude Include="preprocessor\while.h" />
     <ClInclude Include="type.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="math\math_impl_fpu.inl" />
-    <None Include="math\math_impl_neon.inl" />
-    <None Include="math\math_impl_sse.inl" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="math\math_impl.cpp" />
-    <ClCompile Include="math\vector.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,12 +2,548 @@
 
 #include<cmath>
 #include<cassert>
+#if defined(AURORA3D_SSE)
+#	include<emmintrin.h>
+#elif defined(AURORA3D_NEON)
+#	include <arm_neon.h>
+#endif
 #include"math_fwd.h"
 	
 namespace Aurora3D
 {
-	namespace MathImpl
+	namespace math
 	{
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////  Float / Vector/ Matrix Operation Declare //////////////////////////////////////////////////////////
+#if 1
+#if defined(AURORA3D_SSE)
+		// float128   HIGH 3 2 1 0 LOW
+		// float[4]      w z y x  
+		typedef __m128  float128;
+		typedef __m128i uint128;
+
+		union misc128
+		{
+			float128  f128;
+			uint128	  u128;
+		};
+
+		struct float128x4
+		{
+			float128 V[4];
+			float128& operator[](int i) { return V[i]; }
+			const float128& operator[](int i) const { return V[i]; }
+		};
+#elif defined(AURORA3D_NEON)
+		typedef float32x4_t A3D_GCC_ALIGH(16) float128;
+		typedef float32x2_t A3D_GCC_ALIGH(16) float64;
+		typedef uint32x4_t  A3D_GCC_ALIGH(16) uint128;
+
+		struct float128x4 {
+			float128 V[4];
+			float128& operator[](int i) {
+				return V[i];
+			}
+			const float128& operator[](int i) const {
+				return V[i];
+			}
+		};
+#endif 
+
+#if defined(AURORA3D_SSE) || defined(AURORA3D_NEON)
+
+		//common constant
+		constexpr float128 kVectorOne = { 1.0f, 1.0f, 1.0f, 1.0f };
+		constexpr float128 kVectorZero = { 0.0f, 0.0f, 0.0f, 0.0f };
+		constexpr float128 kVectorNegtiveOne = { -1.0f,-1.0f,-1.0f,-1.0f };
+		constexpr float128 kVectorHalf = { 0.5f, 0.5f, 0.5f, 0.5f };
+		constexpr float128 kVectorTwo = { 2.0f,2.0f,2.0f,2.0f };
+		constexpr float128 kVectorXOne = { 1.0f, 0.0f, 0.0f, 0.0f };
+		constexpr float128 kVectorYOne = { 0.0f, 1.0f, 0.0f, 0.0f };
+		constexpr float128 kVectorZOne = { 0.0f, 0.0f, 1.0f, 0.0f };
+		constexpr float128 kVectorWOne = { 0.0f, 0.0f, 0.0f, 1.0f };
+		constexpr float128 kVectorOddNegtive = { 1.0f, -1.0f, 1.0f, -1.0f };
+		constexpr float128 kVectorEvenNegtive = { -1.0f, 1.0f, -1.0f, 1.0f };
+		constexpr float128 kVectorEpside = { kMiddleEpside,kMiddleEpside,kMiddleEpside,kMiddleEpside };
+		constexpr float128 kVectorAllOneMask = { kAllOneMask ,kAllOneMask ,kAllOneMask ,kAllOneMask };
+		constexpr float128 kVectorOneOver2PI = { kOneOver2PI ,kOneOver2PI ,kOneOver2PI ,kOneOver2PI };
+		constexpr float128 kVector2PI = { k2PI ,k2PI ,k2PI ,k2PI };
+		constexpr float128 kVectorPI = { kPI ,kPI ,kPI ,kPI };
+		constexpr float128 kVectorHalfPI = { kHalfPI ,kHalfPI ,kHalfPI ,kHalfPI };
+		constexpr float128 kVector180OverPI = { k180OverPI,k180OverPI ,k180OverPI,k180OverPI };
+		constexpr float128 kVectorPIOver180 = { kPIOver180,kPIOver180 ,kPIOver180 ,kPIOver180 };
+		constexpr float128 kVectorXYZMask = { kAllOneMask, kAllOneMask, kAllOneMask, kAllZeroMask };
+		constexpr float128 kVectorAbsMask = { kHighestZero ,kHighestZero ,kHighestZero ,kHighestZero };
+		constexpr float128 kVectorSignMask = { kHighestOne ,kHighestOne ,kHighestOne ,kHighestOne };
+		constexpr float128 kVectorInfinte = { kInfinite ,kInfinite ,kInfinite ,kInfinite };
+
+		//xyzw = 0.0f
+		float128 VectorZero();
+
+		//xyzw = reinterpret_cast<float>(u)
+		float128 VectorLoad(uint32 u);
+
+		//xyzw = (F,F,F,F)
+		float128 VectorLoad(float F);
+
+		//xyzw = (x,y,z,w)
+		float128 VectorLoad(float x, float y, float z = 0.0f, float w = 0.0f);
+
+		//xyzw = reinterpret_cast<float>((x,y,z,w))
+		float128 VectorLoad(uint32 x, uint32 y, uint32 z = 0u, uint32 w = 0u);
+
+		//xyzw = (v[0],v[1],0.0f,0.0f), v no need aligned
+		float128 VectorLoad2Z0(const float *v);
+
+		//xyzw = (v[0],v[1],1.0f,0.0f), v no need aligned
+		float128 VectorLoad2Z1(const float *v);
+
+		//xyzw = (v[0],v[1],v[2],0.0f), v no need aligned
+		float128 VectorLoad3W0(const float *v);
+
+		//xyzw = (v[0],v[1],v[2],1.0f), v no need aligned
+		float128 VectorLoad3W1(const float *v);
+
+		//xyzw = (v[0],v[1],v[2],v[3]), v no need aligned
+		float128 VectorLoad4(const float *v);
+
+		//xyzw = (v[0],v[1],v[2],v[3]), v need aligned
+		float128 VectorLoad4Aligned(const float *v);
+
+		//v[i] = F
+		void VectorSet(float128& v, int i, float F);
+
+		//v[i] = U
+		void VectorSet(float128& v, int i, uint32 U);
+
+		//v.w = 0.0f
+		void VectorSetW0(float128& v);
+
+		//v.w = 1.0f
+		void VectorSetW1(float128& v);
+
+		// ret = v[i]
+		float VectorGetFloat(const float128& v, int i);
+
+		// ret = v[i]
+		uint32 VectorGetUint32(const float128& v, int i);
+
+		// ret = v[0] 
+		float VectorGetFirst(const float128& v);
+
+		//v.xy = (m[0],m[1])£¬m no need aligned
+		void  VectorStore2(const float128& v, float* m);
+
+		//v.xy = (m[0],m[1],m[2]),m no  need aligned
+		void  VectorStore3(const float128& v, float* m);
+
+		//v.xyzw = (m[0],m[1],m[2],m[3]), m no  need aligned
+		void  VectorStore4(const float128& v, float *m);
+
+		//v.xyzw = (m[0],m[1],m[2],m[3]), m need aligned
+		void  VectorStore4Aligned(const float128& v, float *m);
+
+		// v1 = v2
+		void  VectorStore4Aligned(const float128& v, float *m);
+
+		// v.xyzw = (m[0],m[1],m[2],m[3]), m need aligned, don't change cache
+		void VectorStore4AlignedNoCache(float128& v, float *m);
+
+		// v.xyzw = reinterpret_cast<float>(m[0],m[1],m[2],m[3])
+		void VectorStore4(const float128& v, uint32 *m);
+
+		// ret.xyzw = (v[p],v[p],v[p],v[p]£©
+		template<unsigned p> 
+		float128 VectorReplicate(const float128& v);
+
+		// ret.xyzw = (v[p0],v[p1],v[p2],v[p3])
+		template<unsigned p0, unsigned p1, unsigned p2, unsigned p3>
+		float128 VectorShuffle(const float128& v);
+
+		// ret.xyzw = (v1[p0],v1[p1],v2[p2],v2[p3])
+		template<unsigned p0, unsigned p1, unsigned p2, unsigned p3>
+		float128 VectorShuffle(const float128& v1, const float128& v2);
+
+		// ret.xyzw = (v1[0], v2[0], v1[1], v2[1])
+		float128 VectorInterleaveXY(const float128& v1 , const float128& v2);
+
+		// ret.xyzw = (v1[2], v2[2], v1[3], v2[3])
+		float128 VectorInterleaveZW(const float128& v1 , const float128& v2);
+
+		// ret.xyzw = ( v.x>0?1.0f:-1.0f, v.y>0?1.0f:-1.0f,v.z>0?1.0f:-1.0f,v.w>0?1.0f:-1.0f)
+		float128 VectorSign(const float128& v);
+
+		// ret.xyzw = v1.xyzw + v2.xyzw
+		float128 VectorAdd(const float128& v1, const float128& v2);
+
+		// v1 = v1 + v2
+		void VectorAddAssign(float128& v1, const float128& v2);
+
+		// ret = v1 + v2 + v3
+		float128 VectorAddTwice(const float128& v1, const float128& v2, const float128& v3);
+
+		// ret = v1 + v2 - v3
+		float128 VectorAddMinus(const float128& v1, const float128& v2, const float128& v3);
+
+		// ret = (v1+v2) * v3
+		float128 VectorAddMutiply(const float128& v1, const float128& v2, const float128& v3);
+
+		// ret = (v1+v2) / v3
+		float128 VectorAddDivide(const float128& v1, const float128& v2, const float128& v3);
+
+		// ret.xyzw = v1.xyzw - v2.xyzw
+		float128 VectorMinus(const float128& v1, const float128& v2);
+
+		// v1 = v1 - v2
+		void VectorMinusAssign(float128& v1, const float128 v2);
+
+		// ret = v1 - v2 - v3
+		float128 VectorMinusTwice(const float128& v1, const float128& v2, const float128& v3);
+
+		// ret = v1 - v2 + v3 
+		float128 VectorMinusAdd(const float128& v1, const float128& v2, const float128& v3);
+
+		// ret = (v1 - v2)*v3
+		float128 VectorMinusMutiply(const float128& v1, const float128& v2, const float128& v3);
+
+		// ret (v1-v2)/v3
+		float128 VectorMinusDivide(const float128& minus1, const float128& minus2, const float128& div);
+
+		// ret.xyzw = v1.xyzw * v2.xyzw
+		float128 VectorMultiply(const float128& v1, const float128& v2);
+
+		// ret = v.xyzw * scale
+		float128 VectorMultiply(const float128& v, float scale);
+
+		// v1 = v1*v2
+		void VectorMultiplyAssign(float128& v1, const float128& v2);
+
+		// v.xyzw = v.xyzw *scale
+		void VectorMultiplyAssign(float128& v, float scale);
+
+		// ret = v1 * v2 * v3
+		float128 VectorMultiplyTwice(const float128& v1, const float128& v2, const float128& v3);
+
+		// ret = v1*v2 +v3
+		float128 VectorMultiplyAdd(const float128& v1, const float128& v2, const float128& v3);
+
+		// ret = v1*v2 - v3
+		float128 VectorPreMultiplyMinus(const float128& v1, const float128& v2, const float128& v3);
+
+		// ret = v1 - v1*v2
+		float128 VectorPostMultiplyMinus(const float128& v1, const float128& v2, const float128& v3);
+
+		// ret = v1*v2/v3 
+		float128 VectorPreMultiplyDivide(const float128& v1, const float128& v2, const float128& v3);
+
+		// ret = v1/(v2*v3)
+		float128 VectorPostMultiplyDivide(const float128& v1, const float128& v2, const float128& v3);
+
+		// ret.xyzw = v1.xyzw / v2.xyzw
+		float128 VectorDivide(const float128& v1, const float128& v2);
+
+		// ret.xyzw = v1.xyzw / s
+		float128 VectorDivide(const float128& v1, float s);
+
+		// v1.xyzw = v1.xyzw/s
+		float128 VectorDivideAssign(const float128& v1, float s);
+
+		// v1 = v1 / v2;
+		float128 VectorDivideAssign(const float128& v1, const float128& v2);
+
+		// ret = v1 / (v2+v3)
+		float128 VectorDivideAdd(const float128& div1, const float128& div2, const float128& add);
+
+		// ret = v1 / v2 - v3
+		float128 VectorPreDivideMinus(const float128& v1, const float128& v2, const float128& v3);
+
+		// ret = v1 - v2 / v3
+		float128 VectorPostDivideMinus(const float128& v1, const float128& v2, const float128& v3);
+
+		//return mod1 - (int)(mod1/mod2)*mod2
+		float128 VectorMod(const float128& mod1, const float128& mod2);
+
+		// ret.xyzw = (v1.x|v2.x, v1.y|v2.y, v1.z|v2.z, v1.w|v2.w)
+		float128 VectorOr(const float128& v1, const float128& v2);
+
+		// ret.xyzw = (v1.x&v2.x, v1.y&v2.y, v1.z&v2.z, v1.w&v2.w)
+		float128 VectorAnd(const float128& v1, const float128& v2);
+
+		// ret.xyzw = ( v1.x&v2.x, v1.y&v2.y, v1.z&v2.z, v1.w&v2.w)
+		float128 VectorAndNot(const float128& v1, const float128& v2);
+
+		//ret.xyzw = ( v1.x^v2.x, v1.y^v2.y, v1.z^v2.z, v1.w^v2.w)
+		float128 VectorXor(const float128& v1, const float128& v2);
+
+		// true if v.xy == (0xffffffff,0xffffffff),else false
+		bool VectorTrue2(const float128& v);
+
+		// true if v.xyz == (0xffffffff,0xffffffff,0xffffffff),else false
+		bool VectorTrue3(const float128& v);
+
+		// true if v.xyz == (0xffffffff,0xffffffff,0xffffffff,0xffffffff),else false
+		bool VectorTrue4(const float128& v);
+
+		// true if v.x or v.y == 0xffffffff
+		bool VectorAnyTrue2(const float128& v);
+
+		// true if v.x or v.y or v.z == 0xffffffff
+		bool VectorAnyTrue3(const float128& v);
+
+		// true if v.x or v.y or v.z or v.w == 0xffffffff
+		bool VectorAnyTrue4(const float128& v);
+
+		// true if v.xy == (0, 0),else false
+		bool VectorFalse2(const float128& v);
+
+		// true if v.xyz == (0, 0, 0),else false
+		bool VectorFalse3(const float128& v);
+
+		// true if v.xyz == (0, 0, 0, 0),else false
+		bool VectorFalse4(const float128& v);
+
+		// true if v.x or v.y == 0
+		bool VectorAnyFalse2(const float128& v);
+
+		// true if v.x or v.y or v.z == 0
+		bool VectorAnyFalse3(const float128& v);
+
+		// true if v.x or v.y or v.z or v.w == 0
+		bool VectorAnyFalse4(const float128& v);
+
+		// ret.xyzw = (v1.x == v2.x? 0xffffffff:0, v1.y == v2.y? 0xffffffff:0,
+		// v1.z == v2.z? 0xffffffff:0, v1.w == v2.w? 0xffffffff:0)
+		float128 VectorEquals(const float128& v1, const float128& v2);
+
+		// Abs( v1.xyzw - v2.xyzw ) <= (Epside,Epside,Epside,Epside)
+		float128 VectorNearlyEquals(const float128& v1, const float128& v2, float epside = kMiddleEpside);
+
+		// ret.xyzw = (v1.x != v2.x? 0xffffffff:0, v1.y != v2.y? 0xffffffff:0,
+		// v1.z != v2.z? 0xffffffff:0, v1.w != v2.w? 0xffffffff:0)
+		float128 VectorNotEquals(const float128& v1, const float128& v2);
+
+		// ret.xyzw = (v1.x > v2.x? 0xffffffff:0, v1.y > v2.y? 0xffffffff:0,
+		// v1.z > v2.z? 0xffffffff:0, v1.w > v2.w? 0xffffffff:0)
+		float128 VectorGreater(const float128& v1, const float128& v2);
+
+		// ret.xyzw = (v1.x >= v2.x? 0xffffffff:0, v1.y >= v2.y? 0xffffffff:0,
+		// v1.z >= v2.z? 0xffffffff:0, v1.w >= v2.w? 0xffffffff:0)
+		float128 VectorGreaterEqual(const float128& v1, const float128& v2);
+
+		// ret.xyzw = (v1.x < v2.x? 0xffffffff:0, v1.y < v2.y? 0xffffffff:0,
+		// v1.z < v2.z? 0xffffffff:0, v1.w < v2.w? 0xffffffff:0)
+		float128 VectorLess(const float128& v1, const float128& v2);
+
+		// ret.xyzw = (v1.x <= v2.x? 0xffffffff:0, v1.y <= v2.y? 0xffffffff:0,
+		// v1.z <= v2.z? 0xffffffff:0, v1.w <= v2.w? 0xffffffff:0)
+		float128 VectorLessEqual(const float128& v1, const float128& v2);
+
+		// true if abs(v.xy ) < bound.xy
+		bool VectorInBound2(const float128& v, const float128& bound);
+
+		// true if abs(v.xyz ) < bound.xyz
+		bool VectorInBound3(const float128&v, const float128& bound);
+
+		// true if abs(v.xyzw ) < bound.xyzw
+		bool VectorInBound4(const float128&v, const float128& bound);
+
+		//ret.xyzw = ( max(v1.x,v2.x), max(v1.y,v2.y), max(v1.z,v2.z), max(v1.w,v2.w) )
+		float128 VectorMax(const float128& v1, const float128& v2);
+
+		//ret.xyzw = ( min(v1.x,v2.x), min(v1.y,v2.y), min(v1.z,v2.z), min(v1.w,v2.w) )
+		float128 VectorMin(const float128& v1, const float128& v2);
+
+		// true if  is v.x or v.y is Nan
+		bool VectorIsNaN2(const float128& v);
+
+		// true if is v.x or v.y or v.z is Nan
+		bool VectorIsNaN3(const float128& v);
+
+		// true if  v.x or v.y or v.z or v.w is Nan
+		bool VectorIsNaN4(const float128& v);
+
+		// true if v.x or v.y is INF
+		bool VectorIsInfinite2(const float128& v);
+
+		// true if v.x or v.y or v.z is INF
+		bool VectorIsInfinite3(const float128& v);
+
+		// true if v.x or v.y or v.z or v.w is INF
+		bool VectorIsInfinite4(const float128& v);
+
+		//  ret.xy = v1.x*v2.x+v1.y*v2.y
+		float128 VectorDot2(const float128& v1, const float128& v2);
+
+		//  ret.xyz = v1.x*v2.x+v1.y*v2.y+v1.z*v2.z
+		float128 VectorDot3(const float128& v1, const float128& v2);
+
+		//float dot = dot(v1.xyzw,v2.xyzw), ret.xyzw = (dot,dot,dot,dot)
+		float128 VectorDot4(const float128& v1, const float128& v2);
+
+		// 
+		float128 VectorCrossProduct3(const float128& v1, const float128& v2);
+
+		// ret.xy = sqrt( (v1.x-v2.x)^2 + (v1.y-v2.y)^2 )
+		float128 VectorDistance2(const float128& v1, const float128& v2);
+
+		// ret.xyz = sqrt( (v1.x-v2.x)^2 + (v1.y-v2.y)^2 + (v1.z-v2.z)^2 )
+		float128 VectorDistance3(const float128& v1, const float128& v2);
+
+		// ret.xy = sqrt( v.x^2 + v.y^2 )
+		float128 VectorLength2(const float128& v);
+
+		// ret.xyz = sqrt( v.x^2 + v.y^2 + v.z^2 )
+		float128 VectorLength3(const float128& v);
+
+		// ret.xy = v.xy * 1 / sqrt(v.x^2 + v.y^2)
+		float128 VectorNormalize2(const float128& v);
+
+		// ret.xy = v.xyz * 1 / sqrt(v.x^2 + v.y^2 + v.z^2)
+		float128 VectorNormalize3(const float128& v);
+
+		// ret.xy = v.xyzw * 1 / sqrt(v.x^2 + v.y^2 + v.z^2 + v.w^2)
+		float128 VectorNormalize4(const float128& v);
+
+		
+		// 3D ray reflect
+		//      incident   reflect
+		//          \  |  /|
+		//           \ | /
+		//     _____ _\|/_________
+		//     incident - 2 * dot(incident, normal)*normal 
+		float128 VectorReflect2(const float128 incident, const float128& normal);
+		float128 VectorReflect3(const float128 incident, const float128& normal);
+
+		// ret.xy = v.x+v.y
+		float128 VectorSumUp2(const float128& v);
+
+		// ret.xyz = v.x + v.y + v.z
+		float128 VectorSumUp3(const float128& v);
+
+		//float sumup = v.x+v.y+v.z+v.w, ret.xyzw = (sumup,sumup,sumup,sumup)
+		float128 VectorSumUp4(const float128& v);
+
+		//for bit from 0 to 128 ,if mask[bit] == 1? v1[bit] : v2[bit]
+		float128 VectorSelect(const float128& v1, const float128& v2, const float128& mask);
+		
+		// ret.xyzw = (int) v.xyzw
+		float128 VectorIntPart(const float128& v);
+
+		// ret.xyzw = v.xyzw - (int)v.xyzw
+		float128 VectorFracPart(const float128& v);
+
+		// ret.xyzw = (round(v.x),round(v.y), round(v.z), round(v.w)
+		float128 VectorRound(const float128& v);
+
+		// ret = ceil(v.xyzw)
+		float128 VectorCeil(const float128& v);
+
+		// ret = floor(v.xyzw)
+		float128 VectorFloor(const float128& v);
+
+		// ret.xyzw = -v.xyzw
+		float128 VectorNegate(const float128& v);
+
+		// ret.xyzw = abs(v.xyzw)
+		float128 VectorAbs(const float128& v);
+
+		// ret.xyzw = Approx( 1/v.xyzw ),  max error approximation less than 0.00036621
+		float128 VectorReciprocalApproximate(const float128& v1);
+
+		// ret.xyzw = 1/v.xyzw
+		float128 VectorReciprocal(const float128& v);
+
+		// ret.xyzw = sqrt( v.xyzw )
+		float128 VectorSqrt(const float128& v);
+
+		// ret.xyzw = Approx( 1/ sqrt(v.xyzw) ),  max error approximation less than 0.00036621
+		float128 VectorReciprocalSqrtApproximate(const float128& v);
+
+		// ret.xyzw = 1/sqrt( v.xyzw )
+		float128 VectorReciprocalSqrt(const float128& v);
+
+		// ret.xyzw = start.xyzw  + (end.xyzw -start.xyzw)*t
+		float128 VectorLerp(const float128& start, const float128& end, float t);
+
+		// ret.xyzw = (v.x>0?1.0f:0.0f,v.y>0?1.0f:0.0f,v.z>0?1.0f:0.0f,v.w>0?1.0f:0.0f)
+		float128 VectorStep(const float128& v);
+
+		// ret.xyzw = (v.x>0?0.0f:1.0f,v.y>0?0.0f:1.0f,v.z>0?0.0f:1.0f,v.w>0?0.0f:1.0f)
+		float128 VectorReverseStep(const float128& v);
+		
+		// for i from 0 to 3,  
+		// if(v[i]< = min[i]) ret[i] = min[i]  
+		// if(v[i] >= max[i]) ret[i] = max[i]
+		// else remain unchange
+		float128 VectorClamp(const float128& v, const float128& min, const float128& max);
+
+
+		// for i from 0 to 3,  
+		// if(v[i]< = 0.0f) ret[i] = 0.0f
+		// if(v[i] >= 1.0f) ret[i] = 1.0f;
+		// else remain unchange
+		float128 VectorSaturate(const float128& v);
+
+		// tranform v to degree angle
+		float128 VectorRadianToDegree(const float128& v);
+
+		// tranform v to radian angle
+		float128 VectorDegreeToRadian(const float128& v);
+
+
+		// ret = sin(v.xyzw ) , v.xyzw is radian angle, Max error of 0.001091
+		float128 VectorSinRadianFast(const float128& v);
+
+		// ret = sin(v.xyzw ) , v.xyzw is degree angle, Max error of 0.001091
+		float128 VectorSinDegreeFast(const float128& v);
+
+		// ret = cos(v.xyzw ) , v.xyzw is radian angle, Max error of 0.001091
+		float128 VectorCosRadianFast(const float128& v);
+
+		// ret = cos(v.xyzw ) , v.xyzw is degree angle, Max error of 0.001091
+		float128 VectorCosDegreeFast(const float128& v);
+
+		// computer sin and cos at some time, fast then sperate compute, radian angles
+		void VectorSinAndCosFast(float128& sin, float128& cos, const float128& radians);
+
+		// true if M is Identity matrix
+		bool MatrixIsIdentity(const float128x4& M);
+
+		// true if one element of M is NaN
+		bool MatrixIsNaN(const float128x4& M);
+
+		// true if one element of M is INF
+		bool MatrixIsInInfinite(const float128x4& M);
+
+		// C = A * B, No copy
+		void MatrixMultiplyNoCopy(const float128x4& A, const float128x4& B, float128x4& C);
+
+		// ret = A * B, copy matrix
+		float128x4 MatrixMultiply(const float128x4& A, const float128x4& B);
+
+		// ret.xyzw = (det,det,det,det), det = Determinant(M)
+		float128 MatrixDeterminant(const float128x4& M);
+
+		// transpose A to B, no copy
+		void MatrixTransposeNoCopy(const float128x4& A, float128x4& B);
+
+		// ret = transpose(A)
+		float128x4 MatrixTranspose(const float128x4& A);
+
+
+		// inverse Matrix, no copy
+		float128 MatrixInverse(const float128x4& original, float128x4& inverse);
+
+		// ret = M * v
+		float128 MatrixTransformVector(const float128x4& M, const float128& v);
+
+#endif  //#if defined(AURORA3D_SSE) || defined(AURORA3D_NEON)
+#endif  //Float / Vector/ Matrix Operation Declare
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////// FPU Operation //////////////////////////////////////////////////////////////////////////////////////
+#if 1
 		A3D_FORCEINLINE constexpr float FloatMax(float a, float b)
 		{
 			return a >= b ? a : b;
@@ -65,7 +601,7 @@ namespace Aurora3D
 			tmp.u32 &= 0x7fffffff;
 			return tmp.f32;
 		}
-		
+
 		A3D_FORCEINLINE float FloatRound(float F)
 		{
 			return floorf(F);
@@ -148,12 +684,58 @@ namespace Aurora3D
 			return atanf(F);
 		}
 
-		AURORA3D_API float FloatAtanPos(float X, float Y);
-		AURORA3D_API uint32 FloorLog2(uint32 V);
-
-		A3D_FORCEINLINE uint32 CeilLog2(uint32 V)
+		A3D_FORCEINLINE float  FloatAtanPos(float X, float Y)
 		{
-			unsigned floor = FloorLog2(V);
+			const float absX = FloatAbs(X);
+			const float absY = FloatAbs(Y);
+			const bool yAbsBigger = (absY > absX);
+			float t0 = yAbsBigger ? absY : absX; // Max(absY, absX)
+			float t1 = yAbsBigger ? absX : absY; // Min(absX, absY)
+
+			if (t0 == 0.f)
+				return 0.f;
+
+			float t3 = t1 / t0;
+			float t4 = t3 * t3;
+
+			static const float c[7] = {
+				+7.2128853633444123e-03f,
+				-3.5059680836411644e-02f,
+				+8.1675882859940430e-02f,
+				-1.3374657325451267e-01f,
+				+1.9856563505717162e-01f,
+				-3.3324998579202170e-01f,
+				+1.0f
+			};
+
+			t0 = c[0];
+			t0 = t0 * t4 + c[1];
+			t0 = t0 * t4 + c[2];
+			t0 = t0 * t4 + c[3];
+			t0 = t0 * t4 + c[4];
+			t0 = t0 * t4 + c[5];
+			t0 = t0 * t4 + c[6];
+			t3 = t0 * t3;
+			t3 = yAbsBigger ? (0.5f * kPI) - t3 : t3;
+			t3 = (X < 0.0f) ? kPI - t3 : t3;
+			t3 = (Y < 0.0f) ? -t3 : t3;
+			return t3;
+		}
+
+		A3D_FORCEINLINE uint32 FloatFloorLog2(uint32 Value)
+		{
+			uint32 pos = 0;
+			if (Value >= 1 << 16) { Value >>= 16; pos += 16; }
+			if (Value >= 1 << 8) { Value >>= 8; pos += 8; }
+			if (Value >= 1 << 4) { Value >>= 4; pos += 4; }
+			if (Value >= 1 << 2) { Value >>= 2; pos += 2; }
+			if (Value >= 1 << 1) { pos += 1; }
+			return (Value == 0) ? 0 : pos;
+		}
+
+		A3D_FORCEINLINE uint32 FloatCeilLog2(uint32 V)
+		{
+			unsigned floor = FloatFloorLog2(V);
 			if (V & (~(1 << floor))) return floor + 1;
 			return floor;
 		}
@@ -171,7 +753,7 @@ namespace Aurora3D
 		A3D_FORCEINLINE uint32 CountHeadZero(uint32 V)
 		{
 			if (0 == V) return 32;
-			return 31 - FloorLog2(V);
+			return 31 - FloatFloorLog2(V);
 		}
 
 		A3D_FORCEINLINE uint32 CountTailZero(uint32 V)
@@ -194,71 +776,921 @@ namespace Aurora3D
 
 		A3D_FORCEINLINE bool FloatInBound(float F, float B)
 		{
-			return FloatAbs(F)<=B;
+			return FloatAbs(F) <= B;
 		}
 
 		A3D_FORCEINLINE constexpr float FloatRadianToDegree(float F)
 		{
-			return F * MathConstant::k180OverPI;
+			return F * k180OverPI;
 		}
 
 		A3D_FORCEINLINE constexpr float FloatDegreeToRadian(float F)
 		{
-			return F * MathConstant::kPIOver180;
+			return F * kPIOver180;
 		}
-
-#if defined(AURORA3D_SSE) || defined(AURORA3D_NEON)
-	#if defined(AURORA3D_SSE)
-	#	include<emmintrin.h>
-	#	include"math_impl_sse.inl"
-	#else
-	#	include <arm_neon.h>
-	#	include"math_impl_neon.inl"
-	#endif
-
-		//common constant
-		static const float128 kVectorAbsMask = VectorLoad(kHighestZero);
-		static const float128 kVectorSignMask = VectorLoad(kHighestOne);
-		static const float128 kVectorInfinte = VectorLoad(kInfinite);
-		static const float128 kVectorZero = VectorLoad(0.0f);
-		static const float128 kVectorOne = VectorLoad(1.0f);
-		static const float128 kVectorNegtiveOne = VectorLoad(-1.0f);
-		static const float128 kVectorHalf = VectorLoad(0.5f);
-		static const float128 kVectorTwo = VectorLoad(2.0f);
-		static const float128 kVectorAllOneMask = VectorLoad(kAllOneMask);
-		static const float128 kVectorOneOver2PI = VectorLoad(kOneOver2PI);
-		static const float128 kVector2PI = VectorLoad(k2PI);
-		static const float128 kVectorPI = VectorLoad(kPI);
-		static const float128 kVectorHalfPI = VectorLoad(kHalfPI);
-		static const float128 kVector180OverPI = VectorLoad(k180OverPI);
-		static const float128 kVectorPIOver180 = VectorLoad(kPIOver180);
-		static const float128 kVectorXYZMask = VectorLoad(kAllOneMask,
-			kAllOneMask, kAllOneMask, kAllZeroMask);
-		static const float128 kVectorXOne = VectorLoad(1.0f, 0.0f, 0.0f, 0.0f);
-		static const float128 kVectorYOne = VectorLoad(0.0f, 1.0f, 0.0f, 0.0f);
-		static const float128 kVectorZOne = VectorLoad(0.0f, 0.0f, 1.0f, 0.0f);
-		static const float128 kVectorWOne = VectorLoad(0.0f, 0.0f, 0.0f, 1.0f);
-		static const float128 kVectorOddNegtive = VectorLoad(1.0f, -1.0f, 1.0f, -1.0f);
-		static const float128 kVectorEvenNegtive = VectorLoad(-1.0f, 1.0f, -1.0f, 1.0f);
-		static const float128 kVectorEpside = VectorLoad(kMiddleEpside);
 
 		//return 1 / sqrt(F)
 		A3D_FORCEINLINE float FloatReciprocalSqrt(float F)
 		{
+#if  defined(AURORA3D_SSE) || defined(AURORA3D_NEON)
 			return VectorGetFirst(VectorReciprocalSqrt(VectorLoad(F)));
+#else
+			return 1.0f / sqrtf(F);
+#endif
 		}
 
 		//return  Approx( 1 / sqrt(F) ), max error approximation less than 0.00036621
 		A3D_FORCEINLINE float FloatReciprocalSqrtApproximate(float F)
 		{
+#if  defined(AURORA3D_SSE) || defined(AURORA3D_NEON)
 			return VectorGetFirst(VectorReciprocalSqrtApproximate(VectorLoad(F)));
+#else
+			return 1.0f / sqrtf(F);
+#endif
 		}
 
 		//return  x^(1/2)
 		A3D_FORCEINLINE float FloatSqrt(float F)
 		{
+#if  defined(AURORA3D_SSE) || defined(AURORA3D_NEON)
 			return VectorGetFirst(VectorSqrt(VectorLoad(F)));
+#else
+			return sqrtf(F);
+#endif
 		}
+
+#endif 
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////// Vector Matrix Operation Implementation //////////////////////////////////////////////////////
+#if defined(AURORA3D_SSE) || defined(AURORA3D_NEON)
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////// Vector Operation Base Implements ////////////////////////////////////////////////////////
+	#if defined(AURORA3D_SSE)
+
+#define SHUFFLE_MASK(p0, p1, p2, p3) ( (p0) | ((p1) << 2) | ((p2) <<4) | ((p3) <<6) )
+
+		A3D_FORCEINLINE float128 VectorZero()
+		{
+			return _mm_setzero_ps();
+		}
+
+		//load replicate uint32
+		A3D_FORCEINLINE float128 VectorLoad(uint32 u)
+		{
+			return _mm_castsi128_ps(_mm_setr_epi32(u, u, u, u));
+		}
+
+		//load replicate float
+		A3D_FORCEINLINE float128 VectorLoad(float F)
+		{
+			return _mm_load_ps1(&F);
+		}
+
+		//load 2,3,4 float
+		A3D_FORCEINLINE float128 VectorLoad(float x, float y, float z = 0.0f, float w = 0.0f)
+		{
+			return _mm_setr_ps(x, y, z, w);
+		}
+
+		//load 2,3,4 uint32
+		A3D_FORCEINLINE float128 VectorLoad(uint32 x, uint32 y, uint32 z = 0u, uint32 w = 0u)
+		{
+			return _mm_castsi128_ps(_mm_setr_epi32(x, y, z, w));
+		}
+
+
+		//load two components with z = 0.0f, w= 0.0f
+		A3D_FORCEINLINE float128 VectorLoad2Z0(const float *v)
+		{
+			return _mm_setr_ps(v[0], v[1], 0.0f, 0.0f);
+		}
+
+		//load two components with z = 1.0f, w = 0.0f
+		A3D_FORCEINLINE float128 VectorLoad2Z1(const float *v)
+		{
+			return _mm_setr_ps(v[0], v[1], 1.0f, 0.0f);
+		}
+
+		//load three components with w = 0.0f
+		A3D_FORCEINLINE float128 VectorLoad3W0(const float *v)
+		{
+			return _mm_setr_ps(v[0], v[1], v[2], 0.0f);
+		}
+
+		//load three component with w = 1.0f
+		A3D_FORCEINLINE float128 VectorLoad3W1(const float *v)
+		{
+			return _mm_setr_ps(v[0], v[1], v[2], 1.0f);
+		}
+
+		A3D_FORCEINLINE float128 VectorLoad4(const float *v)
+		{
+			return _mm_setr_ps(v[0], v[1], v[2], v[3]);
+		}
+
+		A3D_FORCEINLINE float128 VectorLoad4Aligned(const float *v)
+		{
+			return _mm_load_ps(v);
+		}
+
+		A3D_FORCEINLINE void VectorSet(float128& v, int i, float F)
+		{
+			assert(i >= 0 && i <= 3);
+			v.m128_f32[i] = F;
+		}
+
+		A3D_FORCEINLINE void VectorSet(float128& v, int i, uint32 F)
+		{
+			assert(i >= 0 && i <= 3);
+			v.m128_u32[i] = F;
+		}
+
+		A3D_FORCEINLINE float VectorGetFloat(const float128& v, int i)
+		{
+			assert(i >= 0 && i <= 3);
+			return v.m128_f32[i];
+		}
+
+		A3D_FORCEINLINE uint32 VectorGetUint32(const float128& v, int i)
+		{
+			assert(i >= 0 && i <= 3);
+			return v.m128_u32[i];
+		}
+
+		A3D_FORCEINLINE float VectorGetFirst(const float128& v)
+		{
+			return v.m128_f32[0];
+		}
+
+		A3D_FORCEINLINE void VectorStore2(const float128& v, float* m)
+		{
+			m[0] = v.m128_f32[0];
+			m[1] = v.m128_f32[1];
+		}
+
+		A3D_FORCEINLINE void VectorStore3(const float128& v, float* m)
+		{
+			m[0] = v.m128_f32[0];
+			m[1] = v.m128_f32[1];
+			m[2] = v.m128_f32[2];
+		}
+
+		A3D_FORCEINLINE void VectorStore4(const float128& v, float *m)
+		{
+			_mm_storeu_ps(m, v);
+		}
+
+		A3D_FORCEINLINE void VectorStore4(const float128& v, uint32 *m)
+		{
+			m[0] = v.m128_u32[0];
+			m[1] = v.m128_u32[1];
+			m[2] = v.m128_u32[2];
+			m[3] = v.m128_u32[3];
+		}
+
+		A3D_FORCEINLINE void VectorStore4Aligned(const float128& v, float *m)
+		{
+			_mm_store_ps(m, v);
+		}
+
+		A3D_FORCEINLINE void VectorStore4AlignedNoCache(
+			float128& v, float *m)
+		{
+			_mm_stream_ps(m, v);
+		}
+
+
+		//latency 1
+		template<unsigned p>
+		A3D_FORCEINLINE float128 VectorReplicate(const float128& v)
+		{
+			return _mm_shuffle_ps(v, v, SHUFFLE_MASK(p, p, p, p));
+		}
+
+		//latency 1 return ( v[p0], v[p1], v[p2], v[p3] )
+		template<unsigned p0, unsigned p1, unsigned p2, unsigned p3>
+		A3D_FORCEINLINE float128 VectorShuffle(const float128& v)
+		{
+			return _mm_shuffle_ps(v, v, SHUFFLE_MASK(p0, p1, p2, p3));
+		}
+
+		//latency 1, return ( v1[p0], v1[p1], v2[p2], v2[p3] )
+		template<unsigned p0, unsigned p1, unsigned p2, unsigned p3>
+		A3D_FORCEINLINE float128 VectorShuffle(const float128& v1, const float128& v2)
+		{
+			return _mm_shuffle_ps(v1, v2, SHUFFLE_MASK(p0, p1, p2, p3));
+		}
+
+		//latency 3
+		//return add1 + add2 
+		A3D_FORCEINLINE float128 VectorAdd(const float128& v1, const float128& v2)
+		{
+			return _mm_add_ps(v1, v2);
+		}
+
+		//latency 3
+		//return minus1 - minus2
+		A3D_FORCEINLINE float128 VectorMinus(const float128& v1, const float128& v2)
+		{
+			return _mm_sub_ps(v1, v2);
+		}
+
+		//Latency 4-5
+		//return mul1 * mul2
+		A3D_FORCEINLINE float128 VectorMultiply(const float128& v1, const float128& v2)
+		{
+			return _mm_mul_ps(v1, v2);
+		}
+
+		//Latency 13~14
+		// return div1 / div2
+		A3D_FORCEINLINE float128 VectorDivide(const float128& div1, const float128& div2)
+		{
+			return _mm_div_ps(div1, div2);
+		}
+
+		// if v1[i] == v2[i] return 0xffffffff
+		//          !=       return 0x00000000
+		// latency 3
+		A3D_FORCEINLINE float128 VectorEquals(const float128& v1, const float128& v2)
+		{
+			return _mm_cmpeq_ps(v1, v2);
+		}
+
+		// if v1[i] != v2[i] return 0xffffffff 
+		//          ==       return 0x00000000
+		// latency 3
+		A3D_FORCEINLINE float128 VectorNotEquals(const float128& v1, const float128& v2)
+		{
+			return _mm_cmpneq_ps(v1, v2);
+		}
+
+		// if v1[i] >  v2[i] return 0xffffffff 
+		//          <=       return 0x00000000
+		// latency 3
+		A3D_FORCEINLINE float128 VectorGreater(const float128& v1, const float128& v2)
+		{
+			return _mm_cmpgt_ps(v1, v2);
+		}
+
+		// if v1[i] <  v2[i] return 0xffffffff 
+		//          >=       return 0x00000000
+		// latency 3
+		A3D_FORCEINLINE float128 VectorLess(const float128& v1, const float128& v2)
+		{
+			return _mm_cmplt_ps(v1, v2);
+		}
+
+		// if v1[i] >= v2[i] return 0xffffffff 
+		//          <        return 0x00000000
+		// latency 3
+		A3D_FORCEINLINE float128 VectorGreaterEqual(const float128& v1, const float128& v2)
+		{
+			return _mm_cmpge_ps(v1, v2);
+		}
+
+		// if v1[i] <= v2[i] return 0xffffffff 
+		//          >        return 0x00000000
+		// latency 3
+		A3D_FORCEINLINE float128 VectorLessEqual(const float128& v1, const float128& v2)
+		{
+			return _mm_cmple_ps(v1, v2);
+		}
+
+		//return v1 | v2
+		//Latency 1
+		A3D_FORCEINLINE float128 VectorOr(const float128& v1, const float128& v2)
+		{
+			return _mm_or_ps(v1, v2);
+		}
+
+		//Latency 1
+		//return v1 & v2
+		A3D_FORCEINLINE float128 VectorAnd(const float128& v1, const float128& v2)
+		{
+			return _mm_and_ps(v1, v2);
+		}
+
+		//Latency 1
+		//return !(v1 & v2)
+		A3D_FORCEINLINE float128 VectorAndNot(const float128& v1, const float128& v2)
+		{
+			return _mm_andnot_ps(v1, v2);
+		}
+
+		//Latency 1
+		//return v1 ^ v2
+		A3D_FORCEINLINE float128 VectorXor(const float128& v1, const float128& v2)
+		{
+			return _mm_xor_ps(v1, v2);
+		}
+
+		//Latency 3
+		//return max( v1, v2)
+		A3D_FORCEINLINE float128 VectorMax(const float128& v1, const float128& v2)
+		{
+			return _mm_max_ps(v1, v2);
+		}
+
+		//Latency 3
+		//return min(v1, v2)
+		A3D_FORCEINLINE float128 VectorMin(const float128& v1, const float128& v2)
+		{
+			return _mm_min_ps(v1, v2);
+		}
+
+		// v[0,1] = 0xffffffff
+		A3D_FORCEINLINE bool VectorTrue2(const float128& v)
+		{
+			return 0x03 == (_mm_movemask_ps(v) & 0x03);
+		}
+
+		//v[0,1,2] = 0xffffffff
+		A3D_FORCEINLINE bool VectorTrue3(const float128& v)
+		{
+			return 0x07 == (_mm_movemask_ps(v) & 0x07);
+		}
+
+		// v[0,1,2,3] == 0xffffffff
+		A3D_FORCEINLINE bool VectorTrue4(const float128& v)
+		{
+			return 0x0f == _mm_movemask_ps(v);
+		}
+
+		// v[0,1] == 0xffffffff
+		A3D_FORCEINLINE bool VectorFalse2(const float128& v)
+		{
+			return 0 == (_mm_movemask_ps(v) & 0x03);
+		}
+
+		// v[0,1,2] == 0xffffffff
+		A3D_FORCEINLINE bool VectorFalse3(const float128& v)
+		{
+			return 0 == (_mm_movemask_ps(v) & 0x07);
+		}
+
+		// v[0,1,2,3] = 0
+		A3D_FORCEINLINE bool VectorFalse4(const float128& v)
+		{
+			return 0 == _mm_movemask_ps(v);
+		}
+
+		// least one of v[i] = 0xffffffff
+		A3D_FORCEINLINE bool VectorAnyTrue2(const float128& v)
+		{
+			return 0 != (_mm_movemask_ps(v) & 0x03);
+		}
+
+		// least one of v[i] = 0xffffffff
+		A3D_FORCEINLINE bool VectorAnyTrue3(const float128& v)
+		{
+			return 0 != (_mm_movemask_ps(v) & 0x07);
+		}
+
+		// least one of v[i] = 0xffffffff
+		A3D_FORCEINLINE bool VectorAnyTrue4(const float128& v)
+		{
+			return 0 != _mm_movemask_ps(v);
+		}
+
+		// least one of v[i] = 0
+		A3D_FORCEINLINE bool VectorAnyFalse2(const float128& v)
+		{
+			return 0x03 != (_mm_movemask_ps(v) & 0x03);
+		}
+
+		// least one of v[i] = 0
+		A3D_FORCEINLINE bool VectorAnyFalse3(const float128& v)
+		{
+			return 0x07 != (_mm_movemask_ps(v) & 0x07);
+		}
+
+		// least one of v[i] = 0
+		A3D_FORCEINLINE bool VectorAnyFalse4(const float128& v)
+		{
+			return 0x0f != _mm_movemask_ps(v);
+		}
+
+		// F = v1.x*v2.x + v1.y*v2.y + v1.z*v2.z + v1.w*v2.w
+		// return (F,F,F,F )
+		A3D_FORCEINLINE float128 VectorDot4(const float128& v1, const float128& v2)
+		{
+			float128 multi, rotate;
+			multi = _mm_mul_ps(v1, v2);  // x,y,z,w
+			rotate = VectorShuffle<2, 3, 0, 1>(multi);  //z,w,x,y
+			multi = _mm_add_ps(multi, rotate); //x+z, y+w, x+z, y+w
+			rotate = VectorShuffle<1, 0, 3, 2>(multi); //y+w, x+z, y+w, x+z
+			return _mm_add_ps(multi, rotate); //x+y+z+w, x+y+z+w, ...
+		}
+
+		// F = x+ y + z + w
+		// return (F,F,F,F)
+		A3D_FORCEINLINE float128 VectorSumUp4(const float128& v)
+		{
+			float128 rotate = VectorShuffle<2, 3, 0, 1>(v);  //z,w,x,y
+			rotate = _mm_add_ps(rotate, v);                  //x+z, y+w, x+z, y+w
+			return _mm_add_ps(VectorShuffle<1, 0, 3, 2>(rotate), rotate);
+		}
+
+		//for i:0~128 ,if mask[i] == 1? v1[i] : v2[i]
+		A3D_FORCEINLINE float128 VectorSelect(const float128& v1,
+			const float128& v2, const float128& mask)
+		{
+			// v1^v2^v2 = v1, so only select mask bit to do 2 times xor
+			//     0^v2 = v2, let not select bit be 0
+			return _mm_xor_ps(v2, _mm_and_ps(mask, _mm_xor_ps(v1, v2)));
+		}
+
+		//return int( v[i] )
+		A3D_FORCEINLINE float128 VectorIntPart(const float128& v)
+		{
+			return _mm_cvtepi32_ps(_mm_cvttps_epi32(v));
+		}
+
+		//Latency 6
+		//return round( v[i] )
+		A3D_FORCEINLINE float128 VectorRound(const float128& v)
+		{
+			return _mm_cvtepi32_ps(_mm_cvtps_epi32(v));
+		}
+
+		namespace SSEConstant
+		{
+			static const float128 AbsMask = VectorLoad(0x7fffffffu);
+			static const float128 One = VectorLoad(1.0f);
+			static const float128 Zero = VectorLoad(0.0f);
+		}
+
+		// return -v
+		A3D_FORCEINLINE float128 VectorNegate(const float128& v)
+		{
+			return VectorMinus(SSEConstant::Zero, v);
+		}
+
+		// Latency 1
+		// return abs( v[i] )
+		A3D_FORCEINLINE float128 VectorAbs(const float128& v)
+		{
+			return _mm_and_ps(v, SSEConstant::AbsMask);
+		}
+
+		//Latency 3~5
+		// return Approx( 1 / v[i]), max error approximation less than 0.00036621
+		A3D_FORCEINLINE float128 VectorReciprocalApproximate(const float128& v1)
+		{
+			return _mm_rcp_ps(v1);
+		}
+
+		//Latency 13 ~ 14
+		// return 1 / v[i]
+		A3D_FORCEINLINE float128 VectorReciprocal(const float128& v)
+		{
+			return _mm_div_ps(SSEConstant::One, v);
+		}
+
+		//Latency 12~25
+		//return v[i] ^ 1/2
+		A3D_FORCEINLINE float128 VectorSqrt(const float128& v)
+		{
+			return _mm_sqrt_ps(v);
+		}
+
+		//Latency 12~25
+		//return v[i] ^ 1/2
+		A3D_FORCEINLINE float128 VectorSqrtApprixmate(const float128& v)
+		{
+			return _mm_sqrt_ps(v);
+		}
+
+		//Latency 3~5
+		// return Approx(1/sqrt(v[i])), max error approximation less than 0.00036621
+		A3D_FORCEINLINE float128 VectorReciprocalSqrtApproximate(const float128& v)
+		{
+			return _mm_rsqrt_ps(v);
+		}
+
+		//26~39  latency
+		// return 1 / sqrt(v[i])
+		A3D_FORCEINLINE float128 VectorReciprocalSqrt(const float128& v)
+		{
+			return _mm_div_ps(SSEConstant::One, _mm_sqrt_ps(v));
+		}
+
+		//1 Latency
+		//return (v1[0], v2[0], v1[1], v2[1])
+		A3D_FORCEINLINE float128 VectorInterleaveXY(const float128& v1
+			, const float128& v2)
+		{
+			return _mm_unpacklo_ps(v1, v2);
+		}
+
+		//1 Latency
+		//return (v1[2], v2[2], v1[3], v2[3])
+		A3D_FORCEINLINE float128 VectorInterleaveZW(const float128& v1
+			, const float128& v2)
+		{
+			return _mm_unpackhi_ps(v1, v2);
+		}
+
+		//return start + t*(end -start)
+		A3D_FORCEINLINE float128 VectorLerp(const float128& start, const float128& end, float t)
+		{
+			return _mm_add_ps(start, _mm_mul_ps(_mm_sub_ps(end, start), _mm_set_ps1(t)));
+		}
+
+	#elif defined(AURORA3D_NEON)
+		A3D_FORCEINLINE float128 VectorZero()
+		{
+			return vdupq_n_f32(0);
+		}
+
+		A3D_FORCEINLINE float128 VectorLoad(float x, float y, float z, float w)
+		{
+			float128 f;
+			f.n128_f32[0] = x;
+			f.n128_f32[1] = y;
+			f.n128_f32[2] = z;
+			f.n128_f32[3] = w;
+			return f;
+		}
+
+		A3D_FORCEINLINE float128 VectorLoad(uint32 x, uint32 y, uint32 z, uint32 w)
+		{
+			float128 f;
+			f.n128_u32[0] = x;
+			f.n128_u32[1] = y;
+			f.n128_u32[2] = z;
+			f.n128_u32[3] = w;
+			return f;
+		}
+
+		A3D_FORCEINLINE float128 VectorLoad(uint32 U)
+		{
+			return vdupq_n_u32(U);
+		}
+
+		A3D_FORCEINLINE float128 VectorLoad(float F)
+		{
+			return vdupq_n_f32(F);
+		}
+
+		A3D_FORCEINLINE float128 VectorLoad3W0(const float *v)
+		{
+			return VectorLoad(v[0], v[1], v[2], 0.0f);
+		}
+
+		A3D_FORCEINLINE float128 VectorLoad3W1(const float *v)
+		{
+			return VectorLoad(v[0], v[1], v[2], 1.0f);
+		}
+
+		A3D_FORCEINLINE float128 VectorLoad4(const float *v)
+		{
+			return vld1q_f32(v);
+		}
+
+		A3D_FORCEINLINE float128 VectorLoad4Aligned(const float *v)
+		{
+			return vld1q_f32(v);
+		}
+
+		A3D_FORCEINLINE void VectorSet(float128& v, int i, float F)
+		{
+			v = vsetq_lane_f32(F, v, i);
+		}
+
+		A3D_FORCEINLINE void VectorSet(float128& v, int i, uint32 U)
+		{
+			v = vsetq_lane_u32(U, v, i);
+		}
+
+
+		A3D_FORCEINLINE float VectorGetFloat(const float128& v, int i)
+		{
+			return v.n128_f32[i];
+		}
+
+		A3D_FORCEINLINE float VectorGetFirst(const float128& v)
+		{
+			return v.n128_f32[0];
+		}
+
+		A3D_FORCEINLINE float VectorGetUint32(const float128& v, int i)
+		{
+			return v.n128_u32[i];
+		}
+
+
+
+		A3D_FORCEINLINE void VectorStore3(const float128& v, float* m)
+		{
+			m[0] = v.n128_f32[0];
+			m[1] = v.n128_f32[1];
+			m[2] = v.n128_f32[2];
+		}
+
+		A3D_FORCEINLINE void VectorStore4(const float128& v, float *m)
+		{
+			vst1q_f32(m, v);
+		}
+
+		A3D_FORCEINLINE void VectorStore4(const float128& v, uint32 *m)
+		{
+			vst1q_u32(m, v);
+		}
+
+		A3D_FORCEINLINE void VectorStore4Aligned(const float128& v, float *m)
+		{
+			vst1q_f32(m, v);
+		}
+
+		A3D_FORCEINLINE void VectorStoreAlignedNoCache4(const float128& v, float *m)
+		{
+			vst1q_u32(m, v);
+		}
+
+		template<unsigned p>
+		A3D_FORCEINLINE float128 VectorReplicate(const float128& v)
+		{
+			return vdupq_lane_f32(v, p);
+		}
+
+		template<unsigned p0, unsigned p1, unsigned p2, unsigned p3>
+		A3D_FORCEINLINE float128 VectorShuffle(const float128& v)
+		{
+		#ifdef __clang__
+			return __builtin_shufflevector(v, v, p0, p1, p2, p3);
+		#else
+			float128 result;
+			result.n128_f32[0] = v.n128_f32[p0];
+			result.n128_f32[1] = v.n128_f32[p1];
+			result.n128_f32[2] = v.n128_f32[p2];
+			result.n128_f32[3] = v.n128_f32[p3];
+		#endif
+		}
+
+		template<unsigned p0, unsigned p1, unsigned p2, unsigned p3>
+		A3D_FORCEINLINE float128 VectorShuffle(const float128& v1, const float128& v2)
+		{
+		#ifdef __clang__
+			return __builtin_shufflevector(v, v, p0, p1, p2, p3);
+		#else
+			float128 result;
+			result.n128_f32[0] = v1.n128_f32[p0];
+			result.n128_f32[1] = v1.n128_f32[p1];
+			result.n128_f32[2] = v2.n128_f32[p2];
+			result.n128_f32[3] = v2.n128_f32[p3];
+			return result;
+		#endif
+		}
+
+		//latency 3
+		A3D_FORCEINLINE float128 VectorAdd(const float128& v1, const float128& v2)
+		{
+			return vaddq_f32(v1, v2);
+		}
+
+		A3D_FORCEINLINE float128 VectorMinus(const float128& v1, const float128& v2)
+		{
+			return vsubq_f32(v1, v2);
+		}
+
+		A3D_FORCEINLINE float128 VectorMultiply(const float128& v1, const float128& v2)
+		{
+			return vmulq_f32(v1, v2);
+		}
+
+		A3D_FORCEINLINE float128 VectorDivide(const float128& v1, const float128& v2)
+		{
+			return VectorMultiply(v1, VectorReciprocal(v2));
+		}
+
+		A3D_FORCEINLINE float128 VectorEquals(const float128& v1, const float128& v2)
+		{
+			return vceqq_f32(v1, v2);
+		}
+
+		A3D_FORCEINLINE float128 VectorNotEquals(const float128& v1, const float128& v2)
+		{
+			return vmvnq_u32(vceqq_f32(v1, v2));
+		}
+
+		A3D_FORCEINLINE float128 VectorGreater(const float128& v1, const float128& v2)
+		{
+			return vcgtq_f32(v1, v2);
+		}
+
+		A3D_FORCEINLINE float128 VectorLess(const float128& v1, const float128& v2)
+		{
+			return vcleq_f32(v1, v2);
+		}
+
+		A3D_FORCEINLINE float128 VectorGreaterOrEqual(const float128& v1, const float128& v2)
+		{
+			return vcgeq_f32(v1, v2);
+		}
+
+		A3D_FORCEINLINE float128 VectorLessOrEqual(const float128& v1, const float128& v2)
+		{
+			return vcltq_f32(v1, v2);
+		}
+
+		A3D_FORCEINLINE float128 VectorOr(const float128& v1, const float128& v2)
+		{
+			return (float128)vorrq_u32((uint128)v1, (uint128)v2);
+		}
+
+		A3D_FORCEINLINE float128 VectorAnd(const float128& v1, const float128& v2)
+		{
+			return (float128)vmvnq_u32(vandq_u32((uint128)v1, (uint128)v2));
+		}
+
+		A3D_FORCEINLINE float128 VectorAndNot(const float128& v1, const float128& v2)
+		{
+			return (float128)vmvnq_u32(vandq_u32((uint128)v1, (uint128)v2));
+		}
+
+		A3D_FORCEINLINE float128 VectorXor(const float128& v1, const float128& v2)
+		{
+			return (float128)veorq_u32((uint128)v1, (uint128)v2);
+		}
+
+		A3D_FORCEINLINE float128 VectorMax(const float128& v1, const float128& v2)
+		{
+			return vmaxq_f32(v1, v2);
+		}
+
+		A3D_FORCEINLINE float128 VectorMin(const float128& v1, const float128& v2)
+		{
+			return vminq_f32(v1, v2);
+		}
+
+
+
+		//all is bigger than 0
+		A3D_FORCEINLINE bool VectorTrue(const float128& v)
+		{
+			int8x8x2_t vTemp = vzip_u8(vget_low_u8(vTemp1), vget_high_u8(vTemp1));
+			vTemp = vzip_u16(vTemp.val[0], vTemp.val[1]);
+			return 0xFFFFFFFFu == vget_lane_u32(vTemp.val[1], 1);
+		}
+
+		//all is zero
+		A3D_FORCEINLINE bool VectorFalse(const float128& v)
+		{
+			int8x8x2_t vTemp = vzip_u8(vget_low_u8(vTemp1), vget_high_u8(vTemp1));
+			vTemp = vzip_u16(vTemp.val[0], vTemp.val[1]);
+			return 0 == vget_lane_u32(vTemp.val[1], 1);
+		}
+
+		//some is bigger than 0, and some is 0
+		A3D_FORCEINLINE bool VectorAnyTrue(const float128& v)
+		{
+			int8x8x2_t vTemp = vzip_u8(vget_low_u8(vTemp1), vget_high_u8(vTemp1));
+			vTemp = vzip_u16(vTemp.val[0], vTemp.val[1]);
+			return 0 != vget_lane_u32(vTemp.val[1], 1);
+		}
+
+		//some is bigger than 0, and some is 0
+		A3D_FORCEINLINE bool VectorAnyFalse(const float128& v)
+		{
+			int8x8x2_t vTemp = vzip_u8(vget_low_u8(vTemp1), vget_high_u8(vTemp1));
+			vTemp = vzip_u16(vTemp.val[0], vTemp.val[1]);
+			return 0xFFFFFFFFu != vget_lane_u32(vTemp.val[1], 1);
+		}
+
+		A3D_FORCEINLINE float128 VectorDot4(const float128& v1, const float128& v2)
+		{
+			float128 multi = vmulq_f32(v1, v2);  //x,y,z,w  
+			float64 sum = vpadd_f32(vget_low_f32(multi), vget_high_f32(multi)); //x+z, y+w
+			sum = vpadd_f32(sum, sum);
+			return vdupq_lane_f32(sum, 0);
+		}
+
+		A3D_FORCEINLINE float128 VectorSumUp(const float128& v)
+		{
+			float64 sum = vpadd_f32(vget_low_f32(v), vget_high_f32(v));
+			sum = vpadd_f32(sum, sum);
+			return vdupq_lane_f32(sum, 0);
+		}
+
+		A3D_FORCEINLINE float128 VectorSelect(const float128& v1,
+			const float128& v2, const float128& mask)
+		{
+			return vbslq_f32(mask, v1, v2);
+		}
+
+		A3D_FORCEINLINE float128 VectorIntPart(const float128& v)
+		{
+		#ifdef _M_ARM64
+			return vrndq_f32(v);
+		#else
+			float128 int_part;
+			int_part.n128_f32[0] = (int)v.n128_f32[0];
+			int_part.n128_f32[1] = (int)v.n128_f32[1];
+			int_part.n128_f32[2] = (int)v.n128_f32[2];
+			int_part.n128_f32[3] = (int)v.n128_f32[3];
+			return int_part;
+		#endif
+		}
+
+		//  float int_part = (int) v[i];
+		//  float floor = int_part - ( v[i] > 0 ? 0: 1 )   
+		//  float round = floor + ( v[i] - int_part > 0.5 ? 1.0:0.0f );
+		A3D_FORCEINLINE float128 VectorRound(const float128& v)
+		{
+			static const float128 kZero = VectorLoad(0.0f);
+			static const float128 kHalf = VectorLoad(0.5f);
+			static const float128 kOne = VectorLoad(1.0f);
+			float128 int_part = VectorIntPart(v);
+			float128 floor = VectorSelect(VectorGreater(v, kZero), kOne, kZero);
+			float128 add = VectorSelect(VectorGreater(VectorMinus(v, floor), kHalf), kOne, kZero);
+			return VectorAdd(floor, add);
+		}
+
+		A3D_FORCEINLINE float128 VectorAbs(const float128& v)
+		{
+			return vabsq_f32(v);
+		}
+
+		A3D_FORCEINLINE float128 VectorNegate(const float128& v)
+		{
+			return vnegq_f32(v);
+		}
+
+		A3D_FORCEINLINE float128 VectorReciprocalApproximate(const float128& v)
+		{
+			return vrecpeq_f32(v);
+		}
+
+		A3D_FORCEINLINE float128 VectorReciprocal(const float128& v)
+		{
+			float128 recp = vrecpeq_f32(v);
+			recp = vmulq_f32(vrecpsq_f32(v, recp), recp);
+			return vmulq_f32(vrecpsq_f32(v, recp), recp);
+		}
+
+		A3D_FORCEINLINE float128 VectorReciprocalSqrtApproximate(const float128& v)
+		{
+			return vrsqrteq_f32(v);
+		}
+
+		A3D_FORCEINLINE float128 VectorReciprocalSqrt(const float128& v)
+		{
+			// 2 iterations of Newton-Raphson refinement of reciprocal
+			float128 S0 = vrsqrteq_f32(v);
+			float128 P0 = vmulq_f32(v, S0);
+			float32x4_t R0 = vrsqrtsq_f32(P0, S0);
+			S0 = vmulq_f32(S0, R0);
+			P0 = vmulq_f32(v, S0);
+			R0 = vrsqrtsq_f32(P0, S0);
+			return vmulq_f32(S0, R0);
+		}
+
+		A3D_FORCEINLINE float128 VectorSqrtApproximate(const float128& v)
+		{
+			const float128 S0 = vrsqrteq_f32(v);
+			return vmulq_f32(v, S0);
+		}
+
+		A3D_FORCEINLINE float128 VectorSqrt(const float128& v)
+		{
+			// 2 iteration of Newton-Raphson refinment of sqrt
+			float128 S0 = vrsqrteq_f32(v);
+			float128 P0 = vmulq_f32(v, S0);
+			float128 R0 = vrsqrtsq_f32(P0, S0);
+
+			S0 = vmulq_f32(R0, S0);
+			P0 = vmulq_f32(v, S0);
+			return vrsqrtsq_f32(P0, S0);
+		}
+
+		//return (v1[0], v2[0], v1[1], v2[1])
+		A3D_FORCEINLINE float128 VectorInterleaveXY(const float128& v1
+			, const float128& v2)
+		{
+			return vzipq_f32(v1, v2).val[0];
+		}
+
+		A3D_FORCEINLINE float128 VectorInterleaveZW(const float128& v1
+			, const float128& v2)
+		{
+			return vzipq_f32(v1, v2).val[1];
+		}
+
+
+		//return start + t*(end -start)
+		A3D_FORCEINLINE float128 VectorLerp(const float128& start, const float128& end, float t)
+		{
+			return vmlaq_n_f32(start, vsubq_f32(end, start), t);
+		}
+	#endif //#if AURORA3D_SSE #elif AURORA3D_NEON
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////// Vector Operation Extension /////////////////////////////////////////////////////////////
+#if 1   //Vector Function Extension
 
 		//return (v[0],v[1],v[2],0.0f)
 		A3D_FORCEINLINE void VectorSetW0( float128& v)
@@ -272,10 +1704,16 @@ namespace Aurora3D
 			return VectorSet(v, 3, 1.0f);
 		}
 
-		//return add1 + add2 + add3
-		A3D_FORCEINLINE float128 VectorAddTwice(const float128& add1, const float128& add2, const float128& add3)
+		// v1 = v1 + v2
+		A3D_FORCEINLINE void VectorAddAssign(float128& v1, const float128& v2)
 		{
-			return VectorAdd(VectorAdd(add1, add2), add3);
+			v1 = VectorAdd(v1, v2);
+		}
+
+		//return add1 + add2 + add3
+		A3D_FORCEINLINE float128 VectorAddTwice(const float128& v1, const float128& v2, const float128& v3)
+		{
+			return VectorAdd(VectorAdd(v1, v2), v3);
 		}
 
 		//return add1 + add2 - minus
@@ -291,10 +1729,15 @@ namespace Aurora3D
 		}
 
 		//return (add1+add2) / div
-		A3D_FORCEINLINE float128 VectorAddDivide(const float128& add1, const float128& add2,
-			const float128& div)
+		A3D_FORCEINLINE float128 VectorAddDivide(const float128& add1, const float128& add2, const float128& div)
 		{
 			return VectorDivide(VectorAdd(add1, add2), div);
+		}
+
+		// v1 = v1+v2
+		A3D_FORCEINLINE void VectorMinusAssign(float128& v1, const float128 v2)
+		{
+			v1 = VectorMinus(v1, v2);
 		}
 
 		//return minus1 - minus2 - minus3
@@ -303,28 +1746,22 @@ namespace Aurora3D
 			return VectorMinus(VectorMinus(minus1, minus2), minus3);
 		}
 
+		//return minus1 - minus2 + minus3
+		A3D_FORCEINLINE float128 VectorMinusAdd(const float128& minus1, const float128& minus2, const float128& add3)
+		{
+			return VectorMinus(VectorAdd(minus1, minus2), add3);
+		}
+
 		//return (minus1-minus2)*mul
-		A3D_FORCEINLINE float128 VectorMinusMutiplyOrder(const float128& minus1, const float128& minus2, const float128& mul)
+		A3D_FORCEINLINE float128 VectorMinusMutiply(const float128& minus1, const float128& minus2, const float128& mul)
 		{
 			return VectorMultiply(VectorMinus(minus1, minus2), mul);
 		}
 
-		//return minus - mul1*mul2
-		A3D_FORCEINLINE float128 VectorMinusMutiplyPriority(const float128& minus, const float128& mul1, const float128& mul2)
-		{
-			return VectorMinus(minus, VectorMultiply(mul1, mul2));
-		}
-
 		//return (minus1-minus2)/div
-		A3D_FORCEINLINE float128 VectorMinusDivideOrder(const float128& minus1, const float128& minus2, const float128& div)
+		A3D_FORCEINLINE float128 VectorMinusDivide(const float128& minus1, const float128& minus2, const float128& div)
 		{
 			return VectorDivide(VectorMinus(minus1, minus2), div);
-		}
-
-		//return minus-div1/div2
-		A3D_FORCEINLINE float128 VectorMinusDividePriority(const float128& minus, const float128& div1, const float128& div2)
-		{
-			return VectorMinus(minus, VectorDivide(div1, div2));
 		}
 
 		//return ( mul1[0]*scale, mul1[1]*scale, mul1[2]*scale, mul1[3]*scale )
@@ -332,6 +1769,19 @@ namespace Aurora3D
 		{
 			return VectorMultiply(mul1, VectorLoad(scale));
 		}
+
+		// return
+		A3D_FORCEINLINE void VectorMultiplyAssign(float128& v1, const float128& v2)
+		{
+			v1 = VectorMultiply(v1, v2);
+		}
+
+		// return
+		A3D_FORCEINLINE void VectorMultiplyAssign(float128& v, float scale)
+		{
+			v = VectorMultiply(v, scale);
+		}
+
 
 		//return mul1 * mul2 * mul3
 		A3D_FORCEINLINE float128 VectorMultiplyTwice(const float128& mul1, const float128& mul2, const float128& mul3)
@@ -346,33 +1796,63 @@ namespace Aurora3D
 		}
 
 		//return mul1 * mul2 - minus
-		A3D_FORCEINLINE float128 VectorMultiplyMinus(const float128& mul1, const float128& mul2, const float128& minus)
+		A3D_FORCEINLINE float128 VectorPreMultiplyMinus(const float128& mul1, const float128& mul2, const float128& minus)
 		{
 			return VectorMinus(VectorMultiply(mul1, mul2), minus);
 		}
 
+		//return v1 - v2*v3
+		A3D_FORCEINLINE float128 VectorPostMultiplyMinus(const float128& v1, const float128& v2, const float128& v3)
+		{
+			return VectorMinus(v1, VectorMultiply(v2, v3));
+		}
+
+
 		//return mul1 * mul2 / div
-		A3D_FORCEINLINE float128 VectorMultiplyDivide(const float128& mul1, const float128& mul2, const float128& div)
+		A3D_FORCEINLINE float128 VectorPreMultiplyDivide(const float128& mul1, const float128& mul2, const float128& div)
 		{
 			return VectorDivide(VectorMultiply(mul1, mul2), div);
 		}
 
-		//return div/ (mul1 * mul2)
-		A3D_FORCEINLINE float128 VectorDivdeMultiply(const float128& div, const float128& mul1, const float128& mul2)
+		//return v1 / (v2*v3)
+		A3D_FORCEINLINE float128 VectorPostMultiplyDivide(const float128& v1, const float128& v2, const float128& v3)
 		{
-			return VectorDivide(div, VectorMultiply(mul1, mul2));
+			return VectorDivide(v1, VectorMultiply(v2, v3));
 		}
 
-		//return div1 / div2 - minus
-		A3D_FORCEINLINE float128 VectorDivdeMinus(const float128& div1, const float128& div2, const float128& minus)
+		// v1 = v1 / v2
+		A3D_FORCEINLINE void VectorDivideAssign(float128& v1, const float128& v2)
 		{
-			return VectorMinus(VectorDivide(div1, div2), minus);
+			v1 = VectorDivide(v1, v2);
 		}
 
-		//return div1 / div2 + minus
-		A3D_FORCEINLINE float128 VectorDivdeAdd(const float128& div1, const float128& div2, const float128& add)
+		A3D_FORCEINLINE float128 VectorDivide(const float128& v1, float s)
 		{
-			return VectorMinus(VectorDivide(div1, div2), add);
+			return VectorDivide(v1, VectorLoad(s));
+		}
+
+		// v1 = v1 / v2
+		A3D_FORCEINLINE void VectorDivideAssign(float128& v1, float s)
+		{
+			v1 = VectorDivide(v1, s);
+		}
+
+		//return v1 / v2 + v3
+		A3D_FORCEINLINE float128 VectorDivideAdd(const float128& v1, const float128& v2, const float128& v3)
+		{
+			return VectorMinus(VectorDivide(v1, v2), v3);
+		}
+
+		//return v1 / v2 - v3
+		A3D_FORCEINLINE float128 VectorPreDivideMinus(const float128& v1, const float128& v2, const float128& v3)
+		{
+			return VectorMinus(VectorDivide(v1, v2), v3);
+		}
+
+		//return v1 - v2/v3
+		A3D_FORCEINLINE float128 VectorPostDivideMinus(const float128& v1, const float128& v2, const float128& v3)
+		{
+			return VectorMinus(v1, VectorDivide(v2, v3));
 		}
 
 		//return mod1 - (int)(mod1/mod2)*mod2
@@ -435,20 +1915,6 @@ namespace Aurora3D
 		A3D_FORCEINLINE float128 VectorLength3(const float128& v)
 		{
 			return VectorSqrt(VectorDot3(v, v));
-		}
-
-		// DS = v.x^2 + v.y^2, z,w is ingored
-		// return (DS, DS, undef, undef )
-		A3D_FORCEINLINE float128 VectorLengthSquare2(const float128& v)
-		{
-			return VectorDot2(v, v);
-		}
-
-		// DS = v.x^2 + v.y^2 + v.z^2, w is ingored
-		// return (DS, DS, DS, undef )
-		A3D_FORCEINLINE float128 VectorLengthSquare3(const float128& v)
-		{
-			return VectorDot3(v, v);
 		}
 
 		// F = x + y
@@ -537,7 +2003,7 @@ namespace Aurora3D
 		}
 
 		// abs(v[0,1,2])<bound[0,1,2] return true 
-		A3D_FORCEINLINE bool VectorInBound(const float128&v, const float128& bound)
+		A3D_FORCEINLINE bool VectorInBound3(const float128&v, const float128& bound)
 		{
 			const float128 abs = VectorAbs(v);
 			return VectorTrue3(VectorLess(abs, bound));
@@ -745,12 +2211,11 @@ namespace Aurora3D
 			cos = VectorMultiplyAdd(AA, cos, kVectorOne);
 			cos = VectorMultiply(sign, cos);
 		}
+#endif  
 
-		
-
-/////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////
-		
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////// Matrix Operation Implements ///////////////////////////////////////////////////////////
+#if 1   
 		// must match every elements
 		A3D_FORCEINLINE bool MatrixIsIdentity(const float128x4& M)
 		{
@@ -784,8 +2249,7 @@ namespace Aurora3D
 
 
 		//16 times multiply and 12 times add
-		A3D_FORCEINLINE void MatrixMultiplyNoCopy(const float128x4& A, const float128x4& B,
-			float128x4& C)
+		A3D_FORCEINLINE void MatrixMultiplyNoCopy(const float128x4& A, const float128x4& B, float128x4& C)
 		{
 			/*
 			*	A00 A01 A02 A03       B00 B01 B02 B03      C00 C01 C02 C03
@@ -892,10 +2356,10 @@ namespace Aurora3D
 			transpose[3] = VectorShuffle<1, 3, 1, 3>(block2, block4); //4,8,12,16
 		}
 
-		A3D_FORCEINLINE float128x4 MatrixTranspose(const float128x4& original)
+		A3D_FORCEINLINE float128x4 MatrixTranspose(const float128x4& A)
 		{
 			float128x4 transpose;
-			MatrixTransposeNoCopy(original, transpose);
+			MatrixTransposeNoCopy(A, transpose);
 			return transpose;
 		}
 
@@ -1073,8 +2537,33 @@ namespace Aurora3D
 			result = VectorMultiplyAdd(M[3], component[3], result);
 			return result;
 		}
-#else
-#	include"math_impl_fpu.inl"
-#endif //defined(AURORA3D_SSE) || defined(AURORA3D_NEON)
-	} // namespace MathUtility
+#endif  //Matrix Operation Implements
+
+#endif  //Vector Matrix Operation Implements
+
+	} // namespace math
 }//namespace Aurora3D
+
+ /*	static const float128 kVectorAbsMask = VectorLoad(kHighestZero);
+ static const float128 kVectorSignMask = VectorLoad(kHighestOne);
+ static const float128 kVectorInfinte = VectorLoad(kInfinite);
+ static const float128 kVectorZero = VectorLoad(0.0f);
+ static const float128 kVectorOne = VectorLoad(1.0f);
+ static const float128 kVectorNegtiveOne = VectorLoad(-1.0f);
+ static const float128 kVectorHalf = VectorLoad(0.5f);
+ static const float128 kVectorTwo = VectorLoad(2.0f);
+ static const float128 kVectorAllOneMask = VectorLoad(kAllOneMask);
+ static const float128 kVectorOneOver2PI = VectorLoad(kOneOver2PI);
+ static const float128 kVector2PI = VectorLoad(k2PI);
+ static const float128 kVectorPI = VectorLoad(kPI);
+ static const float128 kVectorHalfPI = VectorLoad(kHalfPI);
+ static const float128 kVector180OverPI = VectorLoad(k180OverPI);
+ static const float128 kVectorPIOver180 = VectorLoad(kPIOver180);
+ static const float128 kVectorXYZMask = VectorLoad(kAllOneMask, kAllOneMask, kAllOneMask, kAllZeroMask);
+ static const float128 kVectorXOne = VectorLoad(1.0f, 0.0f, 0.0f, 0.0f);
+ static const float128 kVectorYOne = VectorLoad(0.0f, 1.0f, 0.0f, 0.0f);
+ static const float128 kVectorZOne = VectorLoad(0.0f, 0.0f, 1.0f, 0.0f);
+ static const float128 kVectorWOne = VectorLoad(0.0f, 0.0f, 0.0f, 1.0f);
+ static const float128 kVectorOddNegtive = VectorLoad(1.0f, -1.0f, 1.0f, -1.0f);
+ static const float128 kVectorEvenNegtive = VectorLoad(-1.0f, 1.0f, -1.0f, 1.0f);
+ static const float128 kVectorEpside = VectorLoad(kMiddleEpside);*/

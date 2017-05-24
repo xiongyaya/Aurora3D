@@ -1,6 +1,6 @@
 #pragma once
 
-#include"../compile.h"
+#include<Core/type.h>
 #include"vector3.h"
 
 namespace Aurora3D
@@ -8,7 +8,7 @@ namespace Aurora3D
 	struct Plane
 	{
 	public:
-		Vector3 center;
+		//Vector3 center;
 		float   redius;
 	};
 }

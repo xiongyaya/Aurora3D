@@ -1,7 +1,7 @@
 #pragma once
 
-#include"../type.h"
-#include"math_utility.h"
+#include<Core/type.h>
+#include<Core/math/math_fwd.h>
 
 namespace Aurora3D
 {
@@ -31,10 +31,9 @@ namespace Aurora3D
 		A3D_FORCEINLINE Euler operator!=(const Euler& o) const;
 
 		A3D_FORCEINLINE bool ContainNaN() const;
-		A3D_FORCEINLINE bool IsNearlyZero(float tolerance = MathUtil::kMiddleEpside) const;
+		A3D_FORCEINLINE bool IsNearlyZero(float tolerance = kMiddleEpside) const;
 		A3D_FORCEINLINE bool IsZero() const;
-		A3D_FORCEINLINE bool Equals(const Euler& o,
-			float tolerance = MathUtil::kMiddleEpside) const;
+		A3D_FORCEINLINE bool Equals(const Euler& o,float tolerance = kMiddleEpside) const;
 		A3D_FORCEINLINE Euler Add(float dp, float dy, float dr);
 		Vector3 ToVector3() const;
 		Vector4 ToVector4() const;

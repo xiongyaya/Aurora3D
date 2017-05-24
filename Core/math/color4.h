@@ -1,22 +1,26 @@
 #pragma once
 
-#include"../type.h"
+#include<Core/type.h>
 #include"vector4.h"
 
 namespace Aurora3D
 {
-	struct Color
+	namespace math
 	{
-	public:
-		uint8 r, g, b, a;
-		static const Color Zero;
-		A3D_FORCEINLINE const uint8* GetBuffer() const;
-		A3D_FORCEINLINE uint8 GetBuffer();
-	};
+		struct Color
+		{
+		public:
+			uint8 r, g, b, a;
+			static const Color Zero;
+			A3D_FORCEINLINE const uint8* GetBuffer() const;
+			A3D_FORCEINLINE uint8 GetBuffer();
+		};
 
-	class LinearColor4 : public Vector4
-	{
-	public:
+		class LinearColor4 
+		{
+		public:
 
-	};
+		};
+	}
+	
 }

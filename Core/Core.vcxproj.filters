@@ -30,47 +30,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="math\capsule.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="math\color4.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="math\euler.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="math\int_rect.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="math\matrix4.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="math\plane.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="math\quaternion.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="math\sphere.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="math\vector2.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="math\vector3.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="math\vector4.h">
-      <Filter>math</Filter>
-    </ClInclude>
     <ClInclude Include="compile.h" />
     <ClInclude Include="type.h" />
-    <ClInclude Include="math\math_impl.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="math\math_fwd.h">
-      <Filter>math</Filter>
-    </ClInclude>
     <ClInclude Include="log\log.h" />
     <ClInclude Include="auxililty\ingore_unused.h">
       <Filter>auxililty</Filter>
@@ -660,24 +621,41 @@
     <ClInclude Include="mpl\type_traits\has_plus.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="math\math_impl_sse.inl">
+    <ClInclude Include="math\capsule.h">
       <Filter>math</Filter>
-    </None>
-    <None Include="math\math_impl_neon.inl">
+    </ClInclude>
+    <ClInclude Include="math\color4.h">
       <Filter>math</Filter>
-    </None>
-    <None Include="math\math_impl_fpu.inl">
+    </ClInclude>
+    <ClInclude Include="math\euler.h">
       <Filter>math</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="math\vector.cpp">
+    </ClInclude>
+    <ClInclude Include="math\math_fwd.h">
       <Filter>math</Filter>
-    </ClCompile>
-    <ClCompile Include="math\math_impl.cpp">
+    </ClInclude>
+    <ClInclude Include="math\math_impl.h">
       <Filter>math</Filter>
-    </ClCompile>
+    </ClInclude>
+    <ClInclude Include="math\matrix4.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\plane.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\quaternion.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\sphere.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\vector2.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\vector3.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\vector4.h">
+      <Filter>math</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
