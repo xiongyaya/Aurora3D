@@ -35,10 +35,7 @@
     <ClInclude Include="print_type.h">
       <Filter>源文件\头文件</Filter>
     </ClInclude>
-    <ClInclude Include="test_fwd.h">
-      <Filter>源文件</Filter>
-    </ClInclude>
-    <ClInclude Include="test_impl.h">
+    <ClInclude Include="test_vector.hpp">
       <Filter>源文件</Filter>
     </ClInclude>
   </ItemGroup>

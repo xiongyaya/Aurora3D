@@ -9,8 +9,6 @@ namespace Aurora3D
 			static constexpr T value = N;
 			typedef Integral_<T, N> type;
 			typedef T value_type;
-			typedef Integral_<T, N + 1> next;
-			typedef Integral_<T, N - 1> prior;
 			constexpr operator T() const
 			{
 				return N;

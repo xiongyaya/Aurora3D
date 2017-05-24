@@ -2,6 +2,7 @@
 
 #include<cmath>
 #include<cassert>
+#include<Core/type.h>
 #if defined(AURORA3D_SSE)
 #	include<emmintrin.h>
 #elif defined(AURORA3D_NEON)
@@ -73,8 +74,8 @@ namespace Aurora3D
 		constexpr float128 kVector180OverPI = { k180OverPI,k180OverPI ,k180OverPI,k180OverPI };
 		constexpr float128 kVectorPIOver180 = { kPIOver180,kPIOver180 ,kPIOver180 ,kPIOver180 };
 		constexpr float128 kVectorXYZMask = { kAllOneMask, kAllOneMask, kAllOneMask, kAllZeroMask };
-		constexpr float128 kVectorAbsMask = { kHighestZero ,kHighestZero ,kHighestZero ,kHighestZero };
-		constexpr float128 kVectorSignMask = { kHighestOne ,kHighestOne ,kHighestOne ,kHighestOne };
+		constexpr float128 kVectorAbsMask = { kTopZero ,kTopZero ,kTopZero ,kTopZero };
+		constexpr float128 kVectorSignMask = { kTopOne ,kTopOne ,kTopOne ,kTopOne };
 		constexpr float128 kVectorInfinte = { kInfinite ,kInfinite ,kInfinite ,kInfinite };
 
 		//xyzw = 0.0f
@@ -281,7 +282,7 @@ namespace Aurora3D
 		// true if v.xyz == (0xffffffff,0xffffffff,0xffffffff),else false
 		bool VectorTrue3(const float128& v);
 
-		// true if v.xyz == (0xffffffff,0xffffffff,0xffffffff,0xffffffff),else false
+		// true if v.xyzw == (0xffffffff,0xffffffff,0xffffffff,0xffffffff),else false
 		bool VectorTrue4(const float128& v);
 
 		// true if v.x or v.y == 0xffffffff
@@ -849,13 +850,13 @@ namespace Aurora3D
 		}
 
 		//load 2,3,4 float
-		A3D_FORCEINLINE float128 VectorLoad(float x, float y, float z = 0.0f, float w = 0.0f)
+		A3D_FORCEINLINE float128 VectorLoad(float x, float y, float z, float w)
 		{
 			return _mm_setr_ps(x, y, z, w);
 		}
 
 		//load 2,3,4 uint32
-		A3D_FORCEINLINE float128 VectorLoad(uint32 x, uint32 y, uint32 z = 0u, uint32 w = 0u)
+		A3D_FORCEINLINE float128 VectorLoad(uint32 x, uint32 y, uint32 z, uint32 w)
 		{
 			return _mm_castsi128_ps(_mm_setr_epi32(x, y, z, w));
 		}
@@ -1862,7 +1863,7 @@ namespace Aurora3D
 		}
 
 		// IF abs(v1 - v2) < EPSIDE, return 0xffffffff otherwise is 0
-		A3D_FORCEINLINE float128 VectorNearlyEquals(const float128& v1, const float128& v2, float epside = kMiddleEpside)
+		A3D_FORCEINLINE float128 VectorNearlyEquals(const float128& v1, const float128& v2, float epside)
 		{
 			return VectorLess(VectorAbs(VectorMinus(v1, v2)), VectorLoad(epside));
 		}

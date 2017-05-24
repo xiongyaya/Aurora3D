@@ -131,8 +131,7 @@
   <ItemGroup>
     <ClInclude Include="print_type.h" />
     <ClInclude Include="print_value.h" />
-    <ClInclude Include="test_fwd.h" />
-    <ClInclude Include="test_impl.h" />
+    <ClInclude Include="test_vector.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
