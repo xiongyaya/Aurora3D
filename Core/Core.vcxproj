@@ -25,7 +25,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -41,6 +41,9 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>..;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>..;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -71,6 +74,8 @@
     <ClInclude Include="auxililty\noncopyable.h" />
     <ClInclude Include="auxililty\optional.h" />
     <ClInclude Include="auxililty\singletonable.h" />
+    <ClInclude Include="C:\Users\xiongya\Desktop\testccpuid\ccpuid.h" />
+    <ClInclude Include="C:\Users\xiongya\Desktop\testccpuid\ccpuid.hpp" />
     <ClInclude Include="compile.h" />
     <ClInclude Include="container\bidirection_list.h" />
     <ClInclude Include="container\char_trait.h" />
@@ -92,15 +97,21 @@
     <ClInclude Include="math\capsule.h" />
     <ClInclude Include="math\color4.h" />
     <ClInclude Include="math\euler.h" />
+    <ClInclude Include="math\float16x16.h" />
+    <ClInclude Include="math\float16x8.h" />
     <ClInclude Include="math\math_fwd.h" />
     <ClInclude Include="math\math_impl.h" />
     <ClInclude Include="math\matrix4.h" />
     <ClInclude Include="math\plane.h" />
     <ClInclude Include="math\quaternion.h" />
     <ClInclude Include="math\sphere.h" />
+    <ClInclude Include="math\uint8x16.h" />
+    <ClInclude Include="math\uint8x32.h" />
     <ClInclude Include="math\vector2.h" />
     <ClInclude Include="math\vector3.h" />
     <ClInclude Include="math\vector4.h" />
+    <ClInclude Include="math\vector8.h" />
+    <ClInclude Include="math\vector_runtime_support.h" />
     <ClInclude Include="mpl\arithmetic_max.h" />
     <ClInclude Include="mpl\arithmetic_min.h" />
     <ClInclude Include="mpl\ingore_t.h" />
@@ -278,6 +289,9 @@
     <ClInclude Include="preprocessor\uint8_to_byte.h" />
     <ClInclude Include="preprocessor\while.h" />
     <ClInclude Include="type.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\xiongya\Desktop\testccpuid\ccpuid.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -127,7 +127,7 @@ namespace Aurora3D
 		float VectorGetFloat(const float128& v, int i);
 
 		// ret = v[i]
-		uint32 VectorGetUint32(const float128& v, int i);
+		uint32 VectorGetUint32(const float128& v, int i = 0);
 
 		// ret = v[0] 
 		float VectorGetFirst(const float128& v);
@@ -177,6 +177,9 @@ namespace Aurora3D
 		// ret.xyzw = v1.xyzw + v2.xyzw
 		float128 VectorAdd(const float128& v1, const float128& v2);
 
+		// ret.xyzw = v1.xyzw + scale.xxxx
+		float128 VectorAdd(const float128& v1, float scale);
+
 		// v1 = v1 + v2
 		void VectorAddAssign(float128& v1, const float128& v2);
 
@@ -184,95 +187,103 @@ namespace Aurora3D
 		float128 VectorAddTwice(const float128& v1, const float128& v2, const float128& v3);
 
 		// ret = v1 + v2 - v3
-		float128 VectorAddMinus(const float128& v1, const float128& v2, const float128& v3);
+		float128 VectorAddSub(const float128& v1, const float128& v2, const float128& v3);
 
 		// ret = (v1+v2) * v3
 		float128 VectorAddMutiply(const float128& v1, const float128& v2, const float128& v3);
 
 		// ret = (v1+v2) / v3
-		float128 VectorAddDivide(const float128& v1, const float128& v2, const float128& v3);
+		float128 VectorAddDiv(const float128& v1, const float128& v2, const float128& v3);
 
 		// ret.xyzw = v1.xyzw - v2.xyzw
-		float128 VectorMinus(const float128& v1, const float128& v2);
+		float128 VectorSub(const float128& v1, const float128& v2);
+
+		// ret.xyzw = v1.xyzw - (scale,scale,scale,scale)
+		float128 VectorSub(const float128& v1, float scale);
 
 		// v1 = v1 - v2
-		void VectorMinusAssign(float128& v1, const float128 v2);
+		void VectorSubAssign(float128& v1, const float128 v2);
 
 		// ret = v1 - v2 - v3
-		float128 VectorMinusTwice(const float128& v1, const float128& v2, const float128& v3);
+		float128 VectorSubTwice(const float128& v1, const float128& v2, const float128& v3);
 
 		// ret = v1 - v2 + v3 
-		float128 VectorMinusAdd(const float128& v1, const float128& v2, const float128& v3);
+		float128 VectorSubAdd(const float128& v1, const float128& v2, const float128& v3);
 
 		// ret = (v1 - v2)*v3
-		float128 VectorMinusMutiply(const float128& v1, const float128& v2, const float128& v3);
+		float128 VectorSubMutiply(const float128& v1, const float128& v2, const float128& v3);
 
 		// ret (v1-v2)/v3
-		float128 VectorMinusDivide(const float128& minus1, const float128& minus2, const float128& div);
+		float128 VectorSubDiv(const float128& Sub1, const float128& Sub2, const float128& div);
 
 		// ret.xyzw = v1.xyzw * v2.xyzw
-		float128 VectorMultiply(const float128& v1, const float128& v2);
+		float128 VectorMul(const float128& v1, const float128& v2);
 
 		// ret = v.xyzw * scale
-		float128 VectorMultiply(const float128& v, float scale);
+		float128 VectorMul(const float128& v, float scale);
 
 		// v1 = v1*v2
-		void VectorMultiplyAssign(float128& v1, const float128& v2);
+		void VectorMulAssign(float128& v1, const float128& v2);
 
 		// v.xyzw = v.xyzw *scale
-		void VectorMultiplyAssign(float128& v, float scale);
+		void VectorMulAssign(float128& v, float scale);
 
 		// ret = v1 * v2 * v3
-		float128 VectorMultiplyTwice(const float128& v1, const float128& v2, const float128& v3);
+		float128 VectorMulTwice(const float128& v1, const float128& v2, const float128& v3);
 
 		// ret = v1*v2 +v3
-		float128 VectorMultiplyAdd(const float128& v1, const float128& v2, const float128& v3);
+		float128 VectorMulAdd(const float128& v1, const float128& v2, const float128& v3);
 
 		// ret = v1*v2 - v3
-		float128 VectorPreMultiplyMinus(const float128& v1, const float128& v2, const float128& v3);
+		float128 VectorPreMulSub(const float128& v1, const float128& v2, const float128& v3);
 
 		// ret = v1 - v1*v2
-		float128 VectorPostMultiplyMinus(const float128& v1, const float128& v2, const float128& v3);
+		float128 VectorPostMulSub(const float128& v1, const float128& v2, const float128& v3);
 
 		// ret = v1*v2/v3 
-		float128 VectorPreMultiplyDivide(const float128& v1, const float128& v2, const float128& v3);
+		float128 VectorPreMulDiv(const float128& v1, const float128& v2, const float128& v3);
 
 		// ret = v1/(v2*v3)
-		float128 VectorPostMultiplyDivide(const float128& v1, const float128& v2, const float128& v3);
+		float128 VectorPostMulDiv(const float128& v1, const float128& v2, const float128& v3);
 
 		// ret.xyzw = v1.xyzw / v2.xyzw
-		float128 VectorDivide(const float128& v1, const float128& v2);
+		float128 VectorDiv(const float128& v1, const float128& v2);
 
 		// ret.xyzw = v1.xyzw / s
-		float128 VectorDivide(const float128& v1, float s);
+		float128 VectorDiv(const float128& v1, float s);
 
 		// v1.xyzw = v1.xyzw/s
-		float128 VectorDivideAssign(const float128& v1, float s);
+		float128 VectorDivAssign(const float128& v1, float s);
 
 		// v1 = v1 / v2;
-		float128 VectorDivideAssign(const float128& v1, const float128& v2);
+		float128 VectorDivAssign(const float128& v1, const float128& v2);
 
 		// ret = v1 / (v2+v3)
-		float128 VectorDivideAdd(const float128& div1, const float128& div2, const float128& add);
+		float128 VectorDivAdd(const float128& div1, const float128& div2, const float128& add);
 
 		// ret = v1 / v2 - v3
-		float128 VectorPreDivideMinus(const float128& v1, const float128& v2, const float128& v3);
+		float128 VectorPreDivSub(const float128& v1, const float128& v2, const float128& v3);
 
 		// ret = v1 - v2 / v3
-		float128 VectorPostDivideMinus(const float128& v1, const float128& v2, const float128& v3);
+		float128 VectorPostDivSub(const float128& v1, const float128& v2, const float128& v3);
 
 		//return mod1 - (int)(mod1/mod2)*mod2
 		float128 VectorMod(const float128& mod1, const float128& mod2);
 
+		// 11/10/01 -> 1 00->0
 		// ret.xyzw = (v1.x|v2.x, v1.y|v2.y, v1.z|v2.z, v1.w|v2.w)
 		float128 VectorOr(const float128& v1, const float128& v2);
 
+		// 11 -> 1 01/10/00 -> 0
 		// ret.xyzw = (v1.x&v2.x, v1.y&v2.y, v1.z&v2.z, v1.w&v2.w)
 		float128 VectorAnd(const float128& v1, const float128& v2);
 
-		// ret.xyzw = ( v1.x&v2.x, v1.y&v2.y, v1.z&v2.z, v1.w&v2.w)
+		// 11 ->0  01/10/00 -> 1
+		// ret.xyzw = ( !v1.x&v2.x, !v1.y&v2.y, !v1.z&v2.z, !v1.w&v2.w)
 		float128 VectorAndNot(const float128& v1, const float128& v2);
 
+
+		// 11/00 -> 0  01/10 -> 1
 		//ret.xyzw = ( v1.x^v2.x, v1.y^v2.y, v1.z^v2.z, v1.w^v2.w)
 		float128 VectorXor(const float128& v1, const float128& v2);
 
@@ -517,10 +528,10 @@ namespace Aurora3D
 		bool MatrixIsInInfinite(const float128x4& M);
 
 		// C = A * B, No copy
-		void MatrixMultiplyNoCopy(const float128x4& A, const float128x4& B, float128x4& C);
+		void MatrixMulNoCopy(const float128x4& A, const float128x4& B, float128x4& C);
 
 		// ret = A * B, copy matrix
-		float128x4 MatrixMultiply(const float128x4& A, const float128x4& B);
+		float128x4 MatrixMul(const float128x4& A, const float128x4& B);
 
 		// ret.xyzw = (det,det,det,det), det = Determinant(M)
 		float128 MatrixDeterminant(const float128x4& M);
@@ -992,22 +1003,37 @@ namespace Aurora3D
 		}
 
 		//latency 3
-		//return minus1 - minus2
-		A3D_FORCEINLINE float128 VectorMinus(const float128& v1, const float128& v2)
+		//return add1 + add2 
+		A3D_FORCEINLINE float128 VectorAdd(const float128& v1, float scale)
+		{
+			return _mm_add_ps(v1, _mm_load_ps1(&scale));
+		}
+
+
+		//latency 3
+		//return Sub1 - Sub2
+		A3D_FORCEINLINE float128 VectorSub(const float128& v1, const float128& v2)
 		{
 			return _mm_sub_ps(v1, v2);
 		}
 
+		//
+		A3D_FORCEINLINE float128 VectorSub(const float128& v1, float scale)
+		{
+			return _mm_sub_ps(v1,_mm_load_ps1(&scale));
+		}
+
+
 		//Latency 4-5
 		//return mul1 * mul2
-		A3D_FORCEINLINE float128 VectorMultiply(const float128& v1, const float128& v2)
+		A3D_FORCEINLINE float128 VectorMul(const float128& v1, const float128& v2)
 		{
 			return _mm_mul_ps(v1, v2);
 		}
 
 		//Latency 13~14
 		// return div1 / div2
-		A3D_FORCEINLINE float128 VectorDivide(const float128& div1, const float128& div2)
+		A3D_FORCEINLINE float128 VectorDiv(const float128& div1, const float128& div2)
 		{
 			return _mm_div_ps(div1, div2);
 		}
@@ -1067,10 +1093,13 @@ namespace Aurora3D
 			return _mm_or_ps(v1, v2);
 		}
 
+		// 1 -> 0  0 -> 1
+
 		//Latency 1
 		//return v1 & v2
 		A3D_FORCEINLINE float128 VectorAnd(const float128& v1, const float128& v2)
 		{
+			
 			return _mm_and_ps(v1, v2);
 		}
 
@@ -1227,7 +1256,7 @@ namespace Aurora3D
 		// return -v
 		A3D_FORCEINLINE float128 VectorNegate(const float128& v)
 		{
-			return VectorMinus(SSEConstant::Zero, v);
+			return VectorSub(SSEConstant::Zero, v);
 		}
 
 		// Latency 1
@@ -1453,19 +1482,19 @@ namespace Aurora3D
 			return vaddq_f32(v1, v2);
 		}
 
-		A3D_FORCEINLINE float128 VectorMinus(const float128& v1, const float128& v2)
+		A3D_FORCEINLINE float128 VectorSub(const float128& v1, const float128& v2)
 		{
 			return vsubq_f32(v1, v2);
 		}
 
-		A3D_FORCEINLINE float128 VectorMultiply(const float128& v1, const float128& v2)
+		A3D_FORCEINLINE float128 VectorMul(const float128& v1, const float128& v2)
 		{
 			return vmulq_f32(v1, v2);
 		}
 
-		A3D_FORCEINLINE float128 VectorDivide(const float128& v1, const float128& v2)
+		A3D_FORCEINLINE float128 VectorDiv(const float128& v1, const float128& v2)
 		{
-			return VectorMultiply(v1, VectorReciprocal(v2));
+			return VectorMul(v1, VectorReciprocal(v2));
 		}
 
 		A3D_FORCEINLINE float128 VectorEquals(const float128& v1, const float128& v2)
@@ -1607,7 +1636,7 @@ namespace Aurora3D
 			static const float128 kOne = VectorLoad(1.0f);
 			float128 int_part = VectorIntPart(v);
 			float128 floor = VectorSelect(VectorGreater(v, kZero), kOne, kZero);
-			float128 add = VectorSelect(VectorGreater(VectorMinus(v, floor), kHalf), kOne, kZero);
+			float128 add = VectorSelect(VectorGreater(VectorSub(v, floor), kHalf), kOne, kZero);
 			return VectorAdd(floor, add);
 		}
 
@@ -1717,162 +1746,165 @@ namespace Aurora3D
 			return VectorAdd(VectorAdd(v1, v2), v3);
 		}
 
-		//return add1 + add2 - minus
-		A3D_FORCEINLINE float128 VectorAddMinus(const float128& add1, const float128& add2, const float128& minus)
+		//return add1 + add2 - Sub
+		A3D_FORCEINLINE float128 VectorAddSub(const float128& add1, const float128& add2, const float128& Sub)
 		{
-			return VectorMinus(VectorAdd(add1, add2), minus);
+			return VectorSub(VectorAdd(add1, add2), Sub);
 		}
 
 		//return (add1 + add2 )*mul
 		A3D_FORCEINLINE float128 VectorAddMutiply(const float128& add1, const float128& add2, const float128& mul)
 		{
-			return VectorMultiply(VectorAdd(add1, add2), mul);
+			return VectorMul(VectorAdd(add1, add2), mul);
 		}
 
 		//return (add1+add2) / div
-		A3D_FORCEINLINE float128 VectorAddDivide(const float128& add1, const float128& add2, const float128& div)
+		A3D_FORCEINLINE float128 VectorAddDiv(const float128& add1, const float128& add2, const float128& div)
 		{
-			return VectorDivide(VectorAdd(add1, add2), div);
+			return VectorDiv(VectorAdd(add1, add2), div);
 		}
 
 		// v1 = v1+v2
-		A3D_FORCEINLINE void VectorMinusAssign(float128& v1, const float128 v2)
+		A3D_FORCEINLINE void VectorSubAssign(float128& v1, const float128 v2)
 		{
-			v1 = VectorMinus(v1, v2);
+			v1 = VectorSub(v1, v2);
 		}
 
-		//return minus1 - minus2 - minus3
-		A3D_FORCEINLINE float128 VectorMinusTwice(const float128& minus1, const float128& minus2, const float128& minus3)
+		//return Sub1 - Sub2 - Sub3
+		A3D_FORCEINLINE float128 VectorSubTwice(const float128& Sub1, const float128& Sub2, const float128& Sub3)
 		{
-			return VectorMinus(VectorMinus(minus1, minus2), minus3);
+			return VectorSub(VectorSub(Sub1, Sub2), Sub3);
 		}
 
-		//return minus1 - minus2 + minus3
-		A3D_FORCEINLINE float128 VectorMinusAdd(const float128& minus1, const float128& minus2, const float128& add3)
+		//return Sub1 - Sub2 + Sub3
+		A3D_FORCEINLINE float128 VectorSubAdd(const float128& Sub1, const float128& Sub2, const float128& add3)
 		{
-			return VectorMinus(VectorAdd(minus1, minus2), add3);
+			return VectorSub(VectorAdd(Sub1, Sub2), add3);
 		}
 
-		//return (minus1-minus2)*mul
-		A3D_FORCEINLINE float128 VectorMinusMutiply(const float128& minus1, const float128& minus2, const float128& mul)
+		//return (Sub1-Sub2)*mul
+		A3D_FORCEINLINE float128 VectorSubMutiply(const float128& Sub1, const float128& Sub2, const float128& mul)
 		{
-			return VectorMultiply(VectorMinus(minus1, minus2), mul);
+			return VectorMul(VectorSub(Sub1, Sub2), mul);
 		}
 
-		//return (minus1-minus2)/div
-		A3D_FORCEINLINE float128 VectorMinusDivide(const float128& minus1, const float128& minus2, const float128& div)
+		//return (Sub1-Sub2)/div
+		A3D_FORCEINLINE float128 VectorSubDiv(const float128& Sub1, const float128& Sub2, const float128& div)
 		{
-			return VectorDivide(VectorMinus(minus1, minus2), div);
+			return VectorDiv(VectorSub(Sub1, Sub2), div);
 		}
 
 		//return ( mul1[0]*scale, mul1[1]*scale, mul1[2]*scale, mul1[3]*scale )
-		A3D_FORCEINLINE float128 VectorMultiply(const float128& mul1, float scale)
+		A3D_FORCEINLINE float128 VectorMul(const float128& mul1, float scale)
 		{
-			return VectorMultiply(mul1, VectorLoad(scale));
+			return VectorMul(mul1, VectorLoad(scale));
 		}
 
 		// return
-		A3D_FORCEINLINE void VectorMultiplyAssign(float128& v1, const float128& v2)
+		A3D_FORCEINLINE void VectorMulAssign(float128& v1, const float128& v2)
 		{
-			v1 = VectorMultiply(v1, v2);
+			v1 = VectorMul(v1, v2);
 		}
 
 		// return
-		A3D_FORCEINLINE void VectorMultiplyAssign(float128& v, float scale)
+		A3D_FORCEINLINE void VectorMulAssign(float128& v, float scale)
 		{
-			v = VectorMultiply(v, scale);
+			v = VectorMul(v, scale);
 		}
 
 
 		//return mul1 * mul2 * mul3
-		A3D_FORCEINLINE float128 VectorMultiplyTwice(const float128& mul1, const float128& mul2, const float128& mul3)
+		A3D_FORCEINLINE float128 VectorMulTwice(const float128& mul1, const float128& mul2, const float128& mul3)
 		{
-			return VectorMultiply(mul1, VectorMultiply(mul2, mul3));
+			return VectorMul(mul1, VectorMul(mul2, mul3));
 		}
 
 		//return mul1 * mul2 + add
-		A3D_FORCEINLINE float128 VectorMultiplyAdd(const float128& mul1, const float128& mul2, const float128& add)
+		A3D_FORCEINLINE float128 VectorMulAdd(const float128& mul1, const float128& mul2, const float128& add)
 		{
-			return VectorAdd(VectorMultiply(mul1, mul2), add);
+			return VectorAdd(VectorMul(mul1, mul2), add);
 		}
 
-		//return mul1 * mul2 - minus
-		A3D_FORCEINLINE float128 VectorPreMultiplyMinus(const float128& mul1, const float128& mul2, const float128& minus)
+		//return mul1 * mul2 - Sub
+		A3D_FORCEINLINE float128 VectorPreMulSub(const float128& mul1, const float128& mul2, const float128& Sub)
 		{
-			return VectorMinus(VectorMultiply(mul1, mul2), minus);
+			return VectorSub(VectorMul(mul1, mul2), Sub);
 		}
 
 		//return v1 - v2*v3
-		A3D_FORCEINLINE float128 VectorPostMultiplyMinus(const float128& v1, const float128& v2, const float128& v3)
+		A3D_FORCEINLINE float128 VectorPostMulSub(const float128& v1, const float128& v2, const float128& v3)
 		{
-			return VectorMinus(v1, VectorMultiply(v2, v3));
+			return VectorSub(v1, VectorMul(v2, v3));
 		}
 
 
 		//return mul1 * mul2 / div
-		A3D_FORCEINLINE float128 VectorPreMultiplyDivide(const float128& mul1, const float128& mul2, const float128& div)
+		A3D_FORCEINLINE float128 VectorPreMulDiv(const float128& mul1, const float128& mul2, const float128& div)
 		{
-			return VectorDivide(VectorMultiply(mul1, mul2), div);
+			return VectorDiv(VectorMul(mul1, mul2), div);
 		}
 
 		//return v1 / (v2*v3)
-		A3D_FORCEINLINE float128 VectorPostMultiplyDivide(const float128& v1, const float128& v2, const float128& v3)
+		A3D_FORCEINLINE float128 VectorPostMulDiv(const float128& v1, const float128& v2, const float128& v3)
 		{
-			return VectorDivide(v1, VectorMultiply(v2, v3));
+			return VectorDiv(v1, VectorMul(v2, v3));
 		}
 
 		// v1 = v1 / v2
-		A3D_FORCEINLINE void VectorDivideAssign(float128& v1, const float128& v2)
+		A3D_FORCEINLINE void VectorDivAssign(float128& v1, const float128& v2)
 		{
-			v1 = VectorDivide(v1, v2);
+			v1 = VectorDiv(v1, v2);
 		}
 
-		A3D_FORCEINLINE float128 VectorDivide(const float128& v1, float s)
+		A3D_FORCEINLINE float128 VectorDiv(const float128& v1, float s)
 		{
-			return VectorDivide(v1, VectorLoad(s));
+			return VectorDiv(v1, VectorLoad(s));
 		}
 
 		// v1 = v1 / v2
-		A3D_FORCEINLINE void VectorDivideAssign(float128& v1, float s)
+		A3D_FORCEINLINE void VectorDivAssign(float128& v1, float s)
 		{
-			v1 = VectorDivide(v1, s);
+			v1 = VectorDiv(v1, s);
 		}
 
 		//return v1 / v2 + v3
-		A3D_FORCEINLINE float128 VectorDivideAdd(const float128& v1, const float128& v2, const float128& v3)
+		A3D_FORCEINLINE float128 VectorDivAdd(const float128& v1, const float128& v2, const float128& v3)
 		{
-			return VectorMinus(VectorDivide(v1, v2), v3);
+			return VectorSub(VectorDiv(v1, v2), v3);
 		}
 
 		//return v1 / v2 - v3
-		A3D_FORCEINLINE float128 VectorPreDivideMinus(const float128& v1, const float128& v2, const float128& v3)
+		A3D_FORCEINLINE float128 VectorPreDivSub(const float128& v1, const float128& v2, const float128& v3)
 		{
-			return VectorMinus(VectorDivide(v1, v2), v3);
+			return VectorSub(VectorDiv(v1, v2), v3);
 		}
 
 		//return v1 - v2/v3
-		A3D_FORCEINLINE float128 VectorPostDivideMinus(const float128& v1, const float128& v2, const float128& v3)
+		A3D_FORCEINLINE float128 VectorPostDivSub(const float128& v1, const float128& v2, const float128& v3)
 		{
-			return VectorMinus(v1, VectorDivide(v2, v3));
+			return VectorSub(v1, VectorDiv(v2, v3));
 		}
 
 		//return mod1 - (int)(mod1/mod2)*mod2
 		A3D_FORCEINLINE float128 VectorMod(const float128& mod1, const float128& mod2)
 		{
-			return VectorMinus(mod1, VectorMultiply(mod2, VectorIntPart(VectorDivide(mod1, mod2))));
+			return VectorSub(mod1, VectorMul(mod2, VectorIntPart(VectorDiv(mod1, mod2))));
 		}
 
 		// IF abs(v1 - v2) < EPSIDE, return 0xffffffff otherwise is 0
 		A3D_FORCEINLINE float128 VectorNearlyEquals(const float128& v1, const float128& v2, float epside)
 		{
-			return VectorLess(VectorAbs(VectorMinus(v1, v2)), VectorLoad(epside));
+			return VectorLess(VectorAbs(VectorSub(v1, v2)), VectorLoad(epside));
 		}
+
+	
+
 
 		// F = v1.x*v2.x + v1.y*v2.y
 		// return (F,F, undef, undef)
 		A3D_FORCEINLINE float128 VectorDot2(const float128& v1, const float128& v2)
 		{
-			float128 multi = VectorMultiply(v1, v2);
+			float128 multi = VectorMul(v1, v2);
 			return VectorAdd(multi, VectorShuffle<1, 0, 2, 3>(multi));
 		}
 
@@ -1880,7 +1912,7 @@ namespace Aurora3D
 		// return (F,F,F, undef )
 		A3D_FORCEINLINE float128 VectorDot3(const float128& v1, const float128& v2)
 		{
-			float128 multi = VectorMultiply(v1, v2);                       //x,y,z
+			float128 multi = VectorMul(v1, v2);                       //x,y,z
 			multi = VectorAdd(multi, VectorShuffle<1, 2, 0, 3>(multi)); //x+y, y+z, z+x
 			return VectorAdd(multi, VectorShuffle<2, 0, 1, 3>(multi));
 		}
@@ -1890,7 +1922,7 @@ namespace Aurora3D
 		// return (distance, distance, undef, undef )
 		A3D_FORCEINLINE float128 VectorDistance2(const float128& point1, const float128& point2)
 		{
-			float128 vec = VectorMinus(point1, point2);
+			float128 vec = VectorSub(point1, point2);
 			return VectorSqrt(VectorDot2(vec, vec));
 		}
 
@@ -1900,7 +1932,7 @@ namespace Aurora3D
 		// return (distance, distance, distance, undef)
 		A3D_FORCEINLINE float128 VectorDistance3(const float128& point1, const float128& point2)
 		{
-			float128 vec = VectorMinus(point1, point2);
+			float128 vec = VectorSub(point1, point2);
 			return VectorSqrt( VectorDot3(vec, vec));
 		}
 		
@@ -1946,19 +1978,19 @@ namespace Aurora3D
 		//return normalized(x,y, undef, undef)
 		A3D_FORCEINLINE float128 VectorNormalize2(const float128& v)
 		{
-			return VectorMultiply(v, VectorReciprocalSqrt(VectorDot2(v, v)));
+			return VectorMul(v, VectorReciprocalSqrt(VectorDot2(v, v)));
 		}
 
 		// return normalized(x,y,z, undef )
 		A3D_FORCEINLINE float128 VectorNormalize3(const float128& v)
 		{
-			return VectorMultiply(v, VectorReciprocalSqrt(VectorDot3(v, v)));
+			return VectorMul(v, VectorReciprocalSqrt(VectorDot3(v, v)));
 		}
 
 		// return normalize(x,y,z,w)
 		A3D_FORCEINLINE float128 VectorNormalize4(const float128& v)
 		{
-			return VectorMultiply(v, VectorReciprocalSqrt(VectorDot4(v, v)));
+			return VectorMul(v, VectorReciprocalSqrt(VectorDot4(v, v)));
 		}
 
 		//v[i] > 0 return 1, otherwise return 0
@@ -1976,7 +2008,7 @@ namespace Aurora3D
 		//return v[i] - (int)v[i]
 		A3D_FORCEINLINE float128 VectorFracPart(const float128& v)
 		{
-			return VectorMinus(v, VectorIntPart(v));
+			return VectorSub(v, VectorIntPart(v));
 		}
 
 		//return ceil(v[i]), 
@@ -1992,7 +2024,7 @@ namespace Aurora3D
 		{
 			float128 integer = VectorIntPart(v);
 			float128 step = VectorReverseStep(v);
-			return VectorMinus(integer, step);
+			return VectorSub(integer, step);
 		}
 
 		// abs(v[0,1])<bound[0,1] return true 
@@ -2077,7 +2109,7 @@ namespace Aurora3D
 		//  incident - 2 * dot(incident, normal)*normal 
 		A3D_FORCEINLINE float128 VectorReflect2(const float128 incident, const float128& normal)
 		{
-			return VectorMinus(incident, VectorMultiplyTwice(kVectorTwo, normal, VectorDot2(incident, normal)));
+			return VectorSub(incident, VectorMulTwice(kVectorTwo, normal, VectorDot2(incident, normal)));
 		}
 
 		// 3D ray reflect
@@ -2089,7 +2121,7 @@ namespace Aurora3D
 		// return (x,y,z, undef) 
 		A3D_FORCEINLINE float128 VectorReflect3(const float128 incident, const float128& normal)
 		{
-			return VectorMinus(incident, VectorMultiplyTwice(kVectorTwo, normal, VectorDot3(incident, normal)));
+			return VectorSub(incident, VectorMulTwice(kVectorTwo, normal, VectorDot3(incident, normal)));
 		}
 
 		// W is undef 
@@ -2103,8 +2135,8 @@ namespace Aurora3D
 			//y2 * z1 , x2*z1 ,  y2*x1 - 
 			//y1 * z2 , z1*x1 ,  x2*y1 
 			//y2 * z1 - y1 * z2 , x2 * z1 - x1 * z2, y2*x1 - x2-y1
-			return VectorMinus(VectorMultiply(v1_yzxw, v2_zxyw),
-				VectorMultiply(v1_zxyw, v2_yzxw));
+			return VectorSub(VectorMul(v1_yzxw, v2_zxyw),
+				VectorMul(v1_zxyw, v2_yzxw));
 		}
 
 		namespace SinCosConstant
@@ -2143,24 +2175,24 @@ namespace Aurora3D
 		A3D_FORCEINLINE float128 VectorSinRadianFast(const float128& v)
 		{
 			//based on a good discussion here http://forum.devmaster.net/t/fast-and-accurate-sine-cosine/9648
-			float128 result = VectorMultiply(v, kVectorOneOver2PI);
-			result = VectorMultiply(v, kVectorOneOver2PI);
-			result = VectorMinus(result, VectorRound(result));
-			result = VectorMultiply(SinCosConstant::A,
-				VectorMultiply(result,
-				VectorMinus(kVectorHalf, VectorAbs(result))));
-			return VectorMultiply(result, VectorAdd(SinCosConstant::B,
+			float128 result = VectorMul(v, kVectorOneOver2PI);
+			result = VectorMul(v, kVectorOneOver2PI);
+			result = VectorSub(result, VectorRound(result));
+			result = VectorMul(SinCosConstant::A,
+				VectorMul(result,
+				VectorSub(kVectorHalf, VectorAbs(result))));
+			return VectorMul(result, VectorAdd(SinCosConstant::B,
 				VectorAbs(result)));
 		}
 
 		A3D_FORCEINLINE float128 VectorRadianToDegree(const float128& v)
 		{
-			return VectorMultiply(v, kVector180OverPI);
+			return VectorMul(v, kVector180OverPI);
 		}
 
 		A3D_FORCEINLINE float128 VectorDegreeToRadian(const float128& v)
 		{
-			return VectorMultiply(v, kVectorPIOver180);
+			return VectorMul(v, kVectorPIOver180);
 		}
 
 		A3D_FORCEINLINE float128 VectorSinDegreeFast(const float128& v)
@@ -2182,35 +2214,35 @@ namespace Aurora3D
 		A3D_FORCEINLINE void VectorSinAndCosFast(float128& sin, float128& cos, const float128& radians)
 		{
 			//A = A - 2PI * round(A/2PI);
-			float128 A = VectorRound(VectorMultiply(radians, kVectorOneOver2PI));
-			A = VectorMinus(radians, VectorMultiply(A, kVectorOneOver2PI));
+			float128 A = VectorRound(VectorMul(radians, kVectorOneOver2PI));
+			A = VectorSub(radians, VectorMul(A, kVectorOneOver2PI));
 			const float128 abs_A = VectorAbs(A);
 
 			//mapping to [-PI/2, PI/2]
 			float128 sign = VectorSign(radians);
 			float128 sign_pi = VectorOr(sign, kVectorPI);
-			float128 refl = VectorMinus(sign_pi, abs_A);
+			float128 refl = VectorSub(sign_pi, abs_A);
 			float128 cmp = VectorGreater(A, kVectorHalfPI);
 			A = VectorSelect(refl, A, cmp);
 			sign = VectorSelect(kVectorNegtiveOne, kVectorOne, cmp);
-			const float128 AA = VectorMultiply(A, A);
+			const float128 AA = VectorMul(A, A);
 
 			//sin
 			sin = SinCosConstant::S4;
-			sin = VectorMultiplyAdd(AA, sin, SinCosConstant::S3);
-			sin = VectorMultiplyAdd(AA, sin, SinCosConstant::S2);
-			sin = VectorMultiplyAdd(AA, sin, SinCosConstant::S1);
-			sin = VectorMultiplyAdd(AA, sin, SinCosConstant::S0);
-			sin = VectorMultiplyAdd(AA, sin, kVectorOne);
-			sin = VectorMultiply(A, sin);
+			sin = VectorMulAdd(AA, sin, SinCosConstant::S3);
+			sin = VectorMulAdd(AA, sin, SinCosConstant::S2);
+			sin = VectorMulAdd(AA, sin, SinCosConstant::S1);
+			sin = VectorMulAdd(AA, sin, SinCosConstant::S0);
+			sin = VectorMulAdd(AA, sin, kVectorOne);
+			sin = VectorMul(A, sin);
 
 			cos = SinCosConstant::C4;
-			cos = VectorMultiplyAdd(AA, cos, SinCosConstant::C3);
-			cos = VectorMultiplyAdd(AA, cos, SinCosConstant::C2);
-			cos = VectorMultiplyAdd(AA, cos, SinCosConstant::C1);
-			cos = VectorMultiplyAdd(AA, cos, SinCosConstant::C0);
-			cos = VectorMultiplyAdd(AA, cos, kVectorOne);
-			cos = VectorMultiply(sign, cos);
+			cos = VectorMulAdd(AA, cos, SinCosConstant::C3);
+			cos = VectorMulAdd(AA, cos, SinCosConstant::C2);
+			cos = VectorMulAdd(AA, cos, SinCosConstant::C1);
+			cos = VectorMulAdd(AA, cos, SinCosConstant::C0);
+			cos = VectorMulAdd(AA, cos, kVectorOne);
+			cos = VectorMul(sign, cos);
 		}
 #endif  
 
@@ -2249,8 +2281,8 @@ namespace Aurora3D
 		}
 
 
-		//16 times multiply and 12 times add
-		A3D_FORCEINLINE void MatrixMultiplyNoCopy(const float128x4& A, const float128x4& B, float128x4& C)
+		//16 times Mul and 12 times add
+		A3D_FORCEINLINE void MatrixMulNoCopy(const float128x4& A, const float128x4& B, float128x4& C)
 		{
 			/*
 			*	A00 A01 A02 A03       B00 B01 B02 B03      C00 C01 C02 C03
@@ -2268,58 +2300,58 @@ namespace Aurora3D
 			float128 temp;
 
 			///first row
-			temp = VectorMultiply(VectorReplicate<0>(A[0]), B[0]);
-			temp = VectorMultiplyAdd(VectorReplicate<1>(A[0]), B[1], temp);
-			temp = VectorMultiplyAdd(VectorReplicate<2>(A[0]), B[2], temp);
-			C[0] = VectorMultiplyAdd(VectorReplicate<3>(A[0]), B[3], temp);
+			temp = VectorMul(VectorReplicate<0>(A[0]), B[0]);
+			temp = VectorMulAdd(VectorReplicate<1>(A[0]), B[1], temp);
+			temp = VectorMulAdd(VectorReplicate<2>(A[0]), B[2], temp);
+			C[0] = VectorMulAdd(VectorReplicate<3>(A[0]), B[3], temp);
 
 			// second row
-			temp = VectorMultiply(VectorReplicate<0>(A[1]), B[0]);
-			temp = VectorMultiplyAdd(VectorReplicate<1>(A[1]), B[1], temp);
-			temp = VectorMultiplyAdd(VectorReplicate<2>(A[1]), B[2], temp);
-			C[1] = VectorMultiplyAdd(VectorReplicate<3>(A[1]), B[3], temp);
+			temp = VectorMul(VectorReplicate<0>(A[1]), B[0]);
+			temp = VectorMulAdd(VectorReplicate<1>(A[1]), B[1], temp);
+			temp = VectorMulAdd(VectorReplicate<2>(A[1]), B[2], temp);
+			C[1] = VectorMulAdd(VectorReplicate<3>(A[1]), B[3], temp);
 
 			//third row
-			temp = VectorMultiply(VectorReplicate<0>(A[2]), B[0]);
-			temp = VectorMultiplyAdd(VectorReplicate<1>(A[2]), B[1], temp);
-			temp = VectorMultiplyAdd(VectorReplicate<2>(A[2]), B[2], temp);
-			C[2] = VectorMultiplyAdd(VectorReplicate<3>(A[2]), B[3], temp);
+			temp = VectorMul(VectorReplicate<0>(A[2]), B[0]);
+			temp = VectorMulAdd(VectorReplicate<1>(A[2]), B[1], temp);
+			temp = VectorMulAdd(VectorReplicate<2>(A[2]), B[2], temp);
+			C[2] = VectorMulAdd(VectorReplicate<3>(A[2]), B[3], temp);
 
 			//forth row
-			temp = VectorMultiply(VectorReplicate<0>(A[4]), B[0]);
-			temp = VectorMultiplyAdd(VectorReplicate<1>(A[4]), B[1], temp);
-			temp = VectorMultiplyAdd(VectorReplicate<2>(A[4]), B[2], temp);
-			C[4] = VectorMultiplyAdd(VectorReplicate<3>(A[4]), B[3], temp);
+			temp = VectorMul(VectorReplicate<0>(A[4]), B[0]);
+			temp = VectorMulAdd(VectorReplicate<1>(A[4]), B[1], temp);
+			temp = VectorMulAdd(VectorReplicate<2>(A[4]), B[2], temp);
+			C[4] = VectorMulAdd(VectorReplicate<3>(A[4]), B[3], temp);
 		}
 
 
-		A3D_FORCEINLINE float128x4 MatrixMultiply(const float128x4& A, const float128x4& B)
+		A3D_FORCEINLINE float128x4 MatrixMul(const float128x4& A, const float128x4& B)
 		{
 			float128x4 C;
-			MatrixMultiplyNoCopy(A, B, C);
+			MatrixMulNoCopy(A, B, C);
 			return C;
 		}
 
-		//7 times multiply, 10 times shuffle, 2 times minus, 2 times add
+		//7 times Mul, 10 times shuffle, 2 times Sub, 2 times add
 		A3D_FORCEINLINE float128 MatrixDeterminant(const float128x4& M)
 		{
 			float128 mat2_result[2], accumulate[3], det;
 			mat2_result[0] = VectorShuffle<1, 2, 3, 0>(M[3]);
 			mat2_result[1] = VectorShuffle<2, 3, 0, 1>(M[3]);
 			//9*14, 10*15, 11*16, 12*13
-			mat2_result[0] = VectorMultiply(mat2_result[0], M[2]);
+			mat2_result[0] = VectorMul(mat2_result[0], M[2]);
 			//9*15, 10*16, 11*13, 12*14
-			mat2_result[1] = VectorMultiply(mat2_result[1], M[2]);
+			mat2_result[1] = VectorMul(mat2_result[1], M[2]);
 			det = VectorShuffle<1, 2, 3, 0>(M[2]);
 			// 10*13, 11*14, 12*15, 9*16
-			det = VectorMultiply(det, M[3]);
+			det = VectorMul(det, M[3]);
 			//9*14-10*13, 10*15-11*14, 11*16-12*15, 12*13-9*16
-			mat2_result[0] = VectorMinus(mat2_result[0], det);
+			mat2_result[0] = VectorSub(mat2_result[0], det);
 			det = VectorShuffle<2, 3, 0, 1>(M[2]);
 			//11*13, 12*14, 9*15, 10*16 
-			det = VectorMultiply(det, M[3]);
+			det = VectorMul(det, M[3]);
 			//9*15-11*13, 10*16-12*14, 11*13-9*15, 12*14-10*16
-			mat2_result[1] = VectorMinus(mat2_result[1], det);
+			mat2_result[1] = VectorSub(mat2_result[1], det);
 
 			//6,7,8,5
 			accumulate[0] = VectorShuffle<1, 2, 3, 0>(M[1]);
@@ -2329,13 +2361,13 @@ namespace Aurora3D
 			accumulate[2] = VectorShuffle<3, 0, 1, 2>(M[1]);
 
 			//6*(11*16-12*15) , 7*(12*13-9*16), 8*(9*14-10*13), 5*(10*15-11*14)
-			det = VectorMultiply(accumulate[0], VectorShuffle<2, 3, 0, 1>(mat2_result[0]));
+			det = VectorMul(accumulate[0], VectorShuffle<2, 3, 0, 1>(mat2_result[0]));
 			//7*(12*14-10*16) , 8*(9*15-11*13), 5*(10*16-12*14), 6*(11*13-9*15)
-			det = VectorMultiplyAdd(accumulate[1], VectorShuffle<3, 0, 1, 2>(mat2_result[1]), det);
+			det = VectorMulAdd(accumulate[1], VectorShuffle<3, 0, 1, 2>(mat2_result[1]), det);
 			//8*(10*15-11*14),  5*(11*16-12*15), 6*(12*13-9*16), 7*(9*14-10*13)
-			det = VectorMultiplyAdd(accumulate[2], VectorShuffle<2, 3, 0, 1>(mat2_result[0]), det);
+			det = VectorMulAdd(accumulate[2], VectorShuffle<2, 3, 0, 1>(mat2_result[0]), det);
 			//+,-,+,-
-			return VectorMultiply(det, kVectorOddNegtive);
+			return VectorMul(det, kVectorOddNegtive);
 		}
 
 
@@ -2364,7 +2396,7 @@ namespace Aurora3D
 			return transpose;
 		}
 
-		//22 times multiply, 8 times minus, 6 times add, 44 times shuffle
+		//22 times Mul, 8 times Sub, 6 times add, 44 times shuffle
 		//return determinant
 		A3D_FORCEINLINE float128 MatrixInverse(const float128x4& original, float128x4& inverse)
 		{
@@ -2395,26 +2427,26 @@ namespace Aurora3D
 			counter[0] = VectorShuffle<1, 2, 3, 0>(transpose[1]);         //[6,10,14,2]
 			counter[1] = VectorShuffle<1, 2, 3, 0>(transpose[3]);         //[8,12,16,4]
 			jump = VectorShuffle<0, 1, 0, 1>(transpose[0], transpose[2]); //[1,5,3,7]
-			mat2_result[0] = VectorMultiply(counter[0], transpose[0]);    //[1*6, 5*10, 9*14, 13*2]
-			mat2_result[1] = VectorMultiply(counter[1], transpose[2]);    //[3*8, 7*12, 11*16, 15*4]
-			mat2_result[2] = VectorMultiply(jump, 
+			mat2_result[0] = VectorMul(counter[0], transpose[0]);    //[1*6, 5*10, 9*14, 13*2]
+			mat2_result[1] = VectorMul(counter[1], transpose[2]);    //[3*8, 7*12, 11*16, 15*4]
+			mat2_result[2] = VectorMul(jump, 
 				VectorShuffle<2, 3, 2, 3>(transpose[1], transpose[3]));//[1*10,9*14, 3*12, 11*16]						
 			counter[0] = VectorShuffle<1, 2, 3, 0>(transpose[0]);         //[5,9,13,1]
 			counter[1] = VectorShuffle<1, 2, 3, 0>(transpose[2]);         //[7,11,15,3]
 			jump = VectorShuffle<0, 1, 0, 1>(transpose[1], transpose[3]); //[2,6,4,8]
-			counter[0] = VectorMultiply(counter[0], transpose[1]);        //[2*5, 6*9, 10*13, 14*1]
-			counter[1] = VectorMultiply(counter[1], transpose[3]);        //[4*7, 8*11,12*15, 16*3]
-			jump = VectorMultiply(jump, 
+			counter[0] = VectorMul(counter[0], transpose[1]);        //[2*5, 6*9, 10*13, 14*1]
+			counter[1] = VectorMul(counter[1], transpose[3]);        //[4*7, 8*11,12*15, 16*3]
+			jump = VectorMul(jump, 
 				VectorShuffle<2, 3, 2, 3>(transpose[0],transpose[2]));    //[2*9, 6*13, 4*11, 8*15]
 
 			//[1*6-2*5, 5*10-6*9, 9*14-10*13, 13*2-14*1]
-			mat2_result[0] = VectorMinus(mat2_result[0], counter[0]);
+			mat2_result[0] = VectorSub(mat2_result[0], counter[0]);
 			//[3*8-4*7, 7*12-8*11, 11*16-12*15, 15*4- 16*3]
-			mat2_result[1] = VectorMinus(mat2_result[1], counter[1]);
+			mat2_result[1] = VectorSub(mat2_result[1], counter[1]);
 			//[1*10-2*9, 5*14-6*13, 3*12-4*11, 7*16-8*15]
-			mat2_result[2] = VectorMinus(mat2_result[2], jump);
+			mat2_result[2] = VectorSub(mat2_result[2], jump);
 			//[2*9-1*10, 6*13-5*14, 4*11-3*12, 8*15-7*16]
-			mat2_result[3] = VectorMinus(kVectorZero, mat2_result[2]);
+			mat2_result[3] = VectorSub(kVectorZero, mat2_result[2]);
 
 			//caculate 1,9,3,11's one and two part
 			float128 accumulate[2];
@@ -2422,9 +2454,9 @@ namespace Aurora3D
 			accumulate[0] = VectorShuffle<1, 1, 3, 3>(transpose[1], transpose[3]);
 			//[14*7*12, 14*3*8, 8*9*14, 8*13*2] = [14,14, 8, 8] * [7*12, 3*8, 9*14, 13*2]
 			accumulate[1] = VectorShuffle<3, 3, 1, 1>(transpose[1], transpose[3]);
-			inverse[0] = VectorMultiply(accumulate[0],
+			inverse[0] = VectorMul(accumulate[0],
 				VectorShuffle<2, 3, 1, 0>(mat2_result[1], mat2_result[0]));
-			inverse[0] = VectorMultiplyAdd(accumulate[1],
+			inverse[0] = VectorMulAdd(accumulate[1],
 				VectorShuffle<1, 0, 2, 3>(mat2_result[1], mat2_result[0]), inverse[0]);
 
 			//caculate 5,13,7,15's one and two part
@@ -2432,9 +2464,9 @@ namespace Aurora3D
 			accumulate[0] = VectorShuffle<2, 2, 0, 0>(transpose[1], transpose[3]);
 			//-[2*15*12, 2*11*8, 12*1*14, 12*5*2]= [2, 2, 12, 12] * -[15*12, 11*8, 1*14, 5*2]
 			accumulate[1] = VectorShuffle<0, 0, 2, 2>(transpose[1], transpose[3]);
-			inverse[1] = VectorMultiply(accumulate[0],
+			inverse[1] = VectorMul(accumulate[0],
 				VectorShuffle<3, 0, 2, 1>(mat2_result[1], mat2_result[0]));
-			inverse[1] = VectorMultiplyAdd(accumulate[1],
+			inverse[1] = VectorMulAdd(accumulate[1],
 				VectorShuffle<2, 1, 3, 0>(mat2_result[1], mat2_result[0]), inverse[0]);
 
 			//caculate 2, 10, 4, 12's one and two part
@@ -2442,9 +2474,9 @@ namespace Aurora3D
 			accumulate[0] = VectorShuffle<3, 3, 1, 1>(transpose[0], transpose[2]);
 			//-[5*15*12, 5*3*16, 15*9*6, 15*5*2]= [5, 5, 15, 15] * -[15*12, 3*16, 9*6, 5*2]
 			accumulate[1] = VectorShuffle<1, 1, 3, 3>(transpose[0], transpose[2]);
-			inverse[2] = VectorMultiply(accumulate[0],
+			inverse[2] = VectorMul(accumulate[0],
 				VectorShuffle<1, 0, 2, 3>(mat2_result[1], mat2_result[0]));
-			inverse[2] = VectorMultiplyAdd(accumulate[1],
+			inverse[2] = VectorMulAdd(accumulate[1],
 				VectorShuffle<2, 3, 1, 0>(mat2_result[1], mat2_result[0]), inverse[0]);
 
 			//caculate 6,14,8,16's one and two part
@@ -2452,42 +2484,42 @@ namespace Aurora3D
 			accumulate[0] = VectorShuffle<0, 0, 2, 2>(transpose[0], transpose[2]);
 			//[9*15*4, 9*3*8, 3*9*14, 3*5*10]= [9,9, 3, 3]* [15*4, 3*8, 9*14, 5*10]
 			accumulate[1] = VectorShuffle<2, 2, 0, 0>(transpose[0], transpose[2]);
-			inverse[2] = VectorMultiply(accumulate[0],
+			inverse[2] = VectorMul(accumulate[0],
 				VectorShuffle<2, 1, 3, 0>(mat2_result[1], mat2_result[0]));
-			inverse[2] = VectorMultiplyAdd(accumulate[1],
+			inverse[2] = VectorMulAdd(accumulate[1],
 				VectorShuffle<3, 0, 2, 1>(mat2_result[1], mat2_result[0]), inverse[0]);
 
 			//[1*10-2*9, 5*14-6*13, 3*12-4*11, 7*16-8*15]
-			mat2_result[2] = VectorMinus(mat2_result[2], jump);
+			mat2_result[2] = VectorSub(mat2_result[2], jump);
 			//[2*9-1*10, 6*13-5*14, 4*11-3*12, 8*15-7*16]
-			mat2_result[3] = VectorMinus(kVectorZero, mat2_result[2]);
+			mat2_result[3] = VectorSub(kVectorZero, mat2_result[2]);
 
 			//1,5,9,13's third accumulate
 			//[10*15*8, 14*11*4, 2*7*16, 6*3*12] = [10, 14, 2, 6]*[15*8, 11*4, 7*16, 3*12]
 			float128 row0 = VectorShuffle<2, 3, 0, 1>(transpose[1]);
-			row0 = VectorMultiply(row0, VectorShuffle<3, 2, 3, 2>(mat2_result[3], mat2_result[2]));
+			row0 = VectorMul(row0, VectorShuffle<3, 2, 3, 2>(mat2_result[3], mat2_result[2]));
 
 			//2,6,10,14's third part
 			//[9*7*16, 13*3*12, 1*15*8, 5*11*4] = [9, 13, 1, 5]*[7*16, 3*12, 15*8, 11*4]
 			float128 row1 = VectorShuffle<2, 3, 0, 1>(transpose[0]);
-			row1 = VectorMultiply(row1, VectorShuffle<3, 2, 3, 2>(mat2_result[2], mat2_result[3]));
+			row1 = VectorMul(row1, VectorShuffle<3, 2, 3, 2>(mat2_result[2], mat2_result[3]));
 
 			//3,7,11,15's third part
 			//[12*6*13, 16*2*9, 4*5*14, 8*1*10] = [12, 16, 4,8]*[6*13, 2*9, 5*14, 1*10]
 			float128 row2 = VectorShuffle<2, 3, 0, 1>(transpose[3]);
-			row2 = VectorMultiply(row2, VectorShuffle<1, 0, 1, 0>(mat2_result[2], mat2_result[3]));
+			row2 = VectorMul(row2, VectorShuffle<1, 0, 1, 0>(mat2_result[2], mat2_result[3]));
 
 			//4,8,12,16's third part
 			//[11*5*14, 15*1*10, 3*13*6, 7*9*2] = [11, 15, 3, 7]*[5*14, 1*10, 13*6, 9*2]
 			float128 row3 = VectorShuffle<2, 3, 0, 1>(transpose[2]);
-			row3 = VectorMultiply(row3, VectorShuffle<1, 0, 1, 0>(mat2_result[3], mat2_result[2]));
+			row3 = VectorMul(row3, VectorShuffle<1, 0, 1, 0>(mat2_result[3], mat2_result[2]));
 
 			//1,9,3,11 final result
 			inverse[0] = VectorAdd(VectorShuffle<0, 2, 0, 2>(row0, row2), inverse[0]);
 			//5,13,7,15 final result
-			inverse[1] = VectorMinus(VectorShuffle<1, 3, 1, 3>(row0, row2), inverse[1]);
+			inverse[1] = VectorSub(VectorShuffle<1, 3, 1, 3>(row0, row2), inverse[1]);
 			//2,10,4,12 final result
-			inverse[2] = VectorMinus(VectorShuffle<0, 2, 0, 2>(row1, row3), inverse[2]);
+			inverse[2] = VectorSub(VectorShuffle<0, 2, 0, 2>(row1, row3), inverse[2]);
 			//6,14,8,16 final result
 			inverse[3] = VectorAdd(VectorShuffle<1, 3, 1, 3>(row1, row3), inverse[3]);
 
@@ -2504,13 +2536,13 @@ namespace Aurora3D
 			row3 = VectorShuffle<2, 3, 2, 3>(inverse[2], inverse[3]);
 			row3 = VectorShuffle<0, 2, 1, 3>(row3);
 
-			float128 determinant = VectorMultiply(transpose[0], row0);
+			float128 determinant = VectorMul(transpose[0], row0);
 			float128 inv_determinant = VectorReciprocal(determinant);
 
-			inverse[0] = VectorMultiply(inv_determinant, row0);
-			inverse[1] = VectorMultiply(inv_determinant, row1);
-			inverse[2] = VectorMultiply(inv_determinant, row2);
-			inverse[3] = VectorMultiply(inv_determinant, row3);
+			inverse[0] = VectorMul(inv_determinant, row0);
+			inverse[1] = VectorMul(inv_determinant, row1);
+			inverse[2] = VectorMul(inv_determinant, row2);
+			inverse[3] = VectorMul(inv_determinant, row3);
 			return determinant;
 		}
 
@@ -2532,10 +2564,10 @@ namespace Aurora3D
 			component[2] = VectorReplicate<2>(V);
 			component[3] = VectorReplicate<3>(V);
 
-			result = VectorMultiply(M[0], component[0]);
-			result = VectorMultiplyAdd(M[1], component[1], result);
-			result = VectorMultiplyAdd(M[2], component[2], result);
-			result = VectorMultiplyAdd(M[3], component[3], result);
+			result = VectorMul(M[0], component[0]);
+			result = VectorMulAdd(M[1], component[1], result);
+			result = VectorMulAdd(M[2], component[2], result);
+			result = VectorMulAdd(M[3], component[3], result);
 			return result;
 		}
 #endif  //Matrix Operation Implements

@@ -21,6 +21,7 @@ namespace Aurora3D
 	constexpr float kPIOver180 = kPI / 180.0f;   //degree to radian
 	constexpr float kOneOverPI = 1.0f / kPI;
 	constexpr float kOneOver2PI = 1.0f / (2 * kPI);
+	constexpr float kOneOver2PISquare = 1.0f / (4 * kPI * kPI);
 	constexpr float kHalfPI = kPI / 2.0f;
 	constexpr float kQuarterPI = kPI / 4.0f;
 	constexpr uint32 kTopZero = 0x7fffffff;
@@ -31,5 +32,7 @@ namespace Aurora3D
 	constexpr uint32 kNegtiveInfinite = 0xff800000;
 	constexpr uint32 kNaN = 0xffc00000;
 	constexpr float kSmallEpside = 1.e-6f;
+	constexpr float kSquareEpside = 4.e-8f;
 	constexpr float kMiddleEpside = 1.e-4f;
 }
+

@@ -657,5 +657,34 @@
     <ClInclude Include="math\vector4.h">
       <Filter>math</Filter>
     </ClInclude>
+    <ClInclude Include="math\float16x8.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\uint8x16.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\vector8.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\uint8x32.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\float16x16.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\xiongya\Desktop\testccpuid\ccpuid.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\xiongya\Desktop\testccpuid\ccpuid.hpp">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\vector_runtime_support.h">
+      <Filter>math</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="C:\Users\xiongya\Desktop\testccpuid\ccpuid.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

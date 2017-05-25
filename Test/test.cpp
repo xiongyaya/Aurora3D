@@ -10,6 +10,8 @@
 #include<Core/mpl/type_traits/has_plus.h>
 #include"test_vector.hpp"
 #include<immintrin.h>
+#include<inttypes.h>
+#include<float.h>
 
 using namespace std;
 
