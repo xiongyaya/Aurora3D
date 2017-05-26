@@ -26,6 +26,7 @@ namespace Aurora3D
 
 			// construction
 			A3D_FORCEINLINE constexpr Vector4() : vec{ kVectorZero } {}
+			//A3D_FORCEINLINE ~Vector4() {  }
 			A3D_FORCEINLINE constexpr Vector4(float  F) : x(F), y(F), z(F), w(F) {}
 			A3D_FORCEINLINE constexpr Vector4(uint32 mask) : ux(mask), uy(mask), uz(mask), uw(mask) {}
 			A3D_FORCEINLINE explicit constexpr Vector4(float inx, float iny, float inz = 0.0f, float inw = 0.0f) : x(inx), y(iny), z(inz), w(inw) {}

@@ -10,5 +10,8 @@ namespace Aurora3D
 	namespace mpl
 	{
 		template<typename T> struct IsMemberObjPtr :public And<IsMemberPtr<T>, Not<IsMemberFnPtr<T>> > {};
+		template<typename T> using IsMemberObjPtr_t = typename IsMemberObjPtr<T>::type;
+#define IsMemberObjPtr_v(T)   IsMemberObjPtr<T>::value
+#define NotMemberObjPtr_v(T)  (!IsMemberObjPtr<T>::value)
 	}
 }

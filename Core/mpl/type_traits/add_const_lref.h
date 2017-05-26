@@ -18,5 +18,6 @@ namespace Aurora3D
 
 		//template<typename T> struct AddConstLRef :public detail::AddLValueRefHelper<T> {};
 		template<typename T> struct AddConstLRef :public detail::AddConstLRefHelper<T> {};
+		template<typename T> using AddConstLRef_t = typename AddConstLRef<T>::type;
 	}
 }

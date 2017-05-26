@@ -1,5 +1,6 @@
 #pragma once
 
+#include<Core/type.h>
 #include<Core/preprocessor/seq_foreach.h>
 #include<Core/mpl/bool_.h>
 #include<Core/mpl/ingore_t.h>
@@ -16,7 +17,12 @@ namespace Aurora3D
 	{
 		namespace detail
 		{
-
+#if defined(AURORA3D_COMPILER_MSVC)
+// 4002 too many macro-parameter
+// 4505 unused-static-function had been removed
+#   pragma warning ( push )
+#   pragma warning ( disable : 4505 4002)
+#endif
 			template<typename Left, typename Right> struct ForbiddenHelper
 			{
 				typedef typename RemoveRef<Left>::type   lnoref;
@@ -40,13 +46,13 @@ namespace Aurora3D
 			struct NoOperation { char pad[1]; };
 			struct HasOperation { char pad[2]; };
 			struct HasVoidReturn { char pad[2]; };
-			inline  NoOperation operator ,(NoOperation, HasOperation) { return Declval<NoOperation>(); };
+			static NoOperation operator ,(NoOperation, HasOperation) { return Declval<NoOperation>(); };
 			template<typename T> inline NoOperation operator,(const T&, HasVoidReturn) { return Declval<NoOperation>(); };
 
 			//if T1 op T2 not defined, will implicitly convert to ImplicitConverted and do operation
 			struct ImplicitConverted { template <class T> ImplicitConverted(T const&) {}; };
 
-#define BINARY_OPERATION(Op) inline NoOperation operator Op(const ImplicitConverted&, const ImplicitConverted&) { return Declval<NoOperation>(); };
+#define BINARY_OPERATION(Op) static NoOperation operator Op(const ImplicitConverted&, const ImplicitConverted&) { return Declval<NoOperation>(); };
 			A3D_PP_FOREACH(BINARY_OPERATION, (+, -, *, / , %, &, | , ^, +=, -=, *=, /=, %=, &=, |=, ^=, >>=, <<=, &&, ||));
 #undef  BINARY_OPERATION
 			
@@ -80,19 +86,21 @@ namespace Aurora3D
 
 			//operation overload contained in class(member function) left imply type is a left value reference, so Left can't be const T 
 			//Left or Right type qualified with & and && passed to operation will miss
-			template<typename ForbiddenSpecial, typename BinaryOp, typename Left, typename Right, typename Ret, bool is_void = IsVoid<Ret>::value >
+			template<typename BinaryOp, typename Left, typename Right, typename Ret, bool is_void = IsVoid<Ret>::value >
 			struct HasBinaryOp :public And<
 				Not< ForbiddenCommon<Left, Right>>,
-				Not< ForbiddenSpecial >,
 				HasBinaryOpParameter<BinaryOp>,
 				HasBineryOpReturn<BinaryOp, Ret> > {};
 
-			template < typename ForbiddenSpecial, typename BinaryOp, typename Left, typename Right, typename Ret>
-			struct HasBinaryOp<ForbiddenSpecial, BinaryOp, Left, Right, Ret, true> :public And<
+			//return void
+			template <typename BinaryOp, typename Left, typename Right, typename Ret>
+			struct HasBinaryOp<BinaryOp, Left, Right, Ret, true> :public And<
 				Not< ForbiddenCommon<Left, Right>>,
-				Not< ForbiddenSpecial >,
 				HasBinaryOpParameter<BinaryOp>,
 				HasBinaryOpReturnVoid<BinaryOp, Ret> > {};
+#if defined(AURORA3D_COMPILER_MSVC)
+#   pragma warning ( pop )
+#endif
 		}
 	}
 }

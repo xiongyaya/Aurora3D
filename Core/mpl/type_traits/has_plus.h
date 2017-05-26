@@ -14,6 +14,10 @@ namespace Aurora3D
 	{
 		namespace detail
 		{
+
+#define  HAS_BINARY_OPERATION_DECL(Sign, OperationName, Judgement )
+
+
 			template<typename Left, typename Right>
 			struct PlusOperation
 			{
@@ -24,7 +28,7 @@ namespace Aurora3D
 			//fundemental + void*
 			//fundemental(no integral) + pointer
 			//pointer + pointer
-			template<typename Left, typename Right> struct ForbiddenPlusHelper:public ForbiddenHelper<Left, Right>
+			template<typename Left, typename Right> struct ForbiddenPlus :public ForbiddenHelper<Left, Right>
 			{
 				static constexpr bool value =
 					(IsPointer<lnocv>::value && IsPointer<rnocv>::value) ||
@@ -33,14 +37,13 @@ namespace Aurora3D
 					(IsFundamental<lnocv>::value && !IsIntegral<lnocv>::value && IsPointer<rnocv>::value) ||
 					(IsFundamental<rnocv>::value && !IsIntegral<rnocv>::value && IsPointer<lnocv>::value);
 			};
-
-			template<typename Left, typename Right> struct ForbiddenPlus : public Bool_<ForbiddenPlusHelper<Left,Right>::value>{};
 		}
 		
+		template<typename Left, typename Right = Left, typename Ret = ingore_t, bool Forbidden = detail::ForbiddenPlus<Left, Right>::value >
+		struct HasPlus : public detail::HasBinaryOp<detail::PlusOperation<Left, Right>, Left, Right, Ret> {};
+
+		//Forbidden compose
 		template<typename Left, typename Right = Left, typename Ret = ingore_t>
-		struct HasPlus :
-			public detail::HasBinaryOp< 
-				detail::ForbiddenPlus<Left, Right>, 
-				detail::PlusOperation<Left, Right>, Left, Right, Ret> {};
+		struct HasPlus<Left,Right,Ret,true> : public False_ {};
 	}
 }

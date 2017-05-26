@@ -12,5 +12,6 @@ namespace Aurora3D
 		};
 		typedef Bool_<true>  True_;
 		typedef Bool_<false> False_;
+
 	}
 }

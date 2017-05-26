@@ -31,13 +31,13 @@
 
 //compiler
 #if defined(_MSC_VER) && _MSC_VER>=1800
-#define A3D_COMPILER_MSVC
+#define AURORA3D_COMPILER_MSVC
 #elif defined(__clang__) && __cplusplus >=201103L
-#define A3D_COMPILER_CLANG
+#define AURORA3D_COMPILER_CLANG
 #elif defined(__GNUC__) && !defined(__ibmxl__) && __cplusplus >=201103L
-#define A3D_COMPILER_GCC
+#define AURORA3D_COMPILER_GCC
 #elif defined(__INTEL_COMPILER) || defined(__ICL) || defined(__ICC) || defined(__ECC) && __cplusplus >=201103L
-#define A3D_COMPILER_INTEL
+#define AURORA3D_COMPILER_INTEL
 #else
 #error "compiler not support"
 #endif

@@ -9,6 +9,8 @@ namespace Aurora3D
 		template<typename T, size_t dim = 0> struct ArrayDim:public Sizet_<dim> {};
 		template<typename T, size_t len, size_t dim> struct ArrayDim<T[len], dim> : public ArrayDim<T, dim + 1> {};
 		template<typename T, size_t dim> struct ArrayDim<T[], dim> : public ArrayDim<T, dim+1> {};
+		template<typename T> using  ArrayDim_t = typename ArrayDim<T>::type;
+#define ArrayDim_v(T)     ArrayDim<T>::value
 	}
 
 }

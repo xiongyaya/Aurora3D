@@ -14,5 +14,8 @@ namespace Aurora3D
 		template<typename T> struct IsFloat<const T> :public IsFloat<T> {};
 		template<typename T> struct IsFloat<volatile T> :public IsFloat<T> {};
 		template<typename T> struct IsFloat<const volatile T> :public IsFloat<T> {};
+		template<typename T> using IsFloat_t = typename IsFloat<T>::type;
+#define IsFloat_v(T)   IsFloat<T>::value
+#define NotFloat_v(T)  (!IsFloat<T>::value)
 	}
 }

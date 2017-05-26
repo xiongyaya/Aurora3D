@@ -11,5 +11,9 @@ namespace Aurora3D
 		template<> struct IsVoid<const void> :public True_ {};
 		template<> struct IsVoid<volatile void> :public True_ {};
 		template<> struct IsVoid<const volatile void> :public True_ {};
+
+		template<typename T> using IsVoid_t = typename IsVoid<T>::type;
+#define IsVoid_v(T)   IsVoid<T>::value
+#define NotVoid_v(T)  (!IsVoid<T>::value)
 	}
 }
