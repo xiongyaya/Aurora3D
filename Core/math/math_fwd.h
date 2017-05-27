@@ -1,6 +1,6 @@
 #pragma once
 
-#include"../type.h"
+#include<Core/type.h>
 
 namespace Aurora3D
 {

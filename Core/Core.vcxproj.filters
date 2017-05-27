@@ -222,9 +222,6 @@
     <ClInclude Include="preprocessor\seq_compose.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
-    <ClInclude Include="preprocessor\seq_foreach.h">
-      <Filter>preprocessor</Filter>
-    </ClInclude>
     <ClInclude Include="preprocessor\seq_size.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
@@ -289,9 +286,6 @@
       <Filter>preprocessor</Filter>
     </ClInclude>
     <ClInclude Include="preprocessor\while.h">
-      <Filter>preprocessor</Filter>
-    </ClInclude>
-    <ClInclude Include="preprocessor\seq_foreach_2p.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
     <ClInclude Include="preprocessor\uint8_comma_if.h">
@@ -680,6 +674,15 @@
     </ClInclude>
     <ClInclude Include="math\vector_runtime_support.h">
       <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="preprocessor\seq_expand.h">
+      <Filter>preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="preprocessor\seq_foreach_tuple.h">
+      <Filter>preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="preprocessor\seq_foreach_item.h">
+      <Filter>preprocessor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

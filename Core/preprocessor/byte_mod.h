@@ -199,9 +199,9 @@
 //byte1 < byte2_shift  return result
 #define A3D_PP_BYTE_MOD_DO_7TH_CMP_HELPER(cmp, byte2_shift, byte1, byte2, sft_cnt)         \
 			A3D_PP_IF(cmp,                                                                 \
-				A3D_PP_BYTE_MOD_RETURN,                                                     \
+				A3D_PP_BYTE_MOD_RETURN,                                                    \
 				A3D_PP_BYTE_MOD_DO_7TH_SUB)##( byte2_shift, byte1, byte2, sft_cnt)
 
-#define A3D_PP_BYTE_MOD_DO_7TH_SUB(result, byte2_shift, byte1, byte2, sft_cnt)             \
+#define A3D_PP_BYTE_MOD_DO_7TH_SUB(byte2_shift, byte1, byte2, sft_cnt)                     \
 			A3D_PP_BYTE_MOD_RETURN(A3D_PP_BYTE_SUB(byte1, byte2_shift), byte2, sft_cnt)   
 ////////////////////////////////////////////////////////////////////////////////////////////////

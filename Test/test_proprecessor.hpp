@@ -27,7 +27,8 @@ using namespace std;
 #include<Core/preprocessor/uint8_mod.h>
 #include<Core/preprocessor/sign.h>
 #include<Core/preprocessor/seq_compose.h>
-#include<Core/preprocessor/seq_foreach.h>
+#include<Core/preprocessor/seq_foreach_item.h>
+#include<Core/preprocessor/seq_foreach_tuple.h>
 #include<Core/preprocessor/while.h>
 #include<Core/preprocessor/range.h>
 
@@ -101,30 +102,31 @@ inline void TestProprecessor()
 	NEW_LINE;
 
 	cout << "  **** **** 4. while foreach range compose+foreach: **** ****" << endl;
+
+
 	cout << "    test  while loop:" << endl;
 #define WHILE_CONDI2(depth, down, up) A3D_PP_INT_IF(down, 1, 0)           // down !=0
 #define WHILE_LOOP(depth, down, up)  A3D_PP_SUB1(down), A3D_PP_ADD1(up)   //++down, --up
 #define WHILE_REPEAT(depth, down, up)    cout <<"       "<<" depth:"<<depth<< " down: " << down << " up: " << up << endl;
 	A3D_PP_WHILE(WHILE_CONDI2, WHILE_LOOP, WHILE_REPEAT, 20, 0); //
-	cout << A3D_PP_STRINGIZE( A3D_PP_WHILE(WHILE_CONDI, WHILE_LOOP, WHILE_REPEAT, 20, 0) )<< endl;
+	cout << A3D_PP_STRINGIZE( A3D_PP_WHILE(WHILE_CONDI2, WHILE_LOOP, WHILE_REPEAT, 20, 0) )<< endl;
 
 	cout << "    test  compose :" << endl;
 	cout << "          " <<A3D_PP_STRINGIZE(A3D_PP_COMPOSE((unsigned, signed), (char, short, int, long long))) << endl;
 	cout << "          " << A3D_PP_STRINGIZE(A3D_PP_COMPOSE_EX((unsigned, signed), (char, short, int, long long), void)) << endl;
 	cout << "          " << A3D_PP_STRINGIZE(A3D_PP_COMPOSE3((unsigned, signed), (char, short, int, long long), (const, volatile, const volatile, A3D_PP_NULL))) << endl;
 
-	cout << "    test  foreach+compose :" << endl;
-#define FOREACH_CALL(it) cout<<"          "<<typeid(it).name()<<endl;
-#define FOREACH_CALL2(it) cout<<","<<A3D_PP_STRINGIZE(it _ )<<endl;
-	A3D_PP_FOREACH(FOREACH_CALL, (int, char, short, float));
-	A3D_PP_FOREACH(FOREACH_CALL2, A3D_PP_COMPOSE_EX((const, volatile, const volatile), ( && ,  &  , A3D_PP_NULL), &, A3D_PP_NULL,&& ) );
+	cout << "    test  foreach_item" << endl;
+#define FOREACH_CALL(it,...) cout<<"          "<<typeid(it).name()<<endl;
+#define FOREACH_CALL2(it, ...) cout<<","<<A3D_PP_STRINGIZE(it _ )<<endl;
+	A3D_PP_FOREACH_ITEM(FOREACH_CALL, (int, char, short, float));
 
-	
-#define A3D_PP_TST_CONNECT_REPARSE(x, y) A3D_PP_TST_CONNECT_REPARSE_STEP1(x, y)
-#define A3D_PP_TST_CONNECT_REPARSE_STEP1(x, y) A3D_PP_TST_CONNECT_REPARSE_STEP2(_,x##y)
-#define A3D_PP_TST_CONNECT_REPARSE_STEP2(_,result) result
-#define A3D_PP_TST(...)  , &
-	cout << " " << A3D_PP_STRINGIZE(A3D_PP_TST_CONNECT_REPARSE(A3D_PP_TST, (a,b)  )) << endl;
+	cout << "    test  foreach_item + compose" << endl;
+	A3D_PP_FOREACH_ITEM(FOREACH_CALL2, A3D_PP_COMPOSE_EX((const, volatile, const volatile), ( && ,  &  , A3D_PP_NULL), &, A3D_PP_NULL,&& ) );
+
+	cout << "    test  foreach_tuple" << endl;
+#define TEST_TUPLE(First, Second, ...)   |First,Second,__VA_ARGS__|
+	cout << A3D_PP_STRINGIZE(A3D_PP_FOREACH_TUPLE(TEST_TUPLE, ((1, 2, 1), (3, 4, 2), (A3D_PP_NULL, p, 3), (0, A3D_PP_NULL, 4), (1, 1, 4), (2, 3, 4)), -)) << endl;
 
 
 	cout << "    test  range :" << endl;

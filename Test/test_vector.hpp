@@ -8,8 +8,8 @@ using namespace Aurora3D::math;
 inline void TestVector()
 {
 	//================ basic operation =====================
-	constexpr Vector4 one{ 1.0f,1.0f,1.0f,1.0f };
-	constexpr Vector4 half{ 0.5f,0.5f,0.5f,0.5f };
+	 Vector4 one{ 1.0f,1.0f,1.0f,1.0f };
+	 Vector4 half{ 0.5f,0.5f,0.5f,0.5f };
 	Vector4 rcp = half.AccurateRcp();
 	cout << rcp.ToString() << endl;
 	//Vector4 test1 = (one + one + one -half)*0.5f/2.0f;

@@ -132,6 +132,14 @@
 #endif
 
 
+#if defined(A3D_COMPILER_MSVC)
+//4514: un-used inline function had been removed
+#pragma warning(disable:4514)
+#endif
+
+
+
+
 
 
 

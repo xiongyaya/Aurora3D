@@ -31,10 +31,10 @@ int main()
 {
 	//VectorAdd(Vector4{}, Vector4{});
 	//ProcessTool();
-	//TestProprecessor();
+	TestProprecessor();
 	//TestTypeTraits();
 	//TestMpl();
-	TestVector();
+	//TestVector();
 	getchar();
 	return 0;
 }

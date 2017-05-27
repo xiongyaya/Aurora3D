@@ -53,6 +53,18 @@ namespace Aurora3D
 
 #if defined(AURORA3D_SSE) || defined(AURORA3D_NEON)
 
+		//xyzw = reinterpret_cast<float>(u)
+		float128 VectorLoad(uint32 u);
+
+		//xyzw = (F,F,F,F)
+		float128 VectorLoad(float F);
+
+		//xyzw = (x,y,z,w)
+		float128 VectorLoad(float x, float y, float z = 0.0f, float w = 0.0f);
+
+		//xyzw = reinterpret_cast<float>((x,y,z,w))
+		float128 VectorLoad(uint32 x, uint32 y, uint32 z = 0u, uint32 w = 0u);
+
 		//common constant
 		constexpr float128 kVectorOne = { 1.0f, 1.0f, 1.0f, 1.0f };
 		constexpr float128 kVectorZero = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -66,32 +78,21 @@ namespace Aurora3D
 		constexpr float128 kVectorOddNegtive = { 1.0f, -1.0f, 1.0f, -1.0f };
 		constexpr float128 kVectorEvenNegtive = { -1.0f, 1.0f, -1.0f, 1.0f };
 		constexpr float128 kVectorEpside = { kMiddleEpside,kMiddleEpside,kMiddleEpside,kMiddleEpside };
-		constexpr float128 kVectorAllOneMask = { kAllOneMask ,kAllOneMask ,kAllOneMask ,kAllOneMask };
 		constexpr float128 kVectorOneOver2PI = { kOneOver2PI ,kOneOver2PI ,kOneOver2PI ,kOneOver2PI };
 		constexpr float128 kVector2PI = { k2PI ,k2PI ,k2PI ,k2PI };
 		constexpr float128 kVectorPI = { kPI ,kPI ,kPI ,kPI };
 		constexpr float128 kVectorHalfPI = { kHalfPI ,kHalfPI ,kHalfPI ,kHalfPI };
 		constexpr float128 kVector180OverPI = { k180OverPI,k180OverPI ,k180OverPI,k180OverPI };
 		constexpr float128 kVectorPIOver180 = { kPIOver180,kPIOver180 ,kPIOver180 ,kPIOver180 };
-		constexpr float128 kVectorXYZMask = { kAllOneMask, kAllOneMask, kAllOneMask, kAllZeroMask };
-		constexpr float128 kVectorAbsMask = { kTopZero ,kTopZero ,kTopZero ,kTopZero };
-		constexpr float128 kVectorSignMask = { kTopOne ,kTopOne ,kTopOne ,kTopOne };
-		constexpr float128 kVectorInfinte = { kInfinite ,kInfinite ,kInfinite ,kInfinite };
-
+		static const float128 kVectorSignMask = VectorLoad(kTopOne); 
+		static const float128 kVectorInfinte = VectorLoad(kInfinite); 
+		static const float128 kVectorAllOneMask = VectorLoad(kAllOneMask);
+		static const float128 kVectorXYZMask = VectorLoad(kAllOneMask, kAllOneMask, kAllOneMask, kAllZeroMask);
+		static const float128 kVectorAbsMask = VectorLoad(kTopZero);
 		//xyzw = 0.0f
 		float128 VectorZero();
 
-		//xyzw = reinterpret_cast<float>(u)
-		float128 VectorLoad(uint32 u);
-
-		//xyzw = (F,F,F,F)
-		float128 VectorLoad(float F);
-
-		//xyzw = (x,y,z,w)
-		float128 VectorLoad(float x, float y, float z = 0.0f, float w = 0.0f);
-
-		//xyzw = reinterpret_cast<float>((x,y,z,w))
-		float128 VectorLoad(uint32 x, uint32 y, uint32 z = 0u, uint32 w = 0u);
+		
 
 		//xyzw = (v[0],v[1],0.0f,0.0f), v no need aligned
 		float128 VectorLoad2Z0(const float *v);

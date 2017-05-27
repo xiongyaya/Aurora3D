@@ -7,8 +7,9 @@
 #include<string>
 
 // pp lib
-#include<core/preprocessor/seq_foreach.h>
-#include<core/preprocessor/seq_foreach_2p.h>
+#include<Core/preprocessor/stringize.h>
+#include<core/preprocessor/seq_foreach_item.h>
+#include<core/preprocessor/seq_foreach_tuple.h>
 #include<core/preprocessor/seq_compose.h>
 #include<core/preprocessor/sign.h>
 
@@ -61,6 +62,7 @@
 #include<core/mpl/type_traits/aligned_storage.h>
 #include<core/mpl/type_traits/array_dim.h>
 #include<core/mpl/type_traits/array_len.h>
+#include<core/mpl/type_traits/has_plus.h>
 
 
 #include<boost/type_traits.hpp>
@@ -81,7 +83,7 @@ enum class TestEnumClassUint8 :Aurora3D::uint8 { value = 1 };
 class TestEmpty {};
 class TestFinal final {};
 class TestAbstract { public: virtual void Test() = 0; static void TestStatic() {}; };
-class TestDrivied :public TestAbstract { public: virtual void Test() override {};  void VPrintf(int a,...) {} int data; };
+class TestDrivied :public TestAbstract { public: virtual void Test() override {};  void VPrintf(int,...) {} int data; };
 class TestCopyConstructible { public: TestCopyConstructible(const TestCopyConstructible&) {} };
 class TestNoCopyConstructible { public: TestNoCopyConstructible(const TestNoCopyConstructible&) = delete; };
 class TestMoveConstructible { public: TestMoveConstructible(TestMoveConstructible&&) {} };
@@ -98,6 +100,9 @@ inline void __fastcall TestFastCall(){}
 inline void TestNoExcept() noexcept{}
 class TestThis { void ThisCall() {} };
 
+
+struct TestPlus { void operator+(int) {}  float operator+(float) { return 0.0f; } };
+
 inline void TestTypeTraits()
 {
 
@@ -105,13 +110,45 @@ inline void TestTypeTraits()
 #define QUALIFERED_SET  A3D_PP_COMPOSE_EX( (int, const int, volatile int, const volatile int), (A3D_PP_NULL, &, &&, *, [2], [2][3], []), void)
 #define ALL_TYPE_SET    (void, nullptr_t, int, float, void(int), int(*)(char), int*,int[2],int&,int&&, decltype(&TestDrivied::Test), decltype(&TestDrivied::data), TestEnumClassInt8, TestNormalEnum, TestUnion, TestEmpty, TestTrivialConstruct1, TestAbstract, TestDrivied)
 
-#define TEST_TYPE_VALUE(Type, Judge)         TypeValue<Judge<Type>>{}();
-#define TEST_TYPE_CONVERTER(Type, Converter) TypeName<Converter<Type>>{}();
+
+#define TEST_1TYPE_VALUE(Type, Templ)         TypeValue<Templ<Type>>{}();
+#define TEST_TYPE_CONVERTER(Type, Converter)  TypeName<Converter<Type>>{}();
 
 
-#define TEST_TYPE_CONVERTER_BATCH(Func)         A3D_PP_FOREACH(TEST_TYPE_CONVERTER, QUALIFERED_SET, Func) cout << endl;
-#define TEST_TYPE_CONVERTER_BATCH_SP(Func, Seq) A3D_PP_FOREACH(TEST_TYPE_CONVERTER, Seq, Func) cout << endl;
-#define TEST_TYPE_VALUE_BATCH(Func, Seq)        A3D_PP_FOREACH(TEST_TYPE_VALUE, Seq, Func);    cout << endl;
+#define TEST_TYPE_CONVERTER_BATCH(Func)               A3D_PP_FOREACH_ITEM(TEST_TYPE_CONVERTER, QUALIFERED_SET, Func) cout << endl;
+#define TEST_TYPE_CONVERTER_BATCH_SP(Func, Seq)       A3D_PP_FOREACH_ITEM(TEST_TYPE_CONVERTER, Seq, Func) cout << endl;
+#define TEST_TYPE_VALUE_BATCH(Templ, Seq)             A3D_PP_FOREACH_ITEM(TEST_1TYPE_VALUE, Seq, Templ);    cout << endl;
+#define TEST_2TYPE_VALUE_BATCH(Func, Seq, ...)        A3D_PP_FOREACH_TUPLE(Func,Seq,__VA_ARGS__)
+
+	cout << " Test HasPlus" << endl;
+
+//#define TEST_2TYPE_VALUE(Type1,Type2, Templ, Type3)
+#define PRINT_HAS_XX_VALUE(Right,Ret,NeedComma,Left,Templ)   cout << Templ<Left,Right A3D_PP_IF_COMMA(NeedComma) Ret>::value << endl;
+
+	//TEST_2TYPE_VALUE_BATCH(PRINT_HAS_XX_VALUE, ((void, A3D_PP_NULL, 0), (nullptr_t, A3D_PP_NULL, 0), (char*, A3D_PP_NULL, 0), \
+	//	(int, void, 1), (float, void, 1), (TestPlus, void, 1), (int, float, 1), (float, int, 1), (float, int, 1), (int, ingore_t, 1), (float, A3D_PP_NULL, 0), \
+	//	(ingore_t, A3D_PP_NULL, 0), (TestPlus, A3D_PP_NULL, 0)), TestPlus, HasPlus);
+
+	cout << endl;
+	//cout << HasPlus<TestPlus, void>::value << endl;
+	//cout << HasPlus<TestPlus, nullptr_t>::value << endl;
+	//cout << HasPlus<TestPlus, char*>::value << endl;
+	//cout << HasPlus<TestPlus, int,void>::value << endl;
+	//cout << HasPlus<TestPlus, float, void>::value << endl;
+	//cout << HasPlus<TestPlus, TestPlus, void>::value << endl;
+	//cout << HasPlus<TestPlus, int,float>::value << endl;     //void ->float
+	cout << HasPlus<TestPlus, float, int>::value << endl;     //float ->int
+	cout << HasPlus<TestPlus, float, char>::value << endl;     //float ->int
+	//cout << HasPlus<TestPlus, int, ingore_t>::value << endl;
+	//cout << HasPlus<TestPlus, float>::value << endl;
+	//cout << HasPlus<TestPlus, ingore_t>::value << endl;   //XXXX
+	//cout << HasPlus<TestPlus, TestPlus>::value << endl;   //
+
+
+	
+
+	//float f = 1.0f;
+	//const int& a = f;
 
 	cout << "  test AddConst " << endl;
 	//TEST_TYPE_CONVERTER_BATCH(AddConst);

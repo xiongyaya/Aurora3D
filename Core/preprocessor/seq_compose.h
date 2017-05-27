@@ -14,7 +14,6 @@
 // use      A3D_PP_COMPOSE_EX( (const, volatile, const volatile), (&,&&,A3D_PP_NULL), A3D_PP_NULL, &, &&) instead
 
 
-
 //generate seq compose of seq1 and seq2 
 #define A3D_PP_COMPOSE(seq1, seq2) A3D_PP_COMPOSE_HELPER(seq1, seq2, A3D_PP_SEQ_SIZE(seq1), A3D_PP_SUB1( A3D_PP_SEQ_SIZE(seq2)))
 //generate seq compose of seq1 and seq2 + external items

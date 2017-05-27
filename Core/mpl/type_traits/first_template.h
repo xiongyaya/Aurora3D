@@ -1,6 +1,6 @@
 #pragma once
 
-#include<Core/preprocessor/seq_foreach.h>
+#include<Core/preprocessor/seq_foreach_item.h>
 
 namespace Aurora3D
 {
@@ -8,7 +8,7 @@ namespace Aurora3D
 	{
 		template<typename T> struct FirstTemplateType { typedef T type; };
 
-#define FIRST_TEMPLATE_TYPE(TemplateType)                                                           \
+#define FIRST_TEMPLATE_TYPE(TemplateType, ...)                                                      \
 		template<typename T> struct TemplateType;                                                   \
 		template<typename T> struct FirstTemplateType< TemplateType<T> > :public FirstTemplateType<T> {};
 
@@ -16,7 +16,7 @@ namespace Aurora3D
                 AddSigned, AddConstLRef,\
 				RemoveAllExtent, RemoveConst, RemoveCV, RemoveExtent, RemovePointer, RemoveRef, RemoveTopConst,\
 				RemoveVolatile, UnderlyingType)
-		A3D_PP_FOREACH(FIRST_TEMPLATE_TYPE, TEMPLATE_SET);
+		A3D_PP_FOREACH_ITEM(FIRST_TEMPLATE_TYPE, TEMPLATE_SET);
 #undef FIRST_TEMPLATE_TYPE
 #undef TEMPLATE_SET
 	}

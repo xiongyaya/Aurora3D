@@ -3,6 +3,12 @@
 #include<Core/type.h>
 #include<Core/mpl/sizet_.h>
 
+#if defined(A3D_COMPILER_MSVC)
+#pragma warning(push)
+//4324 : because of align declare signature, MaxAlign_t had been filled
+#pragma warning(disable:4324)
+#endif
+
 namespace Aurora3D
 {
 	namespace mpl
@@ -20,12 +26,12 @@ namespace Aurora3D
 		{
 			struct alignas(16) Vector4_t
 			{
-				float  float128[4];
+				uint8  pad[16];
 			};
 
 			struct alignas(128) Cache_t
 			{
-				int32 cache[32];
+				uint8  pad[128];
 			};
 
 			//aligned vector, float128
@@ -65,3 +71,7 @@ namespace Aurora3D
 
 	}
 }
+
+#if defined(A3D_COMPILER_MSVC)
+#pragma warning(pop)
+#endif
