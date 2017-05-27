@@ -21,7 +21,7 @@ namespace Aurora3D
 			template<typename Ret, typename... Args> struct IsFunction<Ret __fastcall(Args...) Prefix> :public True_ {};   \
 			template<typename Ret, typename... Args> struct IsFunction<Ret __vectorcall(Args...) Prefix> :public True_ {};      
 #else  
-		#define IS_FUNCTION(Prefix)                                                                                     \
+		#define IS_FUNCTION(Prefix,...)                                                                                     \
 			template<typename Ret, typename... Args> struct IsFunction< Ret(Args...) Prefix> :public True_ {};          \
 			template<typename Ret, typename... Args> struct IsFunction< Ret(Args..., ...) Prefix> :public True_ {};    
 #endif

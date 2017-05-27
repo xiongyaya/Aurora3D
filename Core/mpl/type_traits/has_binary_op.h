@@ -1,12 +1,7 @@
 #pragma once
 
-<<<<<<< HEAD
 #include<Core/compile.h>
 #include<Core/preprocessor/seq_foreach_item.h>
-=======
-#include<Core/type.h>
-#include<Core/preprocessor/seq_foreach.h>
->>>>>>> master
 #include<Core/mpl/bool_.h>
 #include<Core/mpl/ingore_t.h>
 #include<Core/mpl/logic_and.h>
@@ -17,7 +12,7 @@
 #include<Core/mpl/type_traits/remove_pointer.h>
 #include<Core/mpl/type_traits/remove_ref.h>
 
-#if defined(A3D_COMPILER_MSVC)
+#if defined(AURORA3D_COMPILER_MSVC)
 #pragma warning(push)
 //4244: ReturnConvert<Ret>::Convert(T) precision loss, e.g.   float convert to int  
 //4913: exists user-define operator,(T1,T2), but not match all parameters, and use default inner operator,(...)

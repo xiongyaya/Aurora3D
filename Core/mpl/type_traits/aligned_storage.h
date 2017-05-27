@@ -3,7 +3,7 @@
 #include<Core/type.h>
 #include<Core/mpl/sizet_.h>
 
-#if defined(A3D_COMPILER_MSVC)
+#if defined(AURORA3D_COMPILER_MSVC)
 #pragma warning(push)
 //4324 : because of align declare signature, MaxAlign_t had been filled
 #pragma warning(disable:4324)

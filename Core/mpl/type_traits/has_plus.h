@@ -43,7 +43,7 @@ namespace Aurora3D
 		struct HasPlus : public detail::HasBinaryOp<detail::PlusOperation<Left, Right>, Left, Right, Ret> {};
 
 		//Forbidden compose
-		template<typename Left, typename Right = Left, typename Ret = ingore_t>
+		template<typename Left, typename Right, typename Ret>
 		struct HasPlus<Left,Right,Ret,true> : public False_ {};
 	}
 }
