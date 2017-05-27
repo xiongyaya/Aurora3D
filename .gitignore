@@ -6,4 +6,5 @@ Release/*
 .vs
 3rd/*
 !3rd/boost/*
+!3rd/lua-5.3.4
 x64/*
