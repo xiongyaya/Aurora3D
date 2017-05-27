@@ -16,5 +16,9 @@ namespace Aurora3D
 		template<typename C, typename Ret, typename... Args> struct IsMemberFnPtr<Ret (C::*)(Args...,...) Postfix> :public True_ {};
 		A3D_PP_FOREACH_ITEM(IS_MEMBER_FUNCTION, A3D_PP_COMPOSE_EX((const, volatile, const volatile), (&, &&, A3D_PP_NULL), A3D_PP_NULL, &, &&))
 #undef IS_FUNCTION
+
+			template<typename T> using IsMemberFnPtr_t = typename IsMemberFnPtr<T>::type;
+#define IsMemberFnPtr_v(T)   IsMemberFnPtr<T>::value
+#define NotMemberFnPtr_v(T)  (!IsMemberFnPtr<T>::value)
 	}
 }

@@ -1,13 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Aurora3D", "src\Aurora3D.vcxproj", "{2A8BBC1B-400D-45B4-9E3D-20FB0C8A1671}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0AF663E7-E7EC-473D-8B1A-E7B22DF58BC1} = {0AF663E7-E7EC-473D-8B1A-E7B22DF58BC1}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test", "Test\Test.vcxproj", "{337CFA6C-E916-44FF-B83A-2CC13D8C2A47}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Core", "Core\Core.vcxproj", "{9CF25D83-D719-4757-B9E5-D21517BD5A7C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lua544", "Lua544\Lua544.vcxproj", "{0AF663E7-E7EC-473D-8B1A-E7B22DF58BC1}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LuaTest", "LuaTest\LuaTest.vcxproj", "{41E0B3FE-9BD2-4C71-9230-3D69E25937D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +44,22 @@ Global
 		{9CF25D83-D719-4757-B9E5-D21517BD5A7C}.Release|Win32.ActiveCfg = Release|Win32
 		{9CF25D83-D719-4757-B9E5-D21517BD5A7C}.Release|Win32.Build.0 = Release|Win32
 		{9CF25D83-D719-4757-B9E5-D21517BD5A7C}.Release|x64.ActiveCfg = Release|Win32
+		{0AF663E7-E7EC-473D-8B1A-E7B22DF58BC1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0AF663E7-E7EC-473D-8B1A-E7B22DF58BC1}.Debug|Win32.Build.0 = Debug|Win32
+		{0AF663E7-E7EC-473D-8B1A-E7B22DF58BC1}.Debug|x64.ActiveCfg = Debug|x64
+		{0AF663E7-E7EC-473D-8B1A-E7B22DF58BC1}.Debug|x64.Build.0 = Debug|x64
+		{0AF663E7-E7EC-473D-8B1A-E7B22DF58BC1}.Release|Win32.ActiveCfg = Release|Win32
+		{0AF663E7-E7EC-473D-8B1A-E7B22DF58BC1}.Release|Win32.Build.0 = Release|Win32
+		{0AF663E7-E7EC-473D-8B1A-E7B22DF58BC1}.Release|x64.ActiveCfg = Release|x64
+		{0AF663E7-E7EC-473D-8B1A-E7B22DF58BC1}.Release|x64.Build.0 = Release|x64
+		{41E0B3FE-9BD2-4C71-9230-3D69E25937D0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{41E0B3FE-9BD2-4C71-9230-3D69E25937D0}.Debug|Win32.Build.0 = Debug|Win32
+		{41E0B3FE-9BD2-4C71-9230-3D69E25937D0}.Debug|x64.ActiveCfg = Debug|x64
+		{41E0B3FE-9BD2-4C71-9230-3D69E25937D0}.Debug|x64.Build.0 = Debug|x64
+		{41E0B3FE-9BD2-4C71-9230-3D69E25937D0}.Release|Win32.ActiveCfg = Release|Win32
+		{41E0B3FE-9BD2-4C71-9230-3D69E25937D0}.Release|Win32.Build.0 = Release|Win32
+		{41E0B3FE-9BD2-4C71-9230-3D69E25937D0}.Release|x64.ActiveCfg = Release|x64
+		{41E0B3FE-9BD2-4C71-9230-3D69E25937D0}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

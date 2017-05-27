@@ -9,6 +9,7 @@ namespace Aurora3D
 		template<typename T> struct AddTopConst     { typedef T type; };
 		template<typename T> struct AddTopConst<T*> { typedef const T* type; };
 		template<typename T> struct AddTopConst<T&> { typedef const T& type; };
+		template<typename T> using AddTopConst_t = typename AddTopConst<T>::type;
 	}
 }
 

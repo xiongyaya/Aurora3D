@@ -1,7 +1,12 @@
 #pragma once
 
+<<<<<<< HEAD
 #include<Core/compile.h>
 #include<Core/preprocessor/seq_foreach_item.h>
+=======
+#include<Core/type.h>
+#include<Core/preprocessor/seq_foreach.h>
+>>>>>>> master
 #include<Core/mpl/bool_.h>
 #include<Core/mpl/ingore_t.h>
 #include<Core/mpl/logic_and.h>
@@ -48,6 +53,7 @@ namespace Aurora3D
 			struct NoOperation   { char pad[1]; };
 			struct HasOperation  { char pad[2]; };
 			inline NoOperation operator ,(NoOperation, HasOperation) { return Declval<NoOperation>(); };
+
 
 			// (NoOperation, HasVoidReturn) => NoOperation
 			// (void, HasVoidReturn)  =>HasVoidReturn         
@@ -102,19 +108,21 @@ namespace Aurora3D
 
 			//operation overload contained in class(member function) left imply type is a left value reference, so Left can't be const T 
 			//Left or Right type qualified with & and && passed to operation will miss
-			template<typename ForbiddenSpecial, typename BinaryOp, typename Left, typename Right, typename Ret, bool is_void = IsVoid<Ret>::value >
+			template<typename BinaryOp, typename Left, typename Right, typename Ret, bool is_void = IsVoid<Ret>::value >
 			struct HasBinaryOp :public And<
 				Not< ForbiddenCommon<Left, Right>>,
-				Not< ForbiddenSpecial >,
 				HasBinaryOpParameter<BinaryOp>,
 				HasBineryOpReturn<BinaryOp, Ret> > {};
 
-			template < typename ForbiddenSpecial, typename BinaryOp, typename Left, typename Right, typename Ret>
-			struct HasBinaryOp<ForbiddenSpecial, BinaryOp, Left, Right, Ret, true> :public And<
+			//return void
+			template <typename BinaryOp, typename Left, typename Right, typename Ret>
+			struct HasBinaryOp<BinaryOp, Left, Right, Ret, true> :public And<
 				Not< ForbiddenCommon<Left, Right>>,
-				Not< ForbiddenSpecial >,
 				HasBinaryOpParameter<BinaryOp>,
 				HasBinaryOpReturnVoid<BinaryOp, Ret> > {};
+#if defined(AURORA3D_COMPILER_MSVC)
+#   pragma warning ( pop )
+#endif
 		}
 	}
 }

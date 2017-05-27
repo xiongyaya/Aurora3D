@@ -16,6 +16,7 @@ namespace Aurora3D
 		}
 		
 		template<typename T> struct AddLValueRef:public detail::AddLValueRefHelper<T>{};
+		template<typename T> using AddLValueRef_t = typename AddLValueRef<T>::type;
 
 
 	}

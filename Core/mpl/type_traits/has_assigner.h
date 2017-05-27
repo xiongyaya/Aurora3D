@@ -43,5 +43,7 @@ namespace Aurora3D
 #undef HAS_TRIVIAL_ASSIGNER
 #undef HAS_NOTHROW_ASSIGNER
 
+
+
 	}
 }
