@@ -14,6 +14,6 @@ namespace Aurora3D
 
 		//not change
 		template<typename T> struct UnderlyingType :public detail::UnderlyingTypeHelper<T, IsEnum<T>::value> {};
-		
+		template<typename T> using UnderlyingType_t = typename UnderlyingType<T>::type;
 	}
 }

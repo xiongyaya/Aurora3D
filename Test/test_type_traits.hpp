@@ -62,9 +62,14 @@
 #include<core/mpl/type_traits/aligned_storage.h>
 #include<core/mpl/type_traits/array_dim.h>
 #include<core/mpl/type_traits/array_len.h>
-#include<core/mpl/type_traits/has_plus.h>
-
-
+#include<core/mpl/type_traits/has_add.h>
+#include<core/mpl/type_traits/has_sub.h>
+#include<core/mpl/type_traits/has_div.h>
+#include<core/mpl/type_traits/has_mul.h>
+#include<core/mpl/type_traits/has_mod.h>
+#include<core/mpl/type_traits/has_shift_left.h>
+#include<core/mpl/type_traits/has_less.h>
+#include<core/mpl/type_traits/has_logic_and.h>
 #include<boost/type_traits.hpp>
 
 #include"print_type.h"
@@ -101,55 +106,51 @@ inline void TestNoExcept() noexcept{}
 class TestThis { void ThisCall() {} };
 
 
-struct TestPlus { void operator+(int) {}  float operator+(float) { return 0.0f; } };
+struct TestOperator {
+	void operator+(int) {}
+	float operator+(float) { return 0.0f; }
+	void operator&(float) {}
+	void operator-=(int a) {}
+	void operator<<(int a) {}
+	bool operator&&(int a) { return false; }
+	bool operator<(int a) { return false; }
+};
 
 inline void TestTypeTraits()
 {
-
+	//test set
 #define CLASS_SET       (void,nullptr_t, int,TestUnion,TestNormalEnum, TestEmpty, TestFinal, TestAbstract, TestDrivied, TestCopyConstructible, TestNoCopyConstructible, TestNoMoveConstructible, TestMoveConstructible, NoDefaultConstructible)
 #define QUALIFERED_SET  A3D_PP_COMPOSE_EX( (int, const int, volatile int, const volatile int), (A3D_PP_NULL, &, &&, *, [2], [2][3], []), void)
 #define ALL_TYPE_SET    (void, nullptr_t, int, float, void(int), int(*)(char), int*,int[2],int&,int&&, decltype(&TestDrivied::Test), decltype(&TestDrivied::data), TestEnumClassInt8, TestNormalEnum, TestUnion, TestEmpty, TestTrivialConstruct1, TestAbstract, TestDrivied)
+#define BINARY_TEST_SET ((void, A3D_PP_NULL, 0), (nullptr_t, A3D_PP_NULL, 0), (char*, A3D_PP_NULL, 0), (int, void, 1), (float, void, 1),(TestOperator, void, 1), (int, float, 1), (float, int, 1), (int, ingore_t, 1), (float, A3D_PP_NULL, 0),(ingore_t, A3D_PP_NULL, 0), (TestOperator, A3D_PP_NULL, 0), (int*, float*, 1))
 
-
+	//printf  format
 #define TEST_1TYPE_VALUE(Type, Templ)         TypeValue<Templ<Type>>{}();
 #define TEST_TYPE_CONVERTER(Type, Converter)  TypeName<Converter<Type>>{}();
+#define PRINT_HAS_XX_VALUE(Right,Ret,NeedComma,Left,Templ)   TypeValue<Templ<Left,Right A3D_PP_IF_COMMA(NeedComma) Ret>>{}();
 
-
+	//test case
 #define TEST_TYPE_CONVERTER_BATCH(Func)               A3D_PP_FOREACH_ITEM(TEST_TYPE_CONVERTER, QUALIFERED_SET, Func) cout << endl;
 #define TEST_TYPE_CONVERTER_BATCH_SP(Func, Seq)       A3D_PP_FOREACH_ITEM(TEST_TYPE_CONVERTER, Seq, Func) cout << endl;
 #define TEST_TYPE_VALUE_BATCH(Templ, Seq)             A3D_PP_FOREACH_ITEM(TEST_1TYPE_VALUE, Seq, Templ);    cout << endl;
 #define TEST_2TYPE_VALUE_BATCH(Func, Seq, ...)        A3D_PP_FOREACH_TUPLE(Func,Seq,__VA_ARGS__)
+#define TEST_NORMAL_HAS(Templ)	TypeValue<Templ<float*, int*>>{}(); TypeValue<Templ<float*, int>>{}(); TypeValue<Templ<int, int>>{}(); TypeValue<Templ<void, char>>{}(); TypeValue<Templ<int, void>>{}(); TypeValue<Templ<void*, char>>{}();
 
-	cout << " Test HasPlus" << endl;
-
-//#define TEST_2TYPE_VALUE(Type1,Type2, Templ, Type3)
-#define PRINT_HAS_XX_VALUE(Right,Ret,NeedComma,Left,Templ)   cout << Templ<Left,Right A3D_PP_IF_COMMA(NeedComma) Ret>::value << endl;
-
-	//TEST_2TYPE_VALUE_BATCH(PRINT_HAS_XX_VALUE, ((void, A3D_PP_NULL, 0), (nullptr_t, A3D_PP_NULL, 0), (char*, A3D_PP_NULL, 0), \
-	//	(int, void, 1), (float, void, 1), (TestPlus, void, 1), (int, float, 1), (float, int, 1), (float, int, 1), (int, ingore_t, 1), (float, A3D_PP_NULL, 0), \
-	//	(ingore_t, A3D_PP_NULL, 0), (TestPlus, A3D_PP_NULL, 0)), TestPlus, HasPlus);
-
-	cout << endl;
-	//cout << HasPlus<TestPlus, void>::value << endl;
-	//cout << HasPlus<TestPlus, nullptr_t>::value << endl;
-	//cout << HasPlus<TestPlus, char*>::value << endl;
-	//cout << HasPlus<TestPlus, int,void>::value << endl;
-	//cout << HasPlus<TestPlus, float, void>::value << endl;
-	//cout << HasPlus<TestPlus, TestPlus, void>::value << endl;
-	//cout << HasPlus<TestPlus, int,float>::value << endl;     //void ->float
-	cout << HasPlus<TestPlus, float, int>::value << endl;     //float ->int
-	cout << HasPlus<TestPlus, float, char>::value << endl;     //float ->int
-	//cout << HasPlus<TestPlus, int, ingore_t>::value << endl;
-	//cout << HasPlus<TestPlus, float>::value << endl;
-	//cout << HasPlus<TestPlus, ingore_t>::value << endl;   //XXXX
-	//cout << HasPlus<TestPlus, TestPlus>::value << endl;   //
-
+	cout << " Test Binary HasOperatorXX" << endl;
+	//TEST_2TYPE_VALUE_BATCH(PRINT_HAS_XX_VALUE, BINARY_TEST_SET,TestOperator, HasAdd);
+	//TEST_NORMAL_HAS(HasAdd);
+	//TEST_2TYPE_VALUE_BATCH(PRINT_HAS_XX_VALUE, BINARY_TEST_SET, TestOperator, HasSub);
+	//TEST_NORMAL_HAS(HasSub);
+	//TEST_2TYPE_VALUE_BATCH(PRINT_HAS_XX_VALUE, BINARY_TEST_SET, TestOperator, HasSubAssign);
+	//TEST_NORMAL_HAS(HasSubAssign);
+	//TEST_2TYPE_VALUE_BATCH(PRINT_HAS_XX_VALUE, BINARY_TEST_SET, TestOperator, HasDiv);
+	//TEST_NORMAL_HAS(HasDiv);
+	//TEST_2TYPE_VALUE_BATCH(PRINT_HAS_XX_VALUE, BINARY_TEST_SET, TestOperator, HasShiftLeft);
+	//TEST_NORMAL_HAS(HasShiftLeft);
+	//TEST_2TYPE_VALUE_BATCH(PRINT_HAS_XX_VALUE, BINARY_TEST_SET, TestOperator, HasLess);
+	//TEST_NORMAL_HAS(HasLess);
 
 	
-
-	//float f = 1.0f;
-	//const int& a = f;
-
 	cout << "  test AddConst " << endl;
 	//TEST_TYPE_CONVERTER_BATCH(AddConst);
 

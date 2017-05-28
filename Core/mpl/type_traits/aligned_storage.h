@@ -82,6 +82,6 @@ namespace Aurora3D
 	}
 }
 
-#if defined(A3D_COMPILER_MSVC)
+#if defined(AURORA3D_COMPILER_MSVC)
 #pragma warning(pop)
 #endif

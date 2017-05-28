@@ -25,20 +25,17 @@ namespace Aurora3D
 	{
 		namespace detail
 		{
+			//Left op Right is forbidden
 			template<typename Left, typename Right> struct ForbiddenHelper
 			{
-				typedef typename RemoveRef<Left>::type   lnoref;
-				typedef typename RemoveRef<Right>::type  rnoref;
-				typedef typename RemoveCV<lnoref>::type  lnocv;
-				typedef typename RemoveCV<rnoref>::type  rnocv;
-				typedef typename RemoveCV<typename RemoveRef< typename RemovePointer< lnoref>::type >::type>::type lnoptr;
-				typedef typename RemoveCV<typename RemoveRef< typename RemovePointer< rnoref>::type >::type>::type rnoptr;
+				typedef typename RemoveCV_t<RemoveRef_t<Left>>   left_nocv_t;
+				typedef typename RemoveCV_t<RemoveRef_t<Right>>  right_nocv_t;
 			};
 
 			//forbidden if one parameter is void
 			template<typename Left, typename Right> struct ForbiddenCommonHelper:public ForbiddenHelper<Left,Right>
 			{
-				static constexpr bool value = IsVoid<lnocv>::value || IsVoid<rnocv>::value;
+				static constexpr bool value = IsVoid_v(left_nocv_t) || IsVoid_v(right_nocv_t);
 			};
 
 			//common forbidden case like int op void
@@ -49,7 +46,6 @@ namespace Aurora3D
 			struct HasOperation  { char pad[2]; };
 			inline NoOperation operator ,(NoOperation, HasOperation) { return Declval<NoOperation>(); };
 
-
 			// (NoOperation, HasVoidReturn) => NoOperation
 			// (void, HasVoidReturn)  =>HasVoidReturn         
 			struct HasVoidReturn { char pad[2]; };  
@@ -59,13 +55,13 @@ namespace Aurora3D
 			// (T, HasAnyReturn)          => T
 			// (void, HasAnyReturn)       => HasAnyReturn
 			struct HasAnyReturn  { char pad[2]; };  
-			template<typename T> inline T operator,(T, const HasAnyReturn&) { return Declval<T>(); };
+			template<typename T> inline T operator,(const T&, const HasAnyReturn&) { return Declval<T>(); };
 			inline NoOperation operator,(const NoOperation&, const HasAnyReturn&) { return Declval<NoOperation>(); };
 
 			//if T1 op T2 not defined, will implicitly convert to ImplicitConverted and do operation
 			struct ImplicitConverted { template <class T> ImplicitConverted(T) {}; };
 #define BINARY_OPERATION(Op, ...) inline NoOperation operator Op(const ImplicitConverted&, const ImplicitConverted&) { return Declval<NoOperation>(); };
-			A3D_PP_FOREACH_ITEM(BINARY_OPERATION, (+, -, *, / , %, &, | , ^, +=, -=, *=, /=, %=, &=, |=, ^=, >>=, <<=, &&, ||));
+			A3D_PP_FOREACH_ITEM(BINARY_OPERATION, (+, -, *, / , %, &, | , ^, +=, -=, *=, /=, %=, &=, |=, ^=, <<,>>,>>=, <<=, &&, ||,<,<=,>,>=,==,!=));
 #undef  BINARY_OPERATION
 			
 			//test return type
@@ -75,7 +71,7 @@ namespace Aurora3D
 				static  constexpr HasOperation Convert(const T&) { return Declval<HasOperation>(); };
 
 				//match void
-				static  constexpr HasOperation Convert(const HasAnyReturn&) { return Declval<HasOperation>(); };
+				static  constexpr NoOperation Convert(const HasAnyReturn&) { return Declval<HasOperation>(); };
 
 				//match NoOperation
 				static  constexpr NoOperation  Convert(const NoOperation&) { return Declval<NoOperation>(); };
@@ -86,7 +82,7 @@ namespace Aurora3D
 			template<typename BinaryOp> 
 			struct HasBinaryOpParameter :public Bool_< sizeof(HasOperation) == sizeof((BinaryOp::Op(),Declval<HasOperation>()))> {};
 
-			//if    BinaryOp::Op() exists and return Void, (void, HasAnyReturn) return HasAnyReturn =>HasOperation
+			//if    BinaryOp::Op() exists and return Void, (void, HasAnyReturn) return HasAnyReturn =>NoOperation
 			//else  BinaryOp::Op() exists and return Non-NoOperation type, (T, HasAnyReturn) return T
 			//else  BinaryOp::Op() not exists(imply convert to ImplicitConverted op ImplicitConverted, return NoOperation)
 		    //                     (NoOperation,HasAnyReturn) return NoOperation
@@ -115,12 +111,32 @@ namespace Aurora3D
 				Not< ForbiddenCommon<Left, Right>>,
 				HasBinaryOpParameter<BinaryOp>,
 				HasBinaryOpReturnVoid<BinaryOp, Ret> > {};
-#if defined(AURORA3D_COMPILER_MSVC)
-#   pragma warning ( pop )
-#endif
+
+
+#define  HAS_BINARY_OPERATION_DECL(OpSign, OpName, Judgement )                             \
+		namespace detail                                                                   \
+		{                                                                                  \
+			template<typename Left, typename Right>                                        \
+				struct OpName##Operation                                                   \
+			{                                                                              \
+				static constexpr auto Op()->decltype(Make<Left>() OpSign Declval<Right>());\
+			};                                                                             \
+			template<typename Left, typename Right> struct Forbidden##OpName :             \
+				public ForbiddenHelper<Left, Right>                                        \
+			{                                                                              \
+				static constexpr bool value = Judgement;                                   \
+			};                                                                             \
+		}                                                                                  \
+		template<typename Left, typename Right = Left, typename Ret = ingore_t,            \
+			bool Forbidden = detail::Forbidden##OpName<Left, Right>::value >               \
+		struct Has##OpName : public detail::HasBinaryOp<                                   \
+			detail::OpName##Operation<Left, Right>, Left, Right, Ret> {};                  \
+		template<typename Left, typename Right, typename Ret>                              \
+		struct Has##OpName<Left,Right,Ret,true> : public False_ {};
 		}
+
 	}
 }
-#if defined(A3D_COMPILER_MSVC)
+#if defined(AURORA3D_COMPILER_MSVC)
 #pragma warning(pop)
 #endif

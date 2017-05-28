@@ -13,5 +13,6 @@ namespace Aurora3D
 		//lazy
 		template<typename T> struct RemoveCV :public detail::RemoveCVHelper<RemoveConst<T>>{};
 		template<typename T> using RemoveCV_t = typename RemoveCV<T>::type;
+
 	}
 }

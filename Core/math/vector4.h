@@ -7,7 +7,6 @@
 #include<Core/math/math_impl.h>
 #include<Core/auxililty/ingore_unused.h>
 
-
 #pragma warning(disable:4996)
 
 namespace Aurora3D
@@ -33,7 +32,6 @@ namespace Aurora3D
 			A3D_FORCEINLINE Vector4(const float128& v) : vec(v) { }
 			A3D_FORCEINLINE const Vector4& operator=(const float128& v) { return vec = v; }
 			A3D_FORCEINLINE const Vector4& operator=(const Vector4& v) { return vec = v.vec; }
-
 
 			// override operator
 			A3D_FORCEINLINE float&  operator[](uint32 inIndex) { assert(inIndex <= 3); return data[inIndex]; }
@@ -99,7 +97,7 @@ namespace Aurora3D
 			A3D_FORCEINLINE Vector4 zzzz() const { return Repeat<2>(); }
 			A3D_FORCEINLINE Vector4 wwww() const { return Repeat<3>(); }
 			A3D_FORCEINLINE Vector4 xywz() const { return Reorder<0, 1, 3, 2>(); }
-			A3D_FORCEINLINE Vector4 xzyw() const { return Reorder<0, 1, 3, 2>(); }
+			A3D_FORCEINLINE Vector4 xzyw() const { return Reorder<0, 2, 1, 3>(); }
 			A3D_FORCEINLINE Vector4 xzwy() const { return Reorder<0, 1, 3, 2>(); }
 			A3D_FORCEINLINE Vector4 xwyz() const { return Reorder<0, 1, 3, 2>(); }
 			A3D_FORCEINLINE Vector4 xwzy() const { return Reorder<0, 1, 3, 2>(); }

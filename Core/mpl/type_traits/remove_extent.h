@@ -7,5 +7,7 @@ namespace Aurora3D
 		template<typename T> struct RemoveExtent { typedef T type; };
 		template<typename T> struct RemoveExtent<T[]> { typedef T type; };
 		template<typename T, size_t N> struct RemoveExtent<T[N]> { typedef T type; };
+
+		template<typename T> using RemoveExtent_t = typename RemoveExtent<T>::type;
 	}
 }
