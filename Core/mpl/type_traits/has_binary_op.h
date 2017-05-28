@@ -23,47 +23,50 @@ namespace Aurora3D
 {
 	namespace mpl
 	{
-		namespace detail
+		namespace has_operation_detail
 		{
 			//Left op Right is forbidden
-			template<typename Left, typename Right> struct ForbiddenHelper
+			template<typename Left, typename Right = Left> struct CheckParameterHelper
 			{
 				typedef typename RemoveCV_t<RemoveRef_t<Left>>   left_nocv_t;
 				typedef typename RemoveCV_t<RemoveRef_t<Right>>  right_nocv_t;
 			};
 
-			//forbidden if one parameter is void
-			template<typename Left, typename Right> struct ForbiddenCommonHelper:public ForbiddenHelper<Left,Right>
+			//both parameter can't be void for unary or binary operation
+			template<typename Left, typename Right = Left> struct CheckParameterNotVoid :public CheckParameterHelper<Left, Right>
 			{
-				static constexpr bool value = IsVoid_v(left_nocv_t) || IsVoid_v(right_nocv_t);
+				static constexpr bool value = !IsVoid_v(left_nocv_t) && !IsVoid_v(right_nocv_t);
 			};
 
-			//common forbidden case like int op void
-			template<typename Left, typename Right> struct ForbiddenCommon :Bool_<ForbiddenCommonHelper<Left, Right>::value> {};
-
 			//test type
-			struct NoOperation   { char pad[1]; };
-			struct HasOperation  { char pad[2]; };
+			struct NoOperation { char pad[1]; };
+			struct HasOperation { char pad[2]; };
 			inline NoOperation operator ,(NoOperation, HasOperation) { return Declval<NoOperation>(); };
 
 			// (NoOperation, HasVoidReturn) => NoOperation
 			// (void, HasVoidReturn)  =>HasVoidReturn         
-			struct HasVoidReturn { char pad[2]; };  
+			// used to check return type
+			struct HasVoidReturn { char pad[2]; };
 			template<typename T> inline NoOperation operator,(T, const HasVoidReturn&) { return Declval<NoOperation>(); };
 
 			// (NoOperation,HasAnyReturn) => NoOperation
 			// (T, HasAnyReturn)          => T
 			// (void, HasAnyReturn)       => HasAnyReturn
-			struct HasAnyReturn  { char pad[2]; };  
+			// used to check return is void
+			struct HasAnyReturn { char pad[2]; };
 			template<typename T> inline T operator,(const T&, const HasAnyReturn&) { return Declval<T>(); };
 			inline NoOperation operator,(const NoOperation&, const HasAnyReturn&) { return Declval<NoOperation>(); };
 
-			//if T1 op T2 not defined, will implicitly convert to ImplicitConverted and do operation
+			//if Operation::Op() not defined, will implicitly convert to ImplicitConverted and do operation
 			struct ImplicitConverted { template <class T> ImplicitConverted(T) {}; };
-#define BINARY_OPERATION(Op, ...) inline NoOperation operator Op(const ImplicitConverted&, const ImplicitConverted&) { return Declval<NoOperation>(); };
-			A3D_PP_FOREACH_ITEM(BINARY_OPERATION, (+, -, *, / , %, &, | , ^, +=, -=, *=, /=, %=, &=, |=, ^=, <<,>>,>>=, <<=, &&, ||,<,<=,>,>=,==,!=));
+#define BINARY_OPERATION(Op, ...) static NoOperation operator Op(const ImplicitConverted&, const ImplicitConverted&) { return Declval<NoOperation>(); }
+#define UNARY_PRE_OPERATION(Op, ...) static NoOperation operator Op(const ImplicitConverted&){ return Declval<NoOperation>(); }
+			A3D_PP_FOREACH_ITEM(BINARY_OPERATION, (+, -, *, / , %, &, | , ^, +=, -=, *=, /=, %=, &=, |=, ^=, << , >> , >>=, <<=, &&, || , <, <= , >, >= , == , != ));
+			A3D_PP_FOREACH_ITEM(UNARY_PRE_OPERATION, (++, --, !, ~, *, -, +));
 #undef  BINARY_OPERATION
-			
+#undef  UNARY_PRE_OPERATION
+
+
 			//test return type
 			template<typename T> struct ReturnConvert
 			{
@@ -79,63 +82,104 @@ namespace Aurora3D
 
 			//if   Left op Right exists,  BinaryOp::Op() return Non-NoOperation type, GET HasOperation type
 			//else return NoOperation,  do [ operator,(NoOperation, HasOperation) ] and GET NoOperation type
-			template<typename BinaryOp> 
-			struct HasBinaryOpParameter :public Bool_< sizeof(HasOperation) == sizeof((BinaryOp::Op(),Declval<HasOperation>()))> {};
+			template<typename Operation>
+			struct CheckHasOperation :public Bool_< sizeof(HasOperation) == sizeof((Operation::Op(), Declval<HasOperation>()))> {};
 
 			//if    BinaryOp::Op() exists and return Void, (void, HasAnyReturn) return HasAnyReturn =>NoOperation
 			//else  BinaryOp::Op() exists and return Non-NoOperation type, (T, HasAnyReturn) return T
 			//else  BinaryOp::Op() not exists(imply convert to ImplicitConverted op ImplicitConverted, return NoOperation)
-		    //                     (NoOperation,HasAnyReturn) return NoOperation
+			//                     (NoOperation,HasAnyReturn) return NoOperation
 			//if    return type is ingored always true
-			template<typename BinaryOp, typename Ret> struct HasBineryOpReturn :
-				public Bool_< sizeof(HasOperation) == sizeof( ReturnConvert<Ret>::Convert( ( BinaryOp::Op(),Declval<HasAnyReturn>()) )) >{ };
-			template<typename BinaryOp> struct HasBineryOpReturn<BinaryOp, ingore_t>: public True_{};
+			template<typename Operation, typename Ret> struct CheckHasReturn :
+				public Bool_< sizeof(HasOperation) == sizeof(ReturnConvert<Ret>::Convert((Operation::Op(), Declval<HasAnyReturn>()))) > { };
+			template<typename Operation> struct CheckHasReturn<Operation, ingore_t> : public True_ {};
 
 			//if    BinaryOp::Op() return Non-NoOperation type,  GET NoOperation
 			//else  BinaryOp::Op() return NoOperation type, GET HasVoidReturn
 			//if    return type is ingored always true
-			template<typename BinaryOp, typename Ret> struct HasBinaryOpReturnVoid :
-				public Bool_< sizeof(HasOperation) == sizeof((BinaryOp::Op(),Declval<HasVoidReturn>()))> {};
+			template<typename Operation, typename Ret> struct CheckHasReturnVoid :
+				public Bool_< sizeof(HasOperation) == sizeof((Operation::Op(), Declval<HasVoidReturn>()))> {};
 
+			//for binary operation
 			//operation overload contained in class(member function) left imply type is a left value reference, so Left can't be const T 
 			//Left or Right type qualified with & and && passed to operation will miss
-			template<typename BinaryOp, typename Left, typename Right, typename Ret, bool is_void = IsVoid<Ret>::value >
+			template<typename BinaryOp, typename Left, typename Right, typename Ret, bool is_void = IsVoid_v(Ret) >
 			struct HasBinaryOp :public And<
-				Not< ForbiddenCommon<Left, Right>>,
-				HasBinaryOpParameter<BinaryOp>,
-				HasBineryOpReturn<BinaryOp, Ret> > {};
+				CheckParameterNotVoid<Left, Right>,
+				CheckHasOperation<BinaryOp>,
+				CheckHasReturn<BinaryOp, Ret> > {};
 
 			//return void
 			template <typename BinaryOp, typename Left, typename Right, typename Ret>
 			struct HasBinaryOp<BinaryOp, Left, Right, Ret, true> :public And<
-				Not< ForbiddenCommon<Left, Right>>,
-				HasBinaryOpParameter<BinaryOp>,
-				HasBinaryOpReturnVoid<BinaryOp, Ret> > {};
+				CheckParameterNotVoid<Left, Right>,
+				CheckHasOperation<BinaryOp>,
+				CheckHasReturnVoid<BinaryOp, Ret> > {};
 
 
-#define  HAS_BINARY_OPERATION_DECL(OpSign, OpName, Judgement )                             \
-		namespace detail                                                                   \
-		{                                                                                  \
-			template<typename Left, typename Right>                                        \
-				struct OpName##Operation                                                   \
-			{                                                                              \
-				static constexpr auto Op()->decltype(Make<Left>() OpSign Declval<Right>());\
-			};                                                                             \
-			template<typename Left, typename Right> struct Forbidden##OpName :             \
-				public ForbiddenHelper<Left, Right>                                        \
-			{                                                                              \
-				static constexpr bool value = Judgement;                                   \
-			};                                                                             \
-		}                                                                                  \
-		template<typename Left, typename Right = Left, typename Ret = ingore_t,            \
-			bool Forbidden = detail::Forbidden##OpName<Left, Right>::value >               \
-		struct Has##OpName : public detail::HasBinaryOp<                                   \
-			detail::OpName##Operation<Left, Right>, Left, Right, Ret> {};                  \
-		template<typename Left, typename Right, typename Ret>                              \
-		struct Has##OpName<Left,Right,Ret,true> : public False_ {};
-		}
+			//for unary Operation
+			template<typename UnaryOp, typename OpType, typename Ret, bool is_void = IsVoid_v(Ret)>
+			struct HasUnaryOp :public And<
+				CheckParameterNotVoid<OpType>,
+				CheckHasOperation<UnaryOp>,
+				CheckHasReturn<UnaryOp, Ret>> {};
 
-	}
+			//return is void
+			template<typename UnaryOp, typename OpType, typename Ret>
+			struct HasUnaryOp<UnaryOp, OpType, Ret, true> :public And<
+				CheckParameterNotVoid<OpType>,
+				CheckHasOperation<UnaryOp>,
+				CheckHasReturnVoid<UnaryOp, Ret>>{};
+
+
+			//for binary operation declare
+#define  HAS_BINARY_OPERATION_DECL(OpSign, OpName, Judgement )                                         \
+			namespace has_operation_detail                                                             \
+			{                                                                                          \
+				template<typename Left, typename Right>                                                \
+					struct OpName##Operation                                                           \
+				{                                                                                      \
+					static constexpr auto Op()->decltype(Make<Left>() OpSign Declval<Right>());        \
+				};                                                                                     \
+				template<typename Left, typename Right> struct Check##OpName##Parameter :              \
+					public CheckParameterHelper<Left, Right>                                           \
+				{                                                                                      \
+					static constexpr bool value = Judgement;                                           \
+				};                                                                                     \
+			}                                                                                          \
+			template<typename Left, typename Right = Left, typename Ret = ingore_t,                    \
+				bool forbidden = has_operation_detail::Check##OpName##Parameter<Left, Right>::value >  \
+			struct Has##OpName : public has_operation_detail::HasBinaryOp<                             \
+				has_operation_detail::OpName##Operation<Left, Right>, Left, Right, Ret> {};            \
+			template<typename Left, typename Right, typename Ret>                                      \
+			struct Has##OpName<Left,Right,Ret,true> : public False_ {};
+		
+
+		//for pre-unary operation declare
+#define HAS_FRONT_UNARY_OPERATION_DECL(OpSign, OpName, Judgement)                                \
+			namespace has_operation_detail                                                       \
+			{                                                                                    \
+				template<typename OpType>                                                        \
+				struct OpName##Operation                                                         \
+				{                                                                                \
+					static constexpr auto Op()->decltype(OpSign Make<OpType>());                 \
+				};                                                                               \
+				template<typename OpType>                                                        \
+				struct Check##OpName##Parameter :public CheckParameterHelper<OpType>             \
+				{                                                                                \
+					static const bool value = Judgement;                                         \
+				};                                                                               \
+			}                                                                                    \
+			template<typename OpType, typename Ret = ingore_t,                                   \
+				bool forbidden = has_operation_detail::Check##OpName##Parameter<OpType>::value>  \
+			struct Has##OpName :public has_operation_detail::HasUnaryOp<                         \
+				has_operation_detail::OpName##Operation<OpType>,OpType,Ret> {};                  \
+			template<typename OpType, typename Ret>                                              \
+			struct Has##OpName<OpType, Ret, true> :False_ {};
+
+
+		} //namespace has_operation_detail
+	}//namespace mpl
 }
 #if defined(AURORA3D_COMPILER_MSVC)
 #pragma warning(pop)

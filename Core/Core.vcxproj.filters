@@ -357,9 +357,6 @@
     <ClInclude Include="mpl\type_traits\has_bit_and.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\type_traits\has_bit_not.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\type_traits\has_bit_or.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
@@ -373,9 +370,6 @@
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\has_delete.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\has_derefer.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\has_destructor.h">
@@ -421,9 +415,6 @@
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\has_mul.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\has_negate.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\has_new.h">
@@ -691,6 +682,18 @@
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\has_unary_pre_op.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\has_bit_reverse.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\has_dereference.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\has_positive.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\has_negative.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
   </ItemGroup>

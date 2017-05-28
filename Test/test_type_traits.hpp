@@ -70,6 +70,7 @@
 #include<core/mpl/type_traits/has_shift_left.h>
 #include<core/mpl/type_traits/has_less.h>
 #include<core/mpl/type_traits/has_logic_and.h>
+#include<core/mpl/type_traits/has_front_dec.h>
 #include<boost/type_traits.hpp>
 
 #include"print_type.h"
@@ -127,28 +128,37 @@ inline void TestTypeTraits()
 	//printf  format
 #define TEST_1TYPE_VALUE(Type, Templ)         TypeValue<Templ<Type>>{}();
 #define TEST_TYPE_CONVERTER(Type, Converter)  TypeName<Converter<Type>>{}();
-#define PRINT_HAS_XX_VALUE(Right,Ret,NeedComma,Left,Templ)   TypeValue<Templ<Left,Right A3D_PP_IF_COMMA(NeedComma) Ret>>{}();
+#define PRINT_HAS_BINARY_OP_VALUE(Right,Ret,NeedComma,Left,Templ)   TypeValue<Templ<Left,Right A3D_PP_IF_COMMA(NeedComma) Ret>>{}();
+#define PRINT_HAS_UNARY_OP_VALUE(Type, Ret, Templ) TypeValue<Templ<Type,Ret>>{}();
 
 	//test case
 #define TEST_TYPE_CONVERTER_BATCH(Func)               A3D_PP_FOREACH_ITEM(TEST_TYPE_CONVERTER, QUALIFERED_SET, Func) cout << endl;
 #define TEST_TYPE_CONVERTER_BATCH_SP(Func, Seq)       A3D_PP_FOREACH_ITEM(TEST_TYPE_CONVERTER, Seq, Func) cout << endl;
 #define TEST_TYPE_VALUE_BATCH(Templ, Seq)             A3D_PP_FOREACH_ITEM(TEST_1TYPE_VALUE, Seq, Templ);    cout << endl;
-#define TEST_2TYPE_VALUE_BATCH(Func, Seq, ...)        A3D_PP_FOREACH_TUPLE(Func,Seq,__VA_ARGS__)
+#define TEST_HAS_OP_VALUE_BATCH(Func, Seq, ...)        A3D_PP_FOREACH_TUPLE(Func,Seq,__VA_ARGS__)
 #define TEST_NORMAL_HAS(Templ)	TypeValue<Templ<float*, int*>>{}(); TypeValue<Templ<float*, int>>{}(); TypeValue<Templ<int, int>>{}(); TypeValue<Templ<void, char>>{}(); TypeValue<Templ<int, void>>{}(); TypeValue<Templ<void*, char>>{}();
 
-	cout << " Test Binary HasOperatorXX" << endl;
-	//TEST_2TYPE_VALUE_BATCH(PRINT_HAS_XX_VALUE, BINARY_TEST_SET,TestOperator, HasAdd);
-	//TEST_NORMAL_HAS(HasAdd);
-	//TEST_2TYPE_VALUE_BATCH(PRINT_HAS_XX_VALUE, BINARY_TEST_SET, TestOperator, HasSub);
+	cout << " Test Unary/Binary HasOperatorXX" << endl;
+	/*TEST_HAS_OP_VALUE_BATCH(PRINT_HAS_BINARY_OP_VALUE, BINARY_TEST_SET,TestOperator, HasAdd);
+	TEST_NORMAL_HAS(HasAdd);*/
+	//TEST_HAS_OP_VALUE_BATCH(PRINT_HAS_BINARY_OP_VALUE, BINARY_TEST_SET, TestOperator, HasSub);
 	//TEST_NORMAL_HAS(HasSub);
-	//TEST_2TYPE_VALUE_BATCH(PRINT_HAS_XX_VALUE, BINARY_TEST_SET, TestOperator, HasSubAssign);
+	//TEST_HAS_OP_VALUE_BATCH(PRINT_HAS_BINARY_OP_VALUE, BINARY_TEST_SET, TestOperator, HasSubAssign);
 	//TEST_NORMAL_HAS(HasSubAssign);
-	//TEST_2TYPE_VALUE_BATCH(PRINT_HAS_XX_VALUE, BINARY_TEST_SET, TestOperator, HasDiv);
+	//TEST_HAS_OP_VALUE_BATCH(PRINT_HAS_BINARY_OP_VALUE, BINARY_TEST_SET, TestOperator, HasDiv);
 	//TEST_NORMAL_HAS(HasDiv);
-	//TEST_2TYPE_VALUE_BATCH(PRINT_HAS_XX_VALUE, BINARY_TEST_SET, TestOperator, HasShiftLeft);
+	//TEST_HAS_OP_VALUE_BATCH(PRINT_HAS_BINARY_OP_VALUE, BINARY_TEST_SET, TestOperator, HasShiftLeft);
 	//TEST_NORMAL_HAS(HasShiftLeft);
-	//TEST_2TYPE_VALUE_BATCH(PRINT_HAS_XX_VALUE, BINARY_TEST_SET, TestOperator, HasLess);
+	//TEST_HAS_OP_VALUE_BATCH(PRINT_HAS_BINARY_OP_VALUE, BINARY_TEST_SET, TestOperator, HasLess);
 	//TEST_NORMAL_HAS(HasLess);
+
+	TypeValue<HasFrontDec<int, int>>{}();
+	TypeValue<HasFrontDec<int, float>>{}();
+	TypeValue<HasFrontDec<float, ingore_t>>{}();
+	TypeValue<HasFrontDec<char>>{}();
+	TypeValue<HasFrontDec<TestOperator>>{}();
+
+	
 
 	
 	cout << "  test AddConst " << endl;

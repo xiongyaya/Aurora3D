@@ -7,6 +7,6 @@ namespace Aurora3D
 {
 	namespace mpl
 	{
-		HAS_FRONT_UNARY_OPERATION_DECL(!, LogicNot, 0);
+		HAS_FRONT_UNARY_OPERATION_DECL(*, Dereference, 0);
 	}
 }
