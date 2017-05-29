@@ -7,6 +7,7 @@ namespace Aurora3D
 {
 	namespace mpl
 	{
+
 		template<typename T> typename AddRValueRef<T>::type Declval();
 		template<typename T> typename AddLValueRef<T>::type Make();
 	}

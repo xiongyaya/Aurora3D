@@ -9,7 +9,6 @@ namespace Aurora3D
 {
 	namespace math
 	{
-
 		union alignas(32) Vector8
 		{
 		public:

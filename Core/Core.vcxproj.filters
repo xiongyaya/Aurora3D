@@ -363,9 +363,6 @@
     <ClInclude Include="mpl\type_traits\has_bit_xor.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\type_traits\has_bracket.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\type_traits\has_constructor.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
@@ -391,9 +388,6 @@
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\has_greater_equal.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\has_index.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\has_less.h">
@@ -427,9 +421,6 @@
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\has_post_inc.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\has_refer_member.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\has_shift_left.h">
@@ -573,9 +564,6 @@
     <ClInclude Include="mpl\type_traits\underlying_type.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\type_traits\replace.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\type_traits\first_template.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
@@ -687,9 +675,6 @@
     <ClInclude Include="mpl\type_traits\has_negative.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\type_traits\has_operator.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
     <ClInclude Include="memory\aligned_allocator.h">
       <Filter>memory</Filter>
     </ClInclude>
@@ -701,6 +686,30 @@
     </ClInclude>
     <ClInclude Include="auxililty\forward.h">
       <Filter>auxililty</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\has_operator_type.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\has_index_operator.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\has_invoke_operator.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\has_member_fn_decl.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\has_new_delete_decl.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\has_refer_arrow.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\copy_qualifers.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\has_operator_decl.h">
+      <Filter>mpl\type_traits</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

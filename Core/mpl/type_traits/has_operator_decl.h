@@ -8,6 +8,7 @@
 #include<Core/mpl/logic_not.h>
 #include<Core/mpl/type_traits/is_void.h>
 #include<Core/mpl/type_traits/declval.h>
+#include<Core/mpl/type_traits/has_operator_type.h>
 #include<Core/mpl/type_traits/remove_cv.h>
 #include<Core/mpl/type_traits/remove_pointer.h>
 #include<Core/mpl/type_traits/remove_ref.h>
@@ -23,6 +24,7 @@ namespace Aurora3D
 {
 	namespace mpl
 	{
+		//ensure ImplicitConverted not pollute stand namespace
 		namespace has_operation_detail
 		{
 			//Left op Right is forbidden
@@ -38,25 +40,6 @@ namespace Aurora3D
 				static constexpr bool value = !IsVoid_v(left_nocv_t) && !IsVoid_v(right_nocv_t);
 			};
 
-			//test type
-			struct NoOperation { char pad[1]; };
-			struct HasOperation { char pad[2]; };
-			inline NoOperation operator ,(NoOperation, HasOperation) { return Declval<NoOperation>(); };
-
-			// (NoOperation, HasVoidReturn) => NoOperation
-			// (void, HasVoidReturn)  =>HasVoidReturn         
-			// used to check return type
-			struct HasVoidReturn { char pad[2]; };
-			template<typename T> inline NoOperation operator,(T, const HasVoidReturn&) { return Declval<NoOperation>(); };
-
-			// (NoOperation,HasAnyReturn) => NoOperation
-			// (T, HasAnyReturn)          => T
-			// (void, HasAnyReturn)       => HasAnyReturn
-			// used to check return is void
-			struct HasAnyReturn { char pad[2]; };
-			template<typename T> inline T operator,(const T&, const HasAnyReturn&) { return Declval<T>(); };
-			inline NoOperation operator,(const NoOperation&, const HasAnyReturn&) { return Declval<NoOperation>(); };
-
 			//if Operation::Op() not defined, will implicitly convert to ImplicitConverted and do operation
 			struct ImplicitConverted { template <class T> ImplicitConverted(T) {}; };
 #define BINARY_OPERATION(Op, ...) static NoOperation operator Op(const ImplicitConverted&, const ImplicitConverted&) { return Declval<NoOperation>(); }
@@ -69,7 +52,6 @@ namespace Aurora3D
 			//not allowd . .* :: ?:
 #undef  BINARY_OPERATION
 #undef  UNARY_PRE_OPERATION
-
 
 			//test return type
 			template<typename T> struct ReturnConvert
@@ -87,7 +69,7 @@ namespace Aurora3D
 			//if   Left op Right exists,  BinaryOp::Op() return Non-NoOperation type, GET HasOperation type
 			//else return NoOperation,  do [ operator,(NoOperation, HasOperation) ] and GET NoOperation type
 			template<typename Operation>
-			struct CheckHasOperation :public Bool_< sizeof(HasOperation) == sizeof((Operation::Op(), Declval<HasOperation>()))> {};
+			struct CheckHasOperation :public Bool_< HasOperationValue((Operation::Op(), Declval<HasOperation>())) > {};
 
 			//if    BinaryOp::Op() exists and return Void, (void, HasAnyReturn) return HasAnyReturn =>NoOperation
 			//else  BinaryOp::Op() exists and return Non-NoOperation type, (T, HasAnyReturn) return T
@@ -95,14 +77,14 @@ namespace Aurora3D
 			//                     (NoOperation,HasAnyReturn) return NoOperation
 			//if    return type is ingored always true
 			template<typename Operation, typename Ret> struct CheckHasReturn :
-				public Bool_< sizeof(HasOperation) == sizeof(ReturnConvert<Ret>::Convert((Operation::Op(), Declval<HasAnyReturn>()))) > { };
+				public Bool_< HasOperationValue( ReturnConvert<Ret>::Convert((Operation::Op(), Declval<HasAnyReturn>())) ) > { };
 			template<typename Operation> struct CheckHasReturn<Operation, ingore_t> : public True_ {};
 
 			//if    BinaryOp::Op() return Non-NoOperation type,  GET NoOperation
 			//else  BinaryOp::Op() return NoOperation type, GET HasVoidReturn
 			//if    return type is ingored always true
 			template<typename Operation, typename Ret> struct CheckHasReturnVoid :
-				public Bool_< sizeof(HasOperation) == sizeof((Operation::Op(), Declval<HasVoidReturn>()))> {};
+				public Bool_< HasOperationValue((Operation::Op(), Declval<HasVoidReturn>()))> {};
 
 			//for binary operation
 			//operation overload contained in class(member function) left imply type is a left value reference, so Left can't be const T 
@@ -135,8 +117,7 @@ namespace Aurora3D
 				CheckHasOperation<UnaryOp>,
 				CheckHasReturnVoid<UnaryOp, Ret>>{};
 
-
-			//for binary operation declare
+			//for binary operation declare,  Left OP Right
 #define  HAS_BINARY_OPERATION_DECL(OpSign, OpName, Judgement )                                         \
 			namespace has_operation_detail                                                             \
 			{                                                                                          \
@@ -159,7 +140,7 @@ namespace Aurora3D
 			struct Has##OpName<Left,Right,Ret,true> : public False_ {};
 		
 
-		//for pre-unary operation declare
+		//for pre-unary operation declare, OP T
 #define HAS_FRONT_UNARY_OPERATION_DECL(OpSign, OpName, Judgement)                                \
 			namespace has_operation_detail                                                       \
 			{                                                                                    \
@@ -180,8 +161,6 @@ namespace Aurora3D
 				has_operation_detail::OpName##Operation<OpType>,OpType,Ret> {};                  \
 			template<typename OpType, typename Ret>                                              \
 			struct Has##OpName<OpType, Ret, true> :False_ {};
-
-
 		} //namespace has_operation_detail
 	}//namespace mpl
 }

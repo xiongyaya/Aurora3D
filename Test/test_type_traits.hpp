@@ -1,10 +1,10 @@
 #pragma once
 
-
 #include<iostream>
 #include<vector>
 #include<tuple>
 #include<string>
+#include<new>
 
 // pp lib
 #include<Core/preprocessor/stringize.h>
@@ -71,6 +71,10 @@
 #include<core/mpl/type_traits/has_less.h>
 #include<core/mpl/type_traits/has_logic_and.h>
 #include<core/mpl/type_traits/has_front_dec.h>
+#include<core/mpl/type_traits/has_new.h>
+#include<core/mpl/type_traits/has_invoke_operator.h>
+#include<core/mpl/type_traits/has_index_operator.h>
+#include<core/mpl/type_traits/has_refer_arrow.h>
 #include<boost/type_traits.hpp>
 
 #include"print_type.h"
@@ -108,6 +112,9 @@ class TestThis { void ThisCall() {} };
 
 
 struct TestOperator {
+
+	TestOperator(int, int) {}
+
 	void operator+(int) {}
 	float operator+(float) { return 0.0f; }
 	void operator&(float) {}
@@ -116,17 +123,71 @@ struct TestOperator {
 	bool operator&&(int a) { return false; }
 	bool operator<(int a) { return false; }
 
+	bool operator ()(int a, float b)
+	{
+		return false;
+	}
+
 	void* operator new(size_t size)
 	{
+		return nullptr;
+	}
 
+	void* operator new(size_t size, const nothrow_t&, void* mem)
+	{
+		cout << "place new" << endl;
+		(void)size;
+		return mem;
+	}
+
+	void* operator new(size_t size, void*)
+	{
+		return nullptr;
+	}
+
+	void* operator new(size_t size,  const nothrow_t&)
+	{
+		return nullptr;
 	}
 
 	void* operator new[](size_t size)
 	{
-
+		return nullptr;
 	}
 
 
+	//void operator delete(void* mem)
+	//{
+
+	//}
+
+	void operator delete(void* mem, size_t size)
+	{
+		cout << "size:" << size << endl;
+	}
+
+	void operator delete(void* mem, const nothrow_t&)
+	{
+
+	}
+
+	int operator [](int)
+	{
+		return 0;
+	}
+
+	int operator->()
+	{
+		return false;
+	}
+};
+
+class TestDeriveOperator :public TestOperator
+{
+public:
+	int a;
+	TestDeriveOperator():TestOperator(0, 0) {}
+	
 };
 
 inline void TestTypeTraits()
@@ -164,13 +225,27 @@ inline void TestTypeTraits()
 	//TEST_HAS_OP_VALUE_BATCH(PRINT_HAS_BINARY_OP_VALUE, BINARY_TEST_SET, TestOperator, HasLess);
 	//TEST_NORMAL_HAS(HasLess);
 
-	TypeValue<HasFrontDec<int, int>>{}();
-	TypeValue<HasFrontDec<int, float>>{}();
-	TypeValue<HasFrontDec<float, ingore_t>>{}();
-	TypeValue<HasFrontDec<char>>{}();
-	TypeValue<HasFrontDec<TestOperator>>{}();
+	//TypeValue<HasFrontDec<int, int>>{}();
+	//TypeValue<HasFrontDec<int, float>>{}();
+	//TypeValue<HasFrontDec<float, ingore_t>>{}();
+	//TypeValue<HasFrontDec<char>>{}();
+	//TypeValue<HasFrontDec<TestOperator>>{}();
 
-	int *a = new(nothrow) int;
+	cout << " Test HasNew/HasDelete" << endl;
+	//cout << HasDefaultNew<TestOperator>::value << endl;
+	//cout << HasNothrowNew<TestOperator>::value << endl;
+	//cout << HasPlacementNew<TestOperator>::value << endl;
+	//cout << HasNothrowPlacementNew<TestOperator>::value << endl;
+	//cout << HasDefaultArrayNew<TestOperator>::value << endl;
+	//cout << HasNothrowArrayNew<TestOperator>::value << endl;
+	//cout << HasPlacementArrayNew<TestOperator>::value << endl;
+	//cout << HasNothrowPlacementArrayNew<TestOperator>::value << endl;
+	//cout << HasInvokerOperator<TestOperator, bool, int, float>::value << endl;
+	//cout << HasInvokerOperator<TestOperator, bool, int, int>::value << endl;
+	//cout << HasInvokerOperator<TestOperator, bool, int, TestOperator>::value << endl;
+	//cout << typeid(decltype(&TestOperator::operator[])).name() << endl;
+	cout << HasReferArrow<TestOperator, bool>::value << endl;
+	cout << HasReferArrow<TestOperator, int>::value << endl;
 
 	
 	cout << "  test AddConst " << endl;
@@ -328,4 +403,5 @@ inline void TestTypeTraits()
 	//TEST_TYPE_VALUE_BATCH(IsArray, (void, char volatile [], int *[2], int[2], Int2 const, char[4]));
 
 }
+
 
