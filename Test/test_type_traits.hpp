@@ -115,6 +115,18 @@ struct TestOperator {
 	void operator<<(int a) {}
 	bool operator&&(int a) { return false; }
 	bool operator<(int a) { return false; }
+
+	void* operator new(size_t size)
+	{
+
+	}
+
+	void* operator new[](size_t size)
+	{
+
+	}
+
+
 };
 
 inline void TestTypeTraits()
@@ -158,7 +170,7 @@ inline void TestTypeTraits()
 	TypeValue<HasFrontDec<char>>{}();
 	TypeValue<HasFrontDec<TestOperator>>{}();
 
-	
+	int *a = new(nothrow) int;
 
 	
 	cout << "  test AddConst " << endl;

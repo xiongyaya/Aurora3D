@@ -13,10 +13,13 @@ using namespace std;
 
 using namespace Aurora3D::mpl;
 
+
+
 inline void TestMpl()
 {
 	std::is_polymorphic<int>;
 	std::is_base_of<int, int>;
+	
 	
 	//test replace_type
 	//TypeName<replace_type<const int, int, long>::type>{}();
@@ -61,6 +64,7 @@ inline void TestMpl()
 	AlignUnionType<1, int, double, float, long double>::type data;
 	cout << typeid(decltype(data)).name() << endl;
 
+	
 
 	//cout << "value" << Max<int, 1>::value << endl;
 	//cout << "value" << Max<int, 1, 2>::value << endl;

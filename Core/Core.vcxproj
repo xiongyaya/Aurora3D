@@ -70,6 +70,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="auxililty\forward.h" />
     <ClInclude Include="auxililty\ingore_unused.h" />
     <ClInclude Include="auxililty\noncopyable.h" />
     <ClInclude Include="auxililty\optional.h" />
@@ -112,6 +113,9 @@
     <ClInclude Include="math\vector4.h" />
     <ClInclude Include="math\vector8.h" />
     <ClInclude Include="math\vector_runtime_support.h" />
+    <ClInclude Include="memory\aligned_allocator.h" />
+    <ClInclude Include="memory\heap_allocator.h" />
+    <ClInclude Include="memory\place_new.h" />
     <ClInclude Include="mpl\arithmetic_max.h" />
     <ClInclude Include="mpl\arithmetic_min.h" />
     <ClInclude Include="mpl\ingore_t.h" />
@@ -149,7 +153,7 @@
     <ClInclude Include="mpl\type_traits\declval.h" />
     <ClInclude Include="mpl\type_traits\first_template.h" />
     <ClInclude Include="mpl\type_traits\has_assigner.h" />
-    <ClInclude Include="mpl\type_traits\has_binary_op.h" />
+    <ClInclude Include="mpl\type_traits\has_operator.h" />
     <ClInclude Include="mpl\type_traits\has_bit_and.h" />
     <ClInclude Include="mpl\type_traits\has_bit_reverse.h" />
     <ClInclude Include="mpl\type_traits\has_bit_or.h" />
@@ -184,8 +188,6 @@
     <ClInclude Include="mpl\type_traits\has_refer_member.h" />
     <ClInclude Include="mpl\type_traits\has_shift_left.h" />
     <ClInclude Include="mpl\type_traits\has_shift_right.h" />
-    <ClInclude Include="mpl\type_traits\has_unary_post_op.h" />
-    <ClInclude Include="mpl\type_traits\has_unary_pre_op.h" />
     <ClInclude Include="mpl\type_traits\identity.h" />
     <ClInclude Include="mpl\type_traits\is_abstract.h" />
     <ClInclude Include="mpl\type_traits\is_arithmetic.h" />

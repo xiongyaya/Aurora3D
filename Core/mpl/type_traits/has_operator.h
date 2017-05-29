@@ -61,8 +61,12 @@ namespace Aurora3D
 			struct ImplicitConverted { template <class T> ImplicitConverted(T) {}; };
 #define BINARY_OPERATION(Op, ...) static NoOperation operator Op(const ImplicitConverted&, const ImplicitConverted&) { return Declval<NoOperation>(); }
 #define UNARY_PRE_OPERATION(Op, ...) static NoOperation operator Op(const ImplicitConverted&){ return Declval<NoOperation>(); }
+			//binary operator  + - * / % & | ^ >> <<  += -= *= /= %= |= &= ^= >>= <<= && || > >= < <= == != (except = refer to has assigner)
 			A3D_PP_FOREACH_ITEM(BINARY_OPERATION, (+, -, *, / , %, &, | , ^, +=, -=, *=, /=, %=, &=, |=, ^=, << , >> , >>=, <<=, &&, || , <, <= , >, >= , == , != ));
+			// pre-unary operator --T ++T -T +T *T !T ~T
 			A3D_PP_FOREACH_ITEM(UNARY_PRE_OPERATION, (++, --, !, ~, *, -, +));
+			//post operator []  ()  new  new[]  delete  delete[] ->  ->*  ,  T--  T++
+			//not allowd . .* :: ?:
 #undef  BINARY_OPERATION
 #undef  UNARY_PRE_OPERATION
 

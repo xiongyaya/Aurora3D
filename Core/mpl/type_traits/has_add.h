@@ -1,7 +1,6 @@
 #pragma once
 
-
-#include<Core/mpl/type_traits/has_binary_op.h>
+#include<Core/mpl/type_traits/has_operator.h>
 #include<Core/mpl/type_traits/binary_not_match.h>
 
 namespace Aurora3D

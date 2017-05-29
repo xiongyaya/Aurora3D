@@ -4,6 +4,7 @@
 #include<string>
 #include<cassert>
 #include<iostream>
+#include<initializer_list>
 #include<Core/math/math_impl.h>
 #include<Core/auxililty/ingore_unused.h>
 

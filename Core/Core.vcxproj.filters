@@ -597,9 +597,6 @@
     <ClInclude Include="mpl\type_traits\declval.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\type_traits\has_binary_op.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
     <ClInclude Include="math\capsule.h">
       <Filter>math</Filter>
     </ClInclude>
@@ -678,12 +675,6 @@
     <ClInclude Include="mpl\type_traits\has_add.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\type_traits\has_unary_post_op.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\has_unary_pre_op.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\type_traits\has_bit_reverse.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
@@ -695,6 +686,21 @@
     </ClInclude>
     <ClInclude Include="mpl\type_traits\has_negative.h">
       <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\has_operator.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="memory\aligned_allocator.h">
+      <Filter>memory</Filter>
+    </ClInclude>
+    <ClInclude Include="memory\heap_allocator.h">
+      <Filter>memory</Filter>
+    </ClInclude>
+    <ClInclude Include="memory\place_new.h">
+      <Filter>memory</Filter>
+    </ClInclude>
+    <ClInclude Include="auxililty\forward.h">
+      <Filter>auxililty</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
