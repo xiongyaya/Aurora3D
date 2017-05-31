@@ -16,26 +16,26 @@ namespace Aurora3D
 		class Euler;
 		class Quaternion;
 
-		constexpr float kPI = 3.1415926535897932f;
-		constexpr float k2PI = 2 * kPI;
-		constexpr float k4PI = 4 * kPI;
-		constexpr float k180OverPI = 180.0f / kPI;   //radian to degree
-		constexpr float kPIOver180 = kPI / 180.0f;   //degree to radian
-		constexpr float kOneOverPI = 1.0f / kPI;
-		constexpr float kOneOver2PI = 1.0f / (2 * kPI);
-		constexpr float kOneOver2PISquare = 1.0f / (4 * kPI * kPI);
-		constexpr float kHalfPI = kPI / 2.0f;
-		constexpr float kQuarterPI = kPI / 4.0f;
-		constexpr uint32 kTopZero = 0x7fffffff;
-		constexpr uint32 kTopOne = 0x80000000;
-		constexpr uint32 kAllOneMask = 0xffffffff;
-		constexpr uint32 kAllZeroMask = 0x00000000;
-		constexpr uint32 kInfinite = 0x7f800000;
-		constexpr uint32 kNegtiveInfinite = 0xff800000;
-		constexpr uint32 kNaN = 0xffc00000;
-		constexpr float kSmallEpside =  1.e-6f;
-		constexpr float kMiddleEpside = 1.e-4f;
-		constexpr float kMiddleSQEpside = 5.e-6f;
+		constexpr float kfPi = 3.1415926535897932f;
+		constexpr float kf2Pi = 2 * kfPi;
+		constexpr float kf4Pi = 4 * kfPi;
+		constexpr float kf180OverPi = 180.0f / kfPi;   //radian to degree
+		constexpr float kfPiOver180 = kfPi / 180.0f;   //degree to radian
+		constexpr float kfOneOverPi = 1.0f / kfPi;
+		constexpr float kfOneOver2Pi = 1.0f / (2 * kfPi);
+		constexpr float kfOneOver2PiSquare = 1.0f / (4 * kfPi * kfPi);
+		constexpr float kfHalfPi = kfPi / 2.0f;
+		constexpr float kfQuarterPi = kfPi / 4.0f;
+		constexpr uint32 kfTopZero = 0x7fffffff;
+		constexpr uint32 kfTopOne = 0x80000000;
+		constexpr uint32 kfAllOneMask = 0xffffffff;
+		constexpr uint32 kfAllZeroMask = 0x00000000;
+		constexpr uint32 kfPositiveInf = 0x7f800000;
+		constexpr uint32 kfNegativeInf = 0xff800000;
+		constexpr uint32 kfNaN = 0xffc00000;
+		constexpr float kfSmallEpiside =  1.e-6f;
+		constexpr float kfMiddleEpiside = 1.e-4f;
+		constexpr float kfMiddleSQEpiside = 5.e-6f;
 	}
 }
 

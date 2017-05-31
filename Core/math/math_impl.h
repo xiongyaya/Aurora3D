@@ -79,18 +79,17 @@ namespace Aurora3D
 			constexpr float128 kVectorWOne = { 0.0f, 0.0f, 0.0f, 1.0f };
 			constexpr float128 kVectorOddNegtive = { 1.0f, -1.0f, 1.0f, -1.0f };
 			constexpr float128 kVectorEvenNegtive = { -1.0f, 1.0f, -1.0f, 1.0f };
-			constexpr float128 kVectorEpside = { kMiddleEpside,kMiddleEpside,kMiddleEpside,kMiddleEpside };
-			constexpr float128 kVectorOneOver2PI = { kOneOver2PI ,kOneOver2PI ,kOneOver2PI ,kOneOver2PI };
-			constexpr float128 kVector2PI = { k2PI ,k2PI ,k2PI ,k2PI };
-			constexpr float128 kVectorPI = { kPI ,kPI ,kPI ,kPI };
-			constexpr float128 kVectorHalfPI = { kHalfPI ,kHalfPI ,kHalfPI ,kHalfPI };
-			constexpr float128 kVector180OverPI = { k180OverPI,k180OverPI ,k180OverPI,k180OverPI };
-			constexpr float128 kVectorPIOver180 = { kPIOver180,kPIOver180 ,kPIOver180 ,kPIOver180 };
-			static const float128 kVectorSignMask = VectorLoad(kTopOne);
-			static const float128 kVectorInfinte = VectorLoad(kInfinite);
-			static const float128 kVectorAllOneMask = VectorLoad(kAllOneMask);
-			static const float128 kVectorXYZMask = VectorLoad(kAllOneMask, kAllOneMask, kAllOneMask, kAllZeroMask);
-			static const float128 kVectorAbsMask = VectorLoad(kTopZero);
+			constexpr float128 kVectorOneOver2PI = { kfOneOver2Pi ,kfOneOver2Pi ,kfOneOver2Pi ,kfOneOver2Pi };
+			constexpr float128 kVector2PI = { kf2Pi ,kf2Pi ,kf2Pi ,kf2Pi };
+			constexpr float128 kVectorPI = { kfPi ,kfPi ,kfPi ,kfPi };
+			constexpr float128 kVectorHalfPI = { kfHalfPi ,kfHalfPi ,kfHalfPi ,kfHalfPi };
+			constexpr float128 kVector180OverPI = { kf180OverPi,kf180OverPi ,kf180OverPi,kf180OverPi };
+			constexpr float128 kVectorPIOver180 = { kfPiOver180,kfPiOver180 ,kfPiOver180 ,kfPiOver180 };
+			static const float128 kVectorSignMask = VectorLoad(kfTopOne);
+			static const float128 kVectorInfinte = VectorLoad(kfPositiveInf);
+			static const float128 kVectorAllOneMask = VectorLoad(kfAllOneMask);
+			static const float128 kVectorXYZMask = VectorLoad(kfAllOneMask, kfAllOneMask, kfAllOneMask, kfAllOneMask);
+			static const float128 kVectorAbsMask = VectorLoad(kfTopZero);
 		}
 		
 		//xyzw = 0.0f
@@ -333,7 +332,7 @@ namespace Aurora3D
 		float128 VectorEquals(const float128& v1, const float128& v2);
 
 		// Abs( v1.xyzw - v2.xyzw ) <= (Epside,Epside,Epside,Epside)
-		float128 VectorNearlyEquals(const float128& v1, const float128& v2, float epside = kMiddleEpside);
+		float128 VectorNearlyEquals(const float128& v1, const float128& v2, float epside = kfMiddleEpiside);
 
 		// ret.xyzw = (v1.x != v2.x? 0xffffffff:0, v1.y != v2.y? 0xffffffff:0,
 		// v1.z != v2.z? 0xffffffff:0, v1.w != v2.w? 0xffffffff:0)
@@ -733,8 +732,8 @@ namespace Aurora3D
 			t0 = t0 * t4 + c[5];
 			t0 = t0 * t4 + c[6];
 			t3 = t0 * t3;
-			t3 = yAbsBigger ? (0.5f * kPI) - t3 : t3;
-			t3 = (X < 0.0f) ? kPI - t3 : t3;
+			t3 = yAbsBigger ? (0.5f * kfPi) - t3 : t3;
+			t3 = (X < 0.0f) ? kfPi - t3 : t3;
 			t3 = (Y < 0.0f) ? -t3 : t3;
 			return t3;
 		}
@@ -798,12 +797,12 @@ namespace Aurora3D
 
 		A3D_FORCEINLINE constexpr float FloatRadianToDegree(float F)
 		{
-			return F * k180OverPI;
+			return F * kf180OverPi;
 		}
 
 		A3D_FORCEINLINE constexpr float FloatDegreeToRadian(float F)
 		{
-			return F * kPIOver180;
+			return F * kfPiOver180;
 		}
 
 		//return 1 / sqrt(F)

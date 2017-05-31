@@ -51,22 +51,22 @@ inline void TestVector()
 	Vector4 greaterEq = t3 >= t4;
 	cout << " greater equal:" << greaterEq.ToStringAsUint() << endl;
 
-	cout << " true4:" << kVector4AllOneMask.True4() << " " << kVector4XAllOneMask.True4()<<" "<<" "<<kVector4XAllOneMask.AnyTrue4()<<" "<<kVector4Zero.AnyTrue4() << endl;
-	cout << " true4:" << kVector4AllOneMask.AnyFalse4() << " " << kVector4XAllOneMask.AnyFalse4() << " " << " " << kVector4XAllOneMask.False4() << " " << kVector4Zero.False4() << endl;
-	cout << " true3:" << kVector4XYZAllOneMask.True3() << " " << kVector4XYAllOneMask.True3() << endl;
-	cout << " true3:" << kVector4XYAllOneMask.True2() << " " << kVector4XAllOneMask.True2() << endl;
-	cout << " true3:" << kVector4XAllOneMask.True1() << " " << kVector4Zero.True1() << endl;
+	cout << " true4:" << Vector4::AllOneMask.True4() << " " << Vector4::XAllOneMask.True4()<<" "<<" "<< Vector4::XAllOneMask.AnyTrue4()<<" "<<Vector4::Zero.AnyTrue4() << endl;
+	cout << " true4:" << Vector4::AllOneMask.AnyFalse4() << " " << Vector4::XAllOneMask.AnyFalse4() << " " << " " << Vector4::XAllOneMask.False4() << " " << Vector4::Zero.False4() << endl;
+	cout << " true3:" << Vector4::XYZAllOneMask.True3() << " " << Vector4::XYAllOneMask.True3() << endl;
+	cout << " true3:" << Vector4::XYAllOneMask.True2() << " " << Vector4::XAllOneMask.True2() << endl;
+	cout << " true3:" << Vector4::XAllOneMask.True1() << " " << Vector4::Zero.True1() << endl;
 	
-	Vector4 inf4(kInfinite), inf3( kInfinite, kInfinite, kInfinite,0u), inf2( kInfinite, kInfinite,0u,0u);
-	Vector4 inf_l(0u, 0u, 0u, kInfinite);
-	Vector4 inf_l2(0u, 0u, kInfinite, kInfinite);
-	Vector4 ninf4(kNegtiveInfinite), ninf3(kNegtiveInfinite, kNegtiveInfinite, kNegtiveInfinite,0u), ninf2(kNegtiveInfinite, kNegtiveInfinite, 0u, 0u);
-	cout << " inf4:" << inf4.IsInfinite4() << " " << ninf4.IsInfinite4() <<" "<< inf_l.IsInfinite4()   <<" "<<kVector42PI.IsInfinite4()<< endl;
-	cout << " inf3:" << inf3.IsInfinite3() << " " << ninf3.IsInfinite3() << " " << inf_l.IsInfinite3() << " " << kVector42PI.IsInfinite3() << endl;
-	cout << " inf3:" << inf2.IsInfinite2() << " " << ninf2.IsInfinite2() << " " << inf_l2.IsInfinite2() << " " << inf_l2.IsInfinite3() << " " << kVector42PI.IsInfinite2() << endl;
+	Vector4 inf4(kfPositiveInf), inf3(kfPositiveInf, kfPositiveInf, kfPositiveInf,0u), inf2(kfPositiveInf, kfPositiveInf,0u,0u);
+	Vector4 inf_l(0u, 0u, 0u, kfPositiveInf);
+	Vector4 inf_l2(0u, 0u, kfPositiveInf, kfPositiveInf);
+	Vector4 ninf4(kfNegativeInf), ninf3(kfNegativeInf, kfNegativeInf, kfNegativeInf,0u), ninf2(kfNegativeInf, kfNegativeInf, 0u, 0u);
+	cout << " inf4:" << inf4.IsInfinite4() << " " << ninf4.IsInfinite4() <<" "<< inf_l.IsInfinite4()   <<" "<< Vector4::TwoPi.IsInfinite4()<< endl;
+	cout << " inf3:" << inf3.IsInfinite3() << " " << ninf3.IsInfinite3() << " " << inf_l.IsInfinite3() << " " << Vector4::Pi.IsInfinite3() << endl;
+	cout << " inf3:" << inf2.IsInfinite2() << " " << ninf2.IsInfinite2() << " " << inf_l2.IsInfinite2() << " " << inf_l2.IsInfinite3() << " " << Vector4::Pi.IsInfinite2() << endl;
 
-	Vector4 nan4(kNaN), nan3(kNaN, kNaN, kNaN, 0u), nan2(kNaN, kNaN, 0u, 0u);
-	Vector4 nan_l(0u, 0u, 0u, kNaN), nan_l2(0u, 0u, kNaN, 0u);
+	Vector4 nan4(kfNaN), nan3(kfNaN, kfNaN, kfNaN, 0u), nan2(kfNaN, kfNaN, 0u, 0u);
+	Vector4 nan_l(0u, 0u, 0u, kfNaN), nan_l2(0u, 0u, kfNaN, 0u);
 	cout << " nan4:" << nan4.IsNaN4() << endl;
 	cout << "nan3:" << nan3.IsNaN3() <<" "<<nan_l.IsNaN3()<<" "<<nan_l2.IsNaN3()<< endl;
 	cout << "nan3:" << nan2.IsNaN3() << " " << nan_l.IsNaN2() << " " << nan_l2.IsNaN2() << endl;
@@ -75,9 +75,9 @@ inline void TestVector()
 	Vector4 testNormal(1.0f, 2.0f, 3.0f, 4.0f);
 	Vector4 testNormal2(-1.0f, -2.0f, -3.0f, -4.0f);
 	cout << testNormal2.Abs().ToString() << endl;
-	cout << nearlyone.LengthSQ2().AssignSub(kVector4One).AssignAbs().data[0] << endl;
+	cout << nearlyone.LengthSQ2().AssignSub(Vector4::One).AssignAbs().data[0] << endl;
 	cout << nearlyone.LengthSQ2().ToString() << endl;
-	cout << testNormal.Normalize4().LengthSQ4().AssignSub(kVector4One).ToString() << endl;
+	cout << testNormal.Normalize4().LengthSQ4().AssignSub(Vector4::One).ToString() << endl;
 	//cout << nearlyone.IsUnit4() << " " << testNormal.AssignNormalize4().IsUnit4() << endl;
 
 	cout << " test compose dot2,3,4" << endl;
@@ -88,7 +88,7 @@ inline void TestVector()
 	cout << order1.Dot3(order2).ToString() << endl;
 	cout << order1.Dot4(order2).ToString() << endl;
 
-	Vector4 select0(kAllOneMask, 0u, 0u, 0u), select1(0u, kAllOneMask, 0u, 0u), select2(0u, 0u, kAllOneMask, 0u), select3(0u, 0u, 0u, kAllOneMask);
+	Vector4 select0(kfAllOneMask, 0u, 0u, 0u), select1(0u, kfAllOneMask, 0u, 0u), select2(0u, 0u, kfAllOneMask, 0u), select3(0u, 0u, 0u, kfAllOneMask);
 	cout << " select 0£º" << select0.Select(order1, order2).ToString() << endl;
 	cout << " select 0£º" << select1.Select(order1, order2).ToString() << endl;
 	cout << " select 0£º" << select2.Select(order1, order2).ToString() << endl;
