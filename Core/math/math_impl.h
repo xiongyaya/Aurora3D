@@ -65,30 +65,34 @@ namespace Aurora3D
 		//xyzw = reinterpret_cast<float>((x,y,z,w))
 		float128 VectorLoad(uint32 x, uint32 y, uint32 z = 0u, uint32 w = 0u);
 
-		//common constant
-		constexpr float128 kVectorOne = { 1.0f, 1.0f, 1.0f, 1.0f };
-		constexpr float128 kVectorZero = { 0.0f, 0.0f, 0.0f, 0.0f };
-		constexpr float128 kVectorNegtiveOne = { -1.0f,-1.0f,-1.0f,-1.0f };
-		constexpr float128 kVectorHalf = { 0.5f, 0.5f, 0.5f, 0.5f };
-		constexpr float128 kVectorTwo = { 2.0f,2.0f,2.0f,2.0f };
-		constexpr float128 kVectorXOne = { 1.0f, 0.0f, 0.0f, 0.0f };
-		constexpr float128 kVectorYOne = { 0.0f, 1.0f, 0.0f, 0.0f };
-		constexpr float128 kVectorZOne = { 0.0f, 0.0f, 1.0f, 0.0f };
-		constexpr float128 kVectorWOne = { 0.0f, 0.0f, 0.0f, 1.0f };
-		constexpr float128 kVectorOddNegtive = { 1.0f, -1.0f, 1.0f, -1.0f };
-		constexpr float128 kVectorEvenNegtive = { -1.0f, 1.0f, -1.0f, 1.0f };
-		constexpr float128 kVectorEpside = { kMiddleEpside,kMiddleEpside,kMiddleEpside,kMiddleEpside };
-		constexpr float128 kVectorOneOver2PI = { kOneOver2PI ,kOneOver2PI ,kOneOver2PI ,kOneOver2PI };
-		constexpr float128 kVector2PI = { k2PI ,k2PI ,k2PI ,k2PI };
-		constexpr float128 kVectorPI = { kPI ,kPI ,kPI ,kPI };
-		constexpr float128 kVectorHalfPI = { kHalfPI ,kHalfPI ,kHalfPI ,kHalfPI };
-		constexpr float128 kVector180OverPI = { k180OverPI,k180OverPI ,k180OverPI,k180OverPI };
-		constexpr float128 kVectorPIOver180 = { kPIOver180,kPIOver180 ,kPIOver180 ,kPIOver180 };
-		static const float128 kVectorSignMask = VectorLoad(kTopOne); 
-		static const float128 kVectorInfinte = VectorLoad(kInfinite); 
-		static const float128 kVectorAllOneMask = VectorLoad(kAllOneMask);
-		static const float128 kVectorXYZMask = VectorLoad(kAllOneMask, kAllOneMask, kAllOneMask, kAllZeroMask);
-		static const float128 kVectorAbsMask = VectorLoad(kTopZero);
+		namespace math_impl
+		{
+			//common constant
+			constexpr float128 kVectorOne = { 1.0f, 1.0f, 1.0f, 1.0f };
+			constexpr float128 kVectorZero = { 0.0f, 0.0f, 0.0f, 0.0f };
+			constexpr float128 kVectorNegtiveOne = { -1.0f,-1.0f,-1.0f,-1.0f };
+			constexpr float128 kVectorHalf = { 0.5f, 0.5f, 0.5f, 0.5f };
+			constexpr float128 kVectorTwo = { 2.0f,2.0f,2.0f,2.0f };
+			constexpr float128 kVectorXOne = { 1.0f, 0.0f, 0.0f, 0.0f };
+			constexpr float128 kVectorYOne = { 0.0f, 1.0f, 0.0f, 0.0f };
+			constexpr float128 kVectorZOne = { 0.0f, 0.0f, 1.0f, 0.0f };
+			constexpr float128 kVectorWOne = { 0.0f, 0.0f, 0.0f, 1.0f };
+			constexpr float128 kVectorOddNegtive = { 1.0f, -1.0f, 1.0f, -1.0f };
+			constexpr float128 kVectorEvenNegtive = { -1.0f, 1.0f, -1.0f, 1.0f };
+			constexpr float128 kVectorEpside = { kMiddleEpside,kMiddleEpside,kMiddleEpside,kMiddleEpside };
+			constexpr float128 kVectorOneOver2PI = { kOneOver2PI ,kOneOver2PI ,kOneOver2PI ,kOneOver2PI };
+			constexpr float128 kVector2PI = { k2PI ,k2PI ,k2PI ,k2PI };
+			constexpr float128 kVectorPI = { kPI ,kPI ,kPI ,kPI };
+			constexpr float128 kVectorHalfPI = { kHalfPI ,kHalfPI ,kHalfPI ,kHalfPI };
+			constexpr float128 kVector180OverPI = { k180OverPI,k180OverPI ,k180OverPI,k180OverPI };
+			constexpr float128 kVectorPIOver180 = { kPIOver180,kPIOver180 ,kPIOver180 ,kPIOver180 };
+			static const float128 kVectorSignMask = VectorLoad(kTopOne);
+			static const float128 kVectorInfinte = VectorLoad(kInfinite);
+			static const float128 kVectorAllOneMask = VectorLoad(kAllOneMask);
+			static const float128 kVectorXYZMask = VectorLoad(kAllOneMask, kAllOneMask, kAllOneMask, kAllZeroMask);
+			static const float128 kVectorAbsMask = VectorLoad(kTopZero);
+		}
+		
 		//xyzw = 0.0f
 		float128 VectorZero();
 
@@ -281,7 +285,7 @@ namespace Aurora3D
 
 		// 11 ->0  01/10/00 -> 1
 		// ret.xyzw = ( !v1.x&v2.x, !v1.y&v2.y, !v1.z&v2.z, !v1.w&v2.w)
-		float128 VectorAndNot(const float128& v1, const float128& v2);
+		float128 VectorNotAnd(const float128& v1, const float128& v2);
 
 
 		// 11/00 -> 0  01/10 -> 1
@@ -1042,9 +1046,9 @@ namespace Aurora3D
 		// if v1[i] == v2[i] return 0xffffffff
 		//          !=       return 0x00000000
 		// latency 3
-		A3D_FORCEINLINE float128 VectorEquals(const float128& v1, const float128& v2)
+		A3D_FORCEINLINE uint128 VectorEquals(const uint128& v1, const uint128& v2)
 		{
-			return _mm_cmpeq_ps(v1, v2);
+			return _mm_cmpeq_epi32(v1, v2);
 		}
 
 		// if v1[i] != v2[i] return 0xffffffff 
@@ -1105,8 +1109,15 @@ namespace Aurora3D
 		}
 
 		//Latency 1
-		//return !(v1 & v2)
-		A3D_FORCEINLINE float128 VectorAndNot(const float128& v1, const float128& v2)
+		//return (~v1 & v2)
+		A3D_FORCEINLINE float128 VectorNot(const float128& v)
+		{
+			return _mm_andnot_ps(v, math_impl::kVectorAllOneMask);
+		}
+
+		//Latency 1
+		//return (~v1 & v2)
+		A3D_FORCEINLINE float128 VectorNotAnd(const float128& v1, const float128& v2)
 		{
 			return _mm_andnot_ps(v1, v2);
 		}
@@ -1906,7 +1917,7 @@ namespace Aurora3D
 		A3D_FORCEINLINE float128 VectorDot2(const float128& v1, const float128& v2)
 		{
 			float128 multi = VectorMul(v1, v2);
-			return VectorAdd(multi, VectorShuffle<1, 0, 2, 3>(multi));
+			return  VectorAdd(multi, VectorShuffle<1, 0, 2, 3>(multi));
 		}
 
 		// F = v1.x*v2.x + v1.y*v2.y + v1.z*v2.z
@@ -1972,8 +1983,8 @@ namespace Aurora3D
 		{
 			//+ float , sign bit = 0,
 			//- float , sign bit = 1
-			return VectorSelect(kVectorOne, kVectorNegtiveOne,
-				VectorEquals(kVectorZero,VectorAnd(v, kVectorSignMask)));
+			return VectorSelect(math_impl::kVectorOne, math_impl::kVectorNegtiveOne,
+				VectorEquals(math_impl::kVectorZero,VectorAnd(v, math_impl::kVectorSignMask)));
 		}
 
 		//return normalized(x,y, undef, undef)
@@ -1997,13 +2008,13 @@ namespace Aurora3D
 		//v[i] > 0 return 1, otherwise return 0
 		A3D_FORCEINLINE float128 VectorStep(const float128& v)
 		{
-			return VectorSelect(kVectorOne, kVectorZero, VectorGreater(v, kVectorZero));
+			return VectorSelect(math_impl::kVectorOne, math_impl::kVectorZero, VectorGreater(v, math_impl::kVectorZero));
 		}
 
 		//v[i] < 0 return 1, otherwise return 0
 		A3D_FORCEINLINE float128 VectorReverseStep(const float128& v)
 		{
-			return VectorSelect(kVectorOne, kVectorZero, VectorLess(v, kVectorZero));
+			return VectorSelect(math_impl::kVectorOne, math_impl::kVectorZero, VectorLess(v, math_impl::kVectorZero));
 		}
 
 		//return v[i] - (int)v[i]
@@ -2076,19 +2087,19 @@ namespace Aurora3D
 		// one of abs(v[0,1]) = INF
 		A3D_FORCEINLINE bool VectorIsInfinite2(const float128& v)
 		{
-			return VectorAnyTrue4(VectorEquals(VectorAbs(v), kVectorInfinte));
+			return VectorAnyTrue4(VectorEquals(VectorAbs(v), math_impl::kVectorInfinte));
 		}
 
 		// one of abs(v[0,1,2]) = INF
 		A3D_FORCEINLINE bool VectorIsInfinite3(const float128& v)
 		{
-			return VectorAnyTrue4(VectorEquals(VectorAbs(v), kVectorInfinte));
+			return VectorAnyTrue4(VectorEquals(VectorAbs(v), math_impl::kVectorInfinte));
 		}
 
 		// one of abs(v[0,1,2,3]) = INF
 		A3D_FORCEINLINE bool VectorIsInfinite4(const float128& v)
 		{
-			return VectorAnyTrue4(VectorEquals(VectorAbs(v), kVectorInfinte));
+			return VectorAnyTrue4(VectorEquals(VectorAbs(v), math_impl::kVectorInfinte));
 		}
 
 		// v[i]>max[i], v[i] = max[i]
@@ -2103,14 +2114,14 @@ namespace Aurora3D
 		// v[i]<0.0, v[i] = 0.0
 		A3D_FORCEINLINE float128 VectorSaturate(const float128& v)
 		{
-			return VectorMax(VectorMin(v, kVectorOne), kVectorZero);
+			return VectorMax(VectorMin(v, math_impl::kVectorOne), math_impl::kVectorZero);
 		}
 
 		//  2D ray reflect
 		//  incident - 2 * dot(incident, normal)*normal 
 		A3D_FORCEINLINE float128 VectorReflect2(const float128 incident, const float128& normal)
 		{
-			return VectorSub(incident, VectorMulTwice(kVectorTwo, normal, VectorDot2(incident, normal)));
+			return VectorSub(incident, VectorMulTwice(math_impl::kVectorTwo, normal, VectorDot2(incident, normal)));
 		}
 
 		// 3D ray reflect
@@ -2122,7 +2133,7 @@ namespace Aurora3D
 		// return (x,y,z, undef) 
 		A3D_FORCEINLINE float128 VectorReflect3(const float128 incident, const float128& normal)
 		{
-			return VectorSub(incident, VectorMulTwice(kVectorTwo, normal, VectorDot3(incident, normal)));
+			return VectorSub(incident, VectorMulTwice(math_impl::kVectorTwo, normal, VectorDot3(incident, normal)));
 		}
 
 		// W is undef 
@@ -2176,24 +2187,24 @@ namespace Aurora3D
 		A3D_FORCEINLINE float128 VectorSinRadianFast(const float128& v)
 		{
 			//based on a good discussion here http://forum.devmaster.net/t/fast-and-accurate-sine-cosine/9648
-			float128 result = VectorMul(v, kVectorOneOver2PI);
-			result = VectorMul(v, kVectorOneOver2PI);
+			float128 result = VectorMul(v, math_impl::kVectorOneOver2PI);
+			result = VectorMul(v, math_impl::kVectorOneOver2PI);
 			result = VectorSub(result, VectorRound(result));
 			result = VectorMul(SinCosConstant::A,
 				VectorMul(result,
-				VectorSub(kVectorHalf, VectorAbs(result))));
+				VectorSub(math_impl::kVectorHalf, VectorAbs(result))));
 			return VectorMul(result, VectorAdd(SinCosConstant::B,
 				VectorAbs(result)));
 		}
 
 		A3D_FORCEINLINE float128 VectorRadianToDegree(const float128& v)
 		{
-			return VectorMul(v, kVector180OverPI);
+			return VectorMul(v, math_impl::kVector180OverPI);
 		}
 
 		A3D_FORCEINLINE float128 VectorDegreeToRadian(const float128& v)
 		{
-			return VectorMul(v, kVectorPIOver180);
+			return VectorMul(v, math_impl::kVectorPIOver180);
 		}
 
 		A3D_FORCEINLINE float128 VectorSinDegreeFast(const float128& v)
@@ -2203,29 +2214,29 @@ namespace Aurora3D
 
 		A3D_FORCEINLINE float128 VectorCosRadianFast(const float128& v)
 		{
-			return VectorSinRadianFast(VectorAdd(v, kVectorHalfPI));
+			return VectorSinRadianFast(VectorAdd(v, math_impl::kVectorHalfPI));
 		}
 
 		A3D_FORCEINLINE float128 VectorCosDegreeFast(const float128& v)
 		{
 			return VectorSinRadianFast(VectorAdd(
-				VectorDegreeToRadian(v), kVectorHalfPI));
+				VectorDegreeToRadian(v), math_impl::kVectorHalfPI));
 		}
 
 		A3D_FORCEINLINE void VectorSinAndCosFast(float128& sin, float128& cos, const float128& radians)
 		{
 			//A = A - 2PI * round(A/2PI);
-			float128 A = VectorRound(VectorMul(radians, kVectorOneOver2PI));
-			A = VectorSub(radians, VectorMul(A, kVectorOneOver2PI));
+			float128 A = VectorRound(VectorMul(radians, math_impl::kVectorOneOver2PI));
+			A = VectorSub(radians, VectorMul(A, math_impl::kVectorOneOver2PI));
 			const float128 abs_A = VectorAbs(A);
 
 			//mapping to [-PI/2, PI/2]
 			float128 sign = VectorSign(radians);
-			float128 sign_pi = VectorOr(sign, kVectorPI);
+			float128 sign_pi = VectorOr(sign, math_impl::kVectorPI);
 			float128 refl = VectorSub(sign_pi, abs_A);
-			float128 cmp = VectorGreater(A, kVectorHalfPI);
+			float128 cmp = VectorGreater(A, math_impl::kVectorHalfPI);
 			A = VectorSelect(refl, A, cmp);
-			sign = VectorSelect(kVectorNegtiveOne, kVectorOne, cmp);
+			sign = VectorSelect(math_impl::kVectorNegtiveOne, math_impl::kVectorOne, cmp);
 			const float128 AA = VectorMul(A, A);
 
 			//sin
@@ -2234,7 +2245,7 @@ namespace Aurora3D
 			sin = VectorMulAdd(AA, sin, SinCosConstant::S2);
 			sin = VectorMulAdd(AA, sin, SinCosConstant::S1);
 			sin = VectorMulAdd(AA, sin, SinCosConstant::S0);
-			sin = VectorMulAdd(AA, sin, kVectorOne);
+			sin = VectorMulAdd(AA, sin, math_impl::kVectorOne);
 			sin = VectorMul(A, sin);
 
 			cos = SinCosConstant::C4;
@@ -2242,7 +2253,7 @@ namespace Aurora3D
 			cos = VectorMulAdd(AA, cos, SinCosConstant::C2);
 			cos = VectorMulAdd(AA, cos, SinCosConstant::C1);
 			cos = VectorMulAdd(AA, cos, SinCosConstant::C0);
-			cos = VectorMulAdd(AA, cos, kVectorOne);
+			cos = VectorMulAdd(AA, cos, math_impl::kVectorOne);
 			cos = VectorMul(sign, cos);
 		}
 #endif  
@@ -2253,10 +2264,10 @@ namespace Aurora3D
 		// must match every elements
 		A3D_FORCEINLINE bool MatrixIsIdentity(const float128x4& M)
 		{
-			float128 result = VectorEquals(M[0], kVectorXOne);
-			result = VectorAnd(VectorEquals(M[1], kVectorYOne), result);
-			result = VectorAnd(VectorEquals(M[2], kVectorZOne), result);
-			result = VectorAnd(VectorEquals(M[3], kVectorWOne), result);
+			float128 result = VectorEquals(M[0], math_impl::kVectorXOne);
+			result = VectorAnd(VectorEquals(M[1], math_impl::kVectorYOne), result);
+			result = VectorAnd(VectorEquals(M[2], math_impl::kVectorZOne), result);
+			result = VectorAnd(VectorEquals(M[3], math_impl::kVectorWOne), result);
 			return VectorTrue4(result);
 		}
 
@@ -2274,10 +2285,10 @@ namespace Aurora3D
 		//one element is infinite , matrix is infinite
 		A3D_FORCEINLINE bool MatrixIsInInfinite(const float128x4& M)
 		{
-			float128 result = VectorEquals(VectorAbs(M[0]), kVectorInfinte);
-			result = VectorOr(VectorEquals(VectorAbs(M[1]), kVectorInfinte), result);
-			result = VectorOr(VectorEquals(VectorAbs(M[2]), kVectorInfinte), result);
-			result = VectorOr(VectorEquals(VectorAbs(M[3]), kVectorInfinte), result);
+			float128 result = VectorEquals(VectorAbs(M[0]), math_impl::kVectorInfinte);
+			result = VectorOr(VectorEquals(VectorAbs(M[1]), math_impl::kVectorInfinte), result);
+			result = VectorOr(VectorEquals(VectorAbs(M[2]), math_impl::kVectorInfinte), result);
+			result = VectorOr(VectorEquals(VectorAbs(M[3]), math_impl::kVectorInfinte), result);
 			return VectorAnyTrue4(result);
 		}
 
@@ -2368,7 +2379,7 @@ namespace Aurora3D
 			//8*(10*15-11*14),  5*(11*16-12*15), 6*(12*13-9*16), 7*(9*14-10*13)
 			det = VectorMulAdd(accumulate[2], VectorShuffle<2, 3, 0, 1>(mat2_result[0]), det);
 			//+,-,+,-
-			return VectorMul(det, kVectorOddNegtive);
+			return VectorMul(det, math_impl::kVectorOddNegtive);
 		}
 
 
@@ -2447,7 +2458,7 @@ namespace Aurora3D
 			//[1*10-2*9, 5*14-6*13, 3*12-4*11, 7*16-8*15]
 			mat2_result[2] = VectorSub(mat2_result[2], jump);
 			//[2*9-1*10, 6*13-5*14, 4*11-3*12, 8*15-7*16]
-			mat2_result[3] = VectorSub(kVectorZero, mat2_result[2]);
+			mat2_result[3] = VectorSub(math_impl::kVectorZero, mat2_result[2]);
 
 			//caculate 1,9,3,11's one and two part
 			float128 accumulate[2];
@@ -2493,7 +2504,7 @@ namespace Aurora3D
 			//[1*10-2*9, 5*14-6*13, 3*12-4*11, 7*16-8*15]
 			mat2_result[2] = VectorSub(mat2_result[2], jump);
 			//[2*9-1*10, 6*13-5*14, 4*11-3*12, 8*15-7*16]
-			mat2_result[3] = VectorSub(kVectorZero, mat2_result[2]);
+			mat2_result[3] = VectorSub(math_impl::kVectorZero, mat2_result[2]);
 
 			//1,5,9,13's third accumulate
 			//[10*15*8, 14*11*4, 2*7*16, 6*3*12] = [10, 14, 2, 6]*[15*8, 11*4, 7*16, 3*12]
