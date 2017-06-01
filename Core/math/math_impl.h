@@ -21,12 +21,12 @@ namespace Aurora3D
 		// float128   HIGH 3 2 1 0 LOW
 		// float[4]      w z y x  
 		typedef __m128  float128;
-		typedef __m128i uint128;
+		typedef __m128i int128;
 
 		union misc128
 		{
 			float128  f128;
-			uint128	  u128;
+			int128	  i128;
 		};
 
 		struct float128x4
@@ -38,7 +38,7 @@ namespace Aurora3D
 #elif defined(AURORA3D_NEON)
 		typedef float32x4_t A3D_GCC_ALIGH(16) float128;
 		typedef float32x2_t A3D_GCC_ALIGH(16) float64;
-		typedef uint32x4_t  A3D_GCC_ALIGH(16) uint128;
+		typedef int32x4_t  A3D_GCC_ALIGH(16) uint128;
 
 		struct float128x4 {
 			float128 V[4];
@@ -54,7 +54,7 @@ namespace Aurora3D
 #if defined(AURORA3D_SSE) || defined(AURORA3D_NEON)
 
 		//xyzw = reinterpret_cast<float>(u)
-		float128 VectorLoad(uint32 u);
+		float128 VectorLoad(int32 u);
 
 		//xyzw = (F,F,F,F)
 		float128 VectorLoad(float F);
@@ -63,7 +63,7 @@ namespace Aurora3D
 		float128 VectorLoad(float x, float y, float z = 0.0f, float w = 0.0f);
 
 		//xyzw = reinterpret_cast<float>((x,y,z,w))
-		float128 VectorLoad(uint32 x, uint32 y, uint32 z = 0u, uint32 w = 0u);
+		float128 VectorLoad(int32 x, int32 y, int32 z = 0u, int32 w = 0u);
 
 		namespace math_impl
 		{
@@ -119,7 +119,7 @@ namespace Aurora3D
 		void VectorSet(float128& v, int i, float F);
 
 		//v[i] = U
-		void VectorSet(float128& v, int i, uint32 U);
+		void VectorSet(float128& v, int i, int32 U);
 
 		//v.w = 0.0f
 		void VectorSetW0(float128& v);
@@ -131,7 +131,7 @@ namespace Aurora3D
 		float VectorGetFloat(const float128& v, int i);
 
 		// ret = v[i]
-		uint32 VectorGetUint32(const float128& v, int i = 0);
+		int32 VectorGetInt32(const float128& v, int i = 0);
 
 		// ret = v[0] 
 		float VectorGetFirst(const float128& v);
@@ -155,7 +155,7 @@ namespace Aurora3D
 		void VectorStore4AlignedNoCache(float128& v, float *m);
 
 		// v.xyzw = reinterpret_cast<float>(m[0],m[1],m[2],m[3])
-		void VectorStore4(const float128& v, uint32 *m);
+		void VectorStore4(const float128& v, int32 *m);
 
 		// ret.xyzw = (v[p],v[p],v[p],v[p]£©
 		template<unsigned p> 
@@ -612,9 +612,9 @@ namespace Aurora3D
 
 		A3D_FORCEINLINE float FloatAbs(float F)
 		{
-			union { float f32; uint32 u32; }tmp;
+			union { float f32; int32 i32; }tmp;
 			tmp.f32 = F;
-			tmp.u32 &= 0x7fffffff;
+			tmp.i32 &= 0x7fffffff;
 			return tmp.f32;
 		}
 
@@ -738,9 +738,9 @@ namespace Aurora3D
 			return t3;
 		}
 
-		A3D_FORCEINLINE uint32 FloatFloorLog2(uint32 Value)
+		A3D_FORCEINLINE int32 FloatFloorLog2(int32 Value)
 		{
-			uint32 pos = 0;
+			int32 pos = 0;
 			if (Value >= 1 << 16) { Value >>= 16; pos += 16; }
 			if (Value >= 1 << 8) { Value >>= 8; pos += 8; }
 			if (Value >= 1 << 4) { Value >>= 4; pos += 4; }
@@ -749,9 +749,9 @@ namespace Aurora3D
 			return (Value == 0) ? 0 : pos;
 		}
 
-		A3D_FORCEINLINE uint32 FloatCeilLog2(uint32 V)
+		A3D_FORCEINLINE int32 FloatCeilLog2(int32 V)
 		{
-			unsigned floor = FloatFloorLog2(V);
+			int32 floor = FloatFloorLog2(V);
 			if (V & (~(1 << floor))) return floor + 1;
 			return floor;
 		}
@@ -766,16 +766,16 @@ namespace Aurora3D
 			return powf(2.0f, F);
 		}
 
-		A3D_FORCEINLINE uint32 CountHeadZero(uint32 V)
+		A3D_FORCEINLINE int32 CountHeadZero(int32 V)
 		{
 			if (0 == V) return 32;
 			return 31 - FloatFloorLog2(V);
 		}
 
-		A3D_FORCEINLINE uint32 CountTailZero(uint32 V)
+		A3D_FORCEINLINE int32 CountTailZero(int32 V)
 		{
 			if (0 == V) return 32;
-			uint32 count = 0;
+			int32 count = 0;
 			while (0 == (V & 1)) { V >>= 1; ++count; }
 			return count;
 		}
@@ -852,8 +852,8 @@ namespace Aurora3D
 			return _mm_setzero_ps();
 		}
 
-		//load replicate uint32
-		A3D_FORCEINLINE float128 VectorLoad(uint32 u)
+		//load replicate int32
+		A3D_FORCEINLINE float128 VectorLoad(int32 u)
 		{
 			return _mm_castsi128_ps(_mm_setr_epi32(u, u, u, u));
 		}
@@ -870,8 +870,8 @@ namespace Aurora3D
 			return _mm_setr_ps(x, y, z, w);
 		}
 
-		//load 2,3,4 uint32
-		A3D_FORCEINLINE float128 VectorLoad(uint32 x, uint32 y, uint32 z, uint32 w)
+		//load 2,3,4 int32
+		A3D_FORCEINLINE float128 VectorLoad(int32 x, int32 y, int32 z, int32 w)
 		{
 			return _mm_castsi128_ps(_mm_setr_epi32(x, y, z, w));
 		}
@@ -917,10 +917,10 @@ namespace Aurora3D
 			v.m128_f32[i] = F;
 		}
 
-		A3D_FORCEINLINE void VectorSet(float128& v, int i, uint32 F)
+		A3D_FORCEINLINE void VectorSet(float128& v, int i, int32 F)
 		{
 			assert(i >= 0 && i <= 3);
-			v.m128_u32[i] = F;
+			v.m128_i32[i] = F;
 		}
 
 		A3D_FORCEINLINE float VectorGetFloat(const float128& v, int i)
@@ -929,10 +929,10 @@ namespace Aurora3D
 			return v.m128_f32[i];
 		}
 
-		A3D_FORCEINLINE uint32 VectorGetUint32(const float128& v, int i)
+		A3D_FORCEINLINE int32 VectorGetint32(const float128& v, int i)
 		{
 			assert(i >= 0 && i <= 3);
-			return v.m128_u32[i];
+			return v.m128_i32[i];
 		}
 
 		A3D_FORCEINLINE float VectorGetFirst(const float128& v)
@@ -958,12 +958,12 @@ namespace Aurora3D
 			_mm_storeu_ps(m, v);
 		}
 
-		A3D_FORCEINLINE void VectorStore4(const float128& v, uint32 *m)
+		A3D_FORCEINLINE void VectorStore4(const float128& v, int32 *m)
 		{
-			m[0] = v.m128_u32[0];
-			m[1] = v.m128_u32[1];
-			m[2] = v.m128_u32[2];
-			m[3] = v.m128_u32[3];
+			m[0] = v.m128_i32[0];
+			m[1] = v.m128_i32[1];
+			m[2] = v.m128_i32[2];
+			m[3] = v.m128_i32[3];
 		}
 
 		A3D_FORCEINLINE void VectorStore4Aligned(const float128& v, float *m)
@@ -1035,8 +1035,9 @@ namespace Aurora3D
 			return _mm_mul_ps(v1, v2);
 		}
 
-		//Latency 13~14
+		//Latency 11~14
 		// return div1 / div2
+		// 2~3 time mul
 		A3D_FORCEINLINE float128 VectorDiv(const float128& div1, const float128& div2)
 		{
 			return _mm_div_ps(div1, div2);
@@ -1045,9 +1046,9 @@ namespace Aurora3D
 		// if v1[i] == v2[i] return 0xffffffff
 		//          !=       return 0x00000000
 		// latency 3
-		A3D_FORCEINLINE uint128 VectorEquals(const uint128& v1, const uint128& v2)
+		A3D_FORCEINLINE float128 VectorEquals(const float128& v1, const float128& v2)
 		{
-			return _mm_cmpeq_epi32(v1, v2);
+			return _mm_castsi128_ps( _mm_cmpeq_epi32(_mm_castps_si128(v1), _mm_castps_si128(v2)));
 		}
 
 		// if v1[i] != v2[i] return 0xffffffff 
@@ -1259,7 +1260,7 @@ namespace Aurora3D
 
 		namespace SSEConstant
 		{
-			static const float128 AbsMask = VectorLoad(0x7fffffffu);
+			static const float128 AbsMask = VectorLoad(0x7fffffff);
 			static const float128 One = VectorLoad(1.0f);
 			static const float128 Zero = VectorLoad(0.0f);
 		}
@@ -1357,17 +1358,17 @@ namespace Aurora3D
 			return f;
 		}
 
-		A3D_FORCEINLINE float128 VectorLoad(uint32 x, uint32 y, uint32 z, uint32 w)
+		A3D_FORCEINLINE float128 VectorLoad(int32 x, int32 y, int32 z, int32 w)
 		{
 			float128 f;
-			f.n128_u32[0] = x;
-			f.n128_u32[1] = y;
-			f.n128_u32[2] = z;
-			f.n128_u32[3] = w;
+			f.n128_i32[0] = x;
+			f.n128_i32[1] = y;
+			f.n128_i32[2] = z;
+			f.n128_i32[3] = w;
 			return f;
 		}
 
-		A3D_FORCEINLINE float128 VectorLoad(uint32 U)
+		A3D_FORCEINLINE float128 VectorLoad(int32 U)
 		{
 			return vdupq_n_u32(U);
 		}
@@ -1402,7 +1403,7 @@ namespace Aurora3D
 			v = vsetq_lane_f32(F, v, i);
 		}
 
-		A3D_FORCEINLINE void VectorSet(float128& v, int i, uint32 U)
+		A3D_FORCEINLINE void VectorSet(float128& v, int i, int32 U)
 		{
 			v = vsetq_lane_u32(U, v, i);
 		}
@@ -1418,7 +1419,7 @@ namespace Aurora3D
 			return v.n128_f32[0];
 		}
 
-		A3D_FORCEINLINE float VectorGetUint32(const float128& v, int i)
+		A3D_FORCEINLINE float VectorGetint32(const float128& v, int i)
 		{
 			return v.n128_u32[i];
 		}
@@ -1437,7 +1438,7 @@ namespace Aurora3D
 			vst1q_f32(m, v);
 		}
 
-		A3D_FORCEINLINE void VectorStore4(const float128& v, uint32 *m)
+		A3D_FORCEINLINE void VectorStore4(const float128& v, int32 *m)
 		{
 			vst1q_u32(m, v);
 		}

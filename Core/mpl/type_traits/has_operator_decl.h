@@ -17,7 +17,8 @@
 #pragma warning(push)
 //4244: ReturnConvert<Ret>::Convert(T) precision loss, e.g.   float convert to int  
 //4913: exists user-define operator,(T1,T2), but not match all parameters, and use default inner operator,(...)
-#pragma warning(disable:4244 4913)
+//4505: un-reference local function had been removed
+#pragma warning(disable:4244 4913 4505)
 #endif
 
 namespace Aurora3D
