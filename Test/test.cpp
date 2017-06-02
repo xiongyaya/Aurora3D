@@ -7,6 +7,7 @@
 #include"test_type_traits.hpp"
 #include"test_mpl.hpp"
 #include"test_vector.hpp"
+#include"test_float.hpp"
 #include<immintrin.h>
 #include<inttypes.h>
 #include<float.h>
@@ -26,7 +27,8 @@ int main()
 	//TestProprecessor();
 	//TestTypeTraits();
 	//TestMpl();
-	TestVector();
+	//TestVector();
+	TestFloat();
 	getchar();
 	return 0;
 }

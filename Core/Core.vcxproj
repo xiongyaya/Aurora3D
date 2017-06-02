@@ -98,6 +98,7 @@
     <ClInclude Include="math\capsule.h" />
     <ClInclude Include="math\color4.h" />
     <ClInclude Include="math\euler.h" />
+    <ClInclude Include="math\float32.h" />
     <ClInclude Include="math\float16x16.h" />
     <ClInclude Include="math\float16x8.h" />
     <ClInclude Include="math\math_fwd.h" />
@@ -111,7 +112,7 @@
     <ClInclude Include="math\vector2.h" />
     <ClInclude Include="math\vector3.h" />
     <ClInclude Include="math\vector4.h" />
-    <ClInclude Include="math\vector8.h" />
+    <ClInclude Include="math\vector4x2.h" />
     <ClInclude Include="math\vector_runtime_support.h" />
     <ClInclude Include="memory\aligned_allocator.h" />
     <ClInclude Include="memory\heap_allocator.h" />

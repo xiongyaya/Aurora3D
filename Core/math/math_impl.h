@@ -3,12 +3,15 @@
 #include<cmath>
 #include<cassert>
 #include<Core/type.h>
+#include<Core/math/float32.h>
+#include<Core/math/math_fwd.h>
+
 #if defined(AURORA3D_SSE)
 #	include<emmintrin.h>
 #elif defined(AURORA3D_NEON)
 #	include <arm_neon.h>
 #endif
-#include"math_fwd.h"
+
 	
 namespace Aurora3D
 {
@@ -94,8 +97,6 @@ namespace Aurora3D
 		
 		//xyzw = 0.0f
 		float128 VectorZero();
-
-		
 
 		//xyzw = (v[0],v[1],0.0f,0.0f), v no need aligned
 		float128 VectorLoad2Z0(const float *v);
@@ -285,7 +286,6 @@ namespace Aurora3D
 		// 11 ->0  01/10/00 -> 1
 		// ret.xyzw = ( !v1.x&v2.x, !v1.y&v2.y, !v1.z&v2.z, !v1.w&v2.w)
 		float128 VectorNotAnd(const float128& v1, const float128& v2);
-
 
 		// 11/00 -> 0  01/10 -> 1
 		//ret.xyzw = ( v1.x^v2.x, v1.y^v2.y, v1.z^v2.z, v1.w^v2.w)
@@ -506,7 +506,6 @@ namespace Aurora3D
 		// tranform v to radian angle
 		float128 VectorDegreeToRadian(const float128& v);
 
-
 		// ret = sin(v.xyzw ) , v.xyzw is radian angle, Max error of 0.001091
 		float128 VectorSinRadianFast(const float128& v);
 
@@ -546,7 +545,6 @@ namespace Aurora3D
 		// ret = transpose(A)
 		float128x4 MatrixTranspose(const float128x4& A);
 
-
 		// inverse Matrix, no copy
 		float128 MatrixInverse(const float128x4& original, float128x4& inverse);
 
@@ -555,287 +553,6 @@ namespace Aurora3D
 
 #endif  //#if defined(AURORA3D_SSE) || defined(AURORA3D_NEON)
 #endif  //Float / Vector/ Matrix Operation Declare
-
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////// FPU Operation //////////////////////////////////////////////////////////////////////////////////////
-#if 1
-		A3D_FORCEINLINE constexpr float FloatMax(float a, float b)
-		{
-			return a >= b ? a : b;
-		}
-
-		A3D_FORCEINLINE constexpr float FloatMin(float a, float b)
-		{
-			return a < b ? a : b;
-		}
-
-		A3D_FORCEINLINE constexpr float FloatClamp(float F, float min, float max)
-		{
-			return F < min ? min : (F > max ? max : F);
-		}
-
-		A3D_FORCEINLINE constexpr float FloatClampUNorm(float F)
-		{
-			return F < 0.0f ? 0.0f : (F > 1.0f ? 1.0f : F);
-		}
-
-		A3D_FORCEINLINE constexpr float FloatSaturate(float F)
-		{
-			return F < 0.0f ? 0.0f : (F > 1.0f ? 1.0f : F);
-		}
-
-		A3D_FORCEINLINE constexpr float FloatClampSNorm(float F)
-		{
-			return F < -1.0f ? -1.0f : (F > 1.0f ? 1.0f : F);
-		}
-
-		A3D_FORCEINLINE constexpr float FloatIntPart(float F)
-		{
-			return (float)(int32)F;
-		}
-
-		A3D_FORCEINLINE constexpr float FloatFracPart(float F)
-		{
-			return F - (float)(int32)F;
-		}
-
-		A3D_FORCEINLINE constexpr bool FloatIsNaN(float F)
-		{
-			return F != F;
-		}
-
-		A3D_FORCEINLINE constexpr bool FloatIsInfinite(float F)
-		{
-			return 0x7f800000 == ((*(unsigned*)(&F)) & 0x7fffffff);
-		}
-
-		A3D_FORCEINLINE float FloatAbs(float F)
-		{
-			union { float f32; int32 i32; }tmp;
-			tmp.f32 = F;
-			tmp.i32 &= 0x7fffffff;
-			return tmp.f32;
-		}
-
-		A3D_FORCEINLINE float FloatRound(float F)
-		{
-			return floorf(F);
-		}
-
-		A3D_FORCEINLINE float FloatCeil(float F)
-		{
-			return ceilf(F);
-		}
-
-		A3D_FORCEINLINE float FloatFloor(float F)
-		{
-			return floorf(F);
-		}
-
-		A3D_FORCEINLINE float FloatExp(float F)
-		{
-			return expf(F);
-		}
-
-		A3D_FORCEINLINE float FloatExp2(float F)
-		{
-			return exp2f(F);
-		}
-
-		A3D_FORCEINLINE float FloatLogE(float F)
-		{
-			return logf(F);
-		}
-
-		A3D_FORCEINLINE float FloatLogX(float F, float base)
-		{
-			return logf(F) / logf(base);
-		}
-
-		A3D_FORCEINLINE float FloatLog2(float F)
-		{
-			return log2f(F);
-		}
-
-		A3D_FORCEINLINE float FloatMod(float X, float Y)
-		{
-			if (FloatAbs(Y) < 1.e-5f) return 0.0f;
-			const float div = FloatIntPart(X / Y);
-			float ipart = div*Y;
-			if (FloatAbs(ipart) > FloatAbs(X))
-			{
-				ipart = X;
-			}
-			return X - ipart;
-		}
-
-		A3D_FORCEINLINE float FloatSin(float F)
-		{
-			return sinf(F);
-		}
-
-		A3D_FORCEINLINE float FloatCos(float F)
-		{
-			return cosf(F);
-		}
-
-		A3D_FORCEINLINE float FloatTan(float F)
-		{
-			return tanf(F);
-		}
-
-		A3D_FORCEINLINE float FloatAsin(float F)
-		{
-			return sinf(FloatClampSNorm(F));
-		}
-
-		A3D_FORCEINLINE float FloatAcos(float F)
-		{
-			return cosf(FloatClampSNorm(F));
-		}
-
-		A3D_FORCEINLINE float FloatAtan(float F)
-		{
-			return atanf(F);
-		}
-
-		A3D_FORCEINLINE float  FloatAtanPos(float X, float Y)
-		{
-			const float absX = FloatAbs(X);
-			const float absY = FloatAbs(Y);
-			const bool yAbsBigger = (absY > absX);
-			float t0 = yAbsBigger ? absY : absX; // Max(absY, absX)
-			float t1 = yAbsBigger ? absX : absY; // Min(absX, absY)
-
-			if (t0 == 0.f)
-				return 0.f;
-
-			float t3 = t1 / t0;
-			float t4 = t3 * t3;
-
-			static const float c[7] = {
-				+7.2128853633444123e-03f,
-				-3.5059680836411644e-02f,
-				+8.1675882859940430e-02f,
-				-1.3374657325451267e-01f,
-				+1.9856563505717162e-01f,
-				-3.3324998579202170e-01f,
-				+1.0f
-			};
-
-			t0 = c[0];
-			t0 = t0 * t4 + c[1];
-			t0 = t0 * t4 + c[2];
-			t0 = t0 * t4 + c[3];
-			t0 = t0 * t4 + c[4];
-			t0 = t0 * t4 + c[5];
-			t0 = t0 * t4 + c[6];
-			t3 = t0 * t3;
-			t3 = yAbsBigger ? (0.5f * kfPi) - t3 : t3;
-			t3 = (X < 0.0f) ? kfPi - t3 : t3;
-			t3 = (Y < 0.0f) ? -t3 : t3;
-			return t3;
-		}
-
-		A3D_FORCEINLINE int32 FloatFloorLog2(int32 Value)
-		{
-			int32 pos = 0;
-			if (Value >= 1 << 16) { Value >>= 16; pos += 16; }
-			if (Value >= 1 << 8) { Value >>= 8; pos += 8; }
-			if (Value >= 1 << 4) { Value >>= 4; pos += 4; }
-			if (Value >= 1 << 2) { Value >>= 2; pos += 2; }
-			if (Value >= 1 << 1) { pos += 1; }
-			return (Value == 0) ? 0 : pos;
-		}
-
-		A3D_FORCEINLINE int32 FloatCeilLog2(int32 V)
-		{
-			int32 floor = FloatFloorLog2(V);
-			if (V & (~(1 << floor))) return floor + 1;
-			return floor;
-		}
-
-		A3D_FORCEINLINE float FloatPow(float X, float Y)
-		{
-			return powf(X, Y);
-		}
-
-		A3D_FORCEINLINE float FloatPow2(float F)
-		{
-			return powf(2.0f, F);
-		}
-
-		A3D_FORCEINLINE int32 CountHeadZero(int32 V)
-		{
-			if (0 == V) return 32;
-			return 31 - FloatFloorLog2(V);
-		}
-
-		A3D_FORCEINLINE int32 CountTailZero(int32 V)
-		{
-			if (0 == V) return 32;
-			int32 count = 0;
-			while (0 == (V & 1)) { V >>= 1; ++count; }
-			return count;
-		}
-
-		A3D_FORCEINLINE bool FloatNearlyEquals(float X, float Y, float epside)
-		{
-			return FloatAbs(X - Y) <= epside;
-		}
-
-		A3D_FORCEINLINE constexpr float FloatStep(float F)
-		{
-			return F > 0.0f ? 1.0f : 0.0f;
-		}
-
-		A3D_FORCEINLINE bool FloatInBound(float F, float B)
-		{
-			return FloatAbs(F) <= B;
-		}
-
-		A3D_FORCEINLINE constexpr float FloatRadianToDegree(float F)
-		{
-			return F * kf180OverPi;
-		}
-
-		A3D_FORCEINLINE constexpr float FloatDegreeToRadian(float F)
-		{
-			return F * kfPiOver180;
-		}
-
-		//return 1 / sqrt(F)
-		A3D_FORCEINLINE float FloatReciprocalSqrt(float F)
-		{
-#if  defined(AURORA3D_SSE) || defined(AURORA3D_NEON)
-			return VectorGetFirst(VectorReciprocalSqrt(VectorLoad(F)));
-#else
-			return 1.0f / sqrtf(F);
-#endif
-		}
-
-		//return  Approx( 1 / sqrt(F) ), max error approximation less than 0.00036621
-		A3D_FORCEINLINE float FloatReciprocalSqrtApproximate(float F)
-		{
-#if  defined(AURORA3D_SSE) || defined(AURORA3D_NEON)
-			return VectorGetFirst(VectorReciprocalSqrtApproximate(VectorLoad(F)));
-#else
-			return 1.0f / sqrtf(F);
-#endif
-		}
-
-		//return  x^(1/2)
-		A3D_FORCEINLINE float FloatSqrt(float F)
-		{
-#if  defined(AURORA3D_SSE) || defined(AURORA3D_NEON)
-			return VectorGetFirst(VectorSqrt(VectorLoad(F)));
-#else
-			return sqrtf(F);
-#endif
-		}
-
-#endif 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////// Vector Matrix Operation Implementation //////////////////////////////////////////////////////

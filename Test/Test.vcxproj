@@ -70,7 +70,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>..;../3rd;$(IncludePath);</IncludePath>
+    <IncludePath>..;../3rd;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>..;../3rd;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
@@ -134,6 +134,7 @@
   <ItemGroup>
     <ClInclude Include="print_type.h" />
     <ClInclude Include="print_value.h" />
+    <ClInclude Include="test_float.hpp" />
     <ClInclude Include="test_vector.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

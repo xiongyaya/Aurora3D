@@ -185,7 +185,9 @@ namespace Aurora3D
 			A3D_FORCEINLINE Vector4 IntPart() const;
 
 			//fraction part of each component
-			A3D_FORCEINLINE Vector4 FracPart() const { return Vector4{ vec }.AssignFracPart(); }
+			A3D_FORCEINLINE Vector4 FracPart() const { return Copy().AssignFracPart(); }
+
+			A3D_FORCEINLINE Vector4 Sign() const { return Copy().AssignSign(); };
 
 			//convert to nearly int
 			A3D_FORCEINLINE Vector4 Round() const;
@@ -203,7 +205,7 @@ namespace Aurora3D
 			A3D_FORCEINLINE Vector4 AccurateRcp()const { return Copy().AssignAccurateRcp(); }
 
 			//(x^0.5,w^0.5,w^0.5,w^0.5)
-			A3D_FORCEINLINE Vector4 Sqrt()const;
+			A3D_FORCEINLINE float128 Sqrt()const;
 
 			//accuracy lost less then 0.00036 with AccurateRcpSqrt, 1/5 Latency of AccurateRcpSqrt
 			A3D_FORCEINLINE Vector4 FastRcpSqrt()const;
@@ -294,6 +296,7 @@ namespace Aurora3D
 			//chain operations, no temp Vector4 object generated, efficient then no-assign function when equal is complex
 			A3D_FORCEINLINE  Vector4& Assign(const  Vector4& v) { vec = v.vec; return *this; }
 			A3D_FORCEINLINE  Vector4& AssignNegate() { vec = (-*this).vec; return *this; }
+			A3D_FORCEINLINE  Vector4& AssignSign();
 			A3D_FORCEINLINE  Vector4& AssignAdd(const  Vector4& v) { vec = (*this + v).vec; return *this; }
 			A3D_FORCEINLINE  Vector4& AssignSub(const  Vector4& v) { vec = (*this - v).vec; return *this; }
 			A3D_FORCEINLINE  Vector4& AssignMul(const  Vector4& v) { vec = (*this * v).vec; return *this; }
@@ -320,7 +323,7 @@ namespace Aurora3D
 			A3D_FORCEINLINE  Vector4& AssignCeil() { Vector4 copy{ vec };  return AssignIntPart().AssignAdd(copy.AssignStepOne()); };
 			A3D_FORCEINLINE  Vector4& AssignFastRcp() { vec = FastRcp().vec; return *this; }
 			A3D_FORCEINLINE  Vector4& AssignAccurateRcp();
-			A3D_FORCEINLINE  Vector4& AssignSqrt() { vec = Sqrt().vec; return *this; }
+			A3D_FORCEINLINE  Vector4& AssignSqrt() { vec = Sqrt(); return *this; }
 			A3D_FORCEINLINE  Vector4& AssignFastRcpSqrt() { vec = FastRcpSqrt().vec; return *this; }
 			A3D_FORCEINLINE  Vector4& AssignAccurateRcpSqrt();
 			A3D_FORCEINLINE  Vector4& AssignMin(const Vector4& v) { vec = Min(v).vec; return *this; }
@@ -480,7 +483,7 @@ namespace Aurora3D
 			constexpr Vector4 Half{ 0.5f };
 			constexpr Vector4 Two{ 2.0f };
 			constexpr Vector4 OneOver2Pi{ kfOneOver2Pi };
-			constexpr Vector4 OneOver2PiSquare{ kfOneOver2PiSquare };
+			constexpr Vector4 OneOver2PiSquare{ kf4PiOverSquareSQ };
 			constexpr Vector4 TwoPi{ kf2Pi };
 			constexpr Vector4 Pi{ kfPi };
 			constexpr Vector4 HalfPi{ kfHalfPi };
@@ -509,6 +512,7 @@ namespace Aurora3D
 			constexpr Vector4 NegativeInf{ kfNegativeInf };
 		}
 		A3D_FORCEINLINE  Vector4& Vector4::AssignAbs() { return AssignBitAnd(kVector4::AbsMask); }
+		A3D_FORCEINLINE  Vector4& Vector4::AssignSign() { return AssignBitAnd(kVector4::SignMask); }
 		A3D_FORCEINLINE bool Vector4::IsUnit2(float tolerence) const { return LengthSQ2().AssignSub(kVector4::One).AssignAbs()[0] < tolerence; }
 		A3D_FORCEINLINE bool Vector4::IsUnit3(float tolerence) const { return LengthSQ3().AssignSub(kVector4::One).AssignAbs()[0] < tolerence; }
 		A3D_FORCEINLINE bool Vector4::IsUnit4(float tolerence) const { return LengthSQ4().AssignSub(kVector4::One).AssignAbs()[0] < tolerence; }
@@ -552,7 +556,7 @@ namespace Aurora3D
 		A3D_FORCEINLINE Vector4 Vector4::Min(const Vector4& v) const { return VectorMin(vec, v.vec); }
 		A3D_FORCEINLINE Vector4 Vector4::Max(const Vector4& v) const { return VectorMax(vec, v.vec); }
 		A3D_FORCEINLINE Vector4 Vector4::FastRcp() const { return VectorReciprocalApproximate(vec); }
-		A3D_FORCEINLINE Vector4 Vector4::Sqrt() const { return VectorSqrt(vec); }
+		A3D_FORCEINLINE float128 Vector4::Sqrt() const { return VectorSqrt(vec); }
 		A3D_FORCEINLINE Vector4 Vector4::FastRcpSqrt() const { return VectorReciprocalSqrtApproximate(vec); }
 		A3D_FORCEINLINE bool Vector4::True4() const { return VectorTrue4(vec); }
 		A3D_FORCEINLINE bool Vector4::AnyTrue4() const { return VectorAnyTrue4(vec); }

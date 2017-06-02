@@ -627,9 +627,6 @@
     <ClInclude Include="math\uint8x16.h">
       <Filter>math</Filter>
     </ClInclude>
-    <ClInclude Include="math\vector8.h">
-      <Filter>math</Filter>
-    </ClInclude>
     <ClInclude Include="math\uint8x32.h">
       <Filter>math</Filter>
     </ClInclude>
@@ -710,6 +707,12 @@
     </ClInclude>
     <ClInclude Include="mpl\type_traits\has_operator_decl.h">
       <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="math\vector4x2.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="math\float32.h">
+      <Filter>math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -73,7 +73,7 @@
 #endif
 
 
-#if  defined(A3D_COMPILER_MSVC)  
+#if  defined(AURORA3D_COMPILER_MSVC)  
 #	define A3D_MS_ALIGN(n)     __declspec(align(n))
 #	define A3D_GCC_ALIGN(n) 
 #	define A3D_DLLEXPORT       __declspec(dllexport)    //building as a library
