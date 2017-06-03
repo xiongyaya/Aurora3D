@@ -15,21 +15,21 @@ namespace Aurora3D
 	{
 		static_assert(sizeof(float) == 4, "float32.h need IEEE754 4 byte float");
 
+		constexpr float kfHalf = 1.0f / 2.0f;
+
 		constexpr float kfPi = 3.1415926535897932f;
 		constexpr float kfHalfPi = kfPi / 2.0f;
+		constexpr float kfQuarterPi = kfPi / 4.0f;
 		constexpr float kf2Pi = 2 * kfPi;
 		constexpr float kf4Pi = 4 * kfPi;
-		constexpr float kfHalf = 1.0f / 2.0f;
 		constexpr float kf180OverPi = 180.0f / kfPi;   //radian to degree
 		constexpr float kfPiOver180 = kfPi / 180.0f;   //degree to radian
 		constexpr float kfOneOverPi = 1.0f / kfPi;
 		constexpr float kfOneOver2Pi = 1.0f / (2 * kfPi);
 		constexpr float kf4OverPiSQ = 4.0f / ( kfPi * kfPi);
-		constexpr int kiAbsMask = 0x7fffffff;
-		constexpr float kfQuarterPi = kfPi / 4.0f;
 		constexpr float kf4OverPi = 4.0 / kfPi;
-		constexpr int32 kfTopZero = 0x7fffffff;
-		constexpr int32 kfTopOne = 0x80000000;
+		constexpr int   kiAbsMask  = 0x7fffffff;
+		constexpr int32 kiSignMask = 0x80000000;
 		constexpr int32 kfAllOneMask = 0xffffffff;
 		constexpr int32 kfAllZeroMask = 0x00000000;
 		constexpr int32 kfPositiveInf = 0x7f800000;
@@ -38,6 +38,24 @@ namespace Aurora3D
 		constexpr float kfSmallEpiside = 1.e-6f;
 		constexpr float kfMiddleEpiside = 1.e-4f;
 		constexpr float kfMiddleSQEpiside = 5.e-6f;
+		constexpr float kfLn2 = 0.69314718056;
+		constexpr float kfLn2_2Q = 0.48045301391;
+		constexpr float kfLn2_3Q = 0.333024652;
+		constexpr float kfln2_4Q = 0.230835098583;
+		constexpr float kfLn2_5Q = 0.160002697757;
+		constexpr float kfLn2_6Q = 0.110905418832;
+
+		/**************************************************************************************************************************************
+		*   type     sign      real exp                stored exp                   tail                      value
+		*   +0        0        -127                      0                       0x00000000                  +0.0
+		*   -0        1        -127                      0                       0x00000000                  -0.0
+		*   +1        0         0                        127                     0x00000000                  +1.0                            
+		*   -1        1         0                        127                     0x00000000                  -1.0
+		*  +Inf       0         128                      255                     0x7fffffff                   --
+		*  -Inf       1         128                      255                     0x7fffffff                   --
+		*   NaN      0/1        128                      255                     non-zero                    NaN
+		* regular Number       -126~127                 1~254                
+		*/
 
 		union Float32
 		{
@@ -45,9 +63,9 @@ namespace Aurora3D
 			float fValue;
 			struct
 			{
-				uint32 tail : 23;
-				uint32 exp : 8;
-				uint32 sign : 1;
+				uint32 tail : 23;  //hide 1.x and store x
+				uint32 exp : 8;    //range -(2^7-1) ~(2^7) (+offset 2^7-1 => 0~2^8-1)
+				uint32 sign : 1;   //0 positive, 1 negtive
 			} component;
 		};
 
@@ -147,8 +165,6 @@ namespace Aurora3D
 			return F * kfPiOver180;
 		}
 
-		
-		
 		//convert ambitracy range to [-Pi~+ Pi]
 		A3D_FORCEINLINE float FloatClampRadian(float R)
 		{
@@ -251,6 +267,24 @@ namespace Aurora3D
 		A3D_FORCEINLINE float FloatExp(float F)
 		{
 			return std::expf(F);
+		}
+
+		//Vector Example 
+		//tylor-expansion 2^x = 1 + ln2*x + ln2^2/2 x^2 + ln2^3/(3*2*1)*x^3 ...
+		//iterator 5 time is enough 
+		//FloatFastExp2 times : 230.461450 average times : 0.000230
+		//std::exp2     times : 267.996106 average times : 0.000268
+		//Max Error : 0.000171 average Error : 0.000024
+		//Max Error Data : 0.999912 Result1 : 1.999707, Result2 : 1.999878
+		A3D_FORCENOINLINE float FloatFastExp2(float F)
+		{
+			int intpart = FloatAbs(F) > 1.0 ?(F>0.0f? (1 << (int)F) : (1 >> (int)F)):1.0f;
+			F = F - (int)F;
+			const float F2 = F*F;
+			const float F3 = F2*F;
+			const float F4 = F3*F;
+			const float F5 = F4*F;
+			return intpart*(1 + kfLn2*F + (kfLn2_2Q / 2.f)*F2 + (kfLn2_3Q / 6.f)*F3 + (kfln2_4Q / 24.f)*F4 + (kfLn2_5Q / 120.f)*F5);
 		}
 
 		A3D_FORCEINLINE float FloatExp2(float F)

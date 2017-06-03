@@ -88,11 +88,11 @@ namespace Aurora3D
 			constexpr float128 kVectorHalfPI = { kfHalfPi ,kfHalfPi ,kfHalfPi ,kfHalfPi };
 			constexpr float128 kVector180OverPI = { kf180OverPi,kf180OverPi ,kf180OverPi,kf180OverPi };
 			constexpr float128 kVectorPIOver180 = { kfPiOver180,kfPiOver180 ,kfPiOver180 ,kfPiOver180 };
-			static const float128 kVectorSignMask = VectorLoad(kfTopOne);
+			static const float128 kVectorSignMask = VectorLoad(kiSignMask);
 			static const float128 kVectorInfinte = VectorLoad(kfPositiveInf);
 			static const float128 kVectorAllOneMask = VectorLoad(kfAllOneMask);
 			static const float128 kVectorXYZMask = VectorLoad(kfAllOneMask, kfAllOneMask, kfAllOneMask, kfAllOneMask);
-			static const float128 kVectorAbsMask = VectorLoad(kfTopZero);
+			static const float128 kVectorAbsMask = VectorLoad(kiAbsMask);
 		}
 		
 		//xyzw = 0.0f

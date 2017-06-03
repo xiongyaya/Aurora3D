@@ -202,58 +202,82 @@ A3D_FORCEINLINE float TestRcp2(float F)
 }
 
 
+A3D_FORCENOINLINE __m128  LoadSint
+(
+	const int* pSource
+)
+{
+	assert(pSource);
+#if 1
+	__m128 V;
+	V.m128_f32[0] = (float)pSource[0];
+	V.m128_f32[1] = (float)pSource[1];
+	V.m128_f32[2] = 0.f;
+	V.m128_f32[3] = 0.f;
+	return V;
+#else
+	__m128 x = _mm_load_ss(reinterpret_cast<const float*>(&pSource[0]));
+	__m128 y = _mm_load_ss(reinterpret_cast<const float*>(&pSource[1]));
+	__m128 V = _mm_unpacklo_ps(x, y);
+	return _mm_cvtepi32_ps(_mm_castps_si128(V));
+#endif
+}
 
 inline void TestFloat()
 {
-	//test constexpr
-	constexpr float min = FloatMin(1.0f, 2.0f);
-	constexpr float clamp = FloatClamp(3.f, 0.0f, 1.0f);
-	constexpr float saturate = FloatSaturate(3.f);
-	constexpr float nsign = FloatSign(-3.f);
-
-	 float testCeil[] = { FloatCeil(-2.3f),FloatCeil(-1.8f),FloatCeil(-0.8f),FloatCeil(-0.3f),FloatCeil(-0.f),FloatCeil(+0.f),FloatCeil(+0.3f),FloatCeil(+0.9f),FloatCeil(+1.2f),FloatCeil(+1.6f) };
-	 float testFloor[] = { FloatFloor(-2.3f),FloatFloor(-1.8f),FloatFloor(-0.8f),
-		FloatFloor(-0.3f),FloatFloor(-0.f),FloatFloor(+0.f),FloatFloor(+0.3f),FloatFloor(+0.9f),FloatFloor(+1.2f),FloatFloor(+1.6f) };
-	constexpr float testRound[] = { FloatRound(-2.3f),FloatRound(-1.8f),FloatRound(-0.8f),FloatRound(-0.3f),
-		FloatRound(-0.f),FloatRound(+0.f),FloatRound(+0.3f),FloatRound(+0.9f),FloatRound(+1.2f),FloatRound(+1.6f) };
-	constexpr bool isNegInf = FloatIsInfinite(kfNegativeInf);
-	constexpr bool isPosInf = FloatIsInfinite(kfPositiveInf);
-	constexpr bool isInf = FloatIsInfinite(0);
-	float abs = FloatAbs(-2.0f);
-	//float mod = FloatMod(-2.4, 1.1f);
-	float fast_sin = FloatSin(1);
 	
-	cout << FloatSin(2.946795) << " " << FloatSin(0) << endl;
+	////test constexpr
+	//constexpr float min = FloatMin(1.0f, 2.0f);
+	//constexpr float clamp = FloatClamp(3.f, 0.0f, 1.0f);
+	//constexpr float saturate = FloatSaturate(3.f);
+	//constexpr float nsign = FloatSign(-3.f);
 
-	cout << sin(2.946795) << " " << sin(0) << endl;
-	cout << FloatExp2(2) << endl;
-	cout << atan2f(1.0, 2.0f) << endl;
-	cout << FloatAtanPos(1.0, 2.0f) << endl;
-	
+	// float testCeil[] = { FloatCeil(-2.3f),FloatCeil(-1.8f),FloatCeil(-0.8f),FloatCeil(-0.3f),FloatCeil(-0.f),FloatCeil(+0.f),FloatCeil(+0.3f),FloatCeil(+0.9f),FloatCeil(+1.2f),FloatCeil(+1.6f) };
+	// float testFloor[] = { FloatFloor(-2.3f),FloatFloor(-1.8f),FloatFloor(-0.8f),
+	//	FloatFloor(-0.3f),FloatFloor(-0.f),FloatFloor(+0.f),FloatFloor(+0.3f),FloatFloor(+0.9f),FloatFloor(+1.2f),FloatFloor(+1.6f) };
+	//constexpr float testRound[] = { FloatRound(-2.3f),FloatRound(-1.8f),FloatRound(-0.8f),FloatRound(-0.3f),
+	//	FloatRound(-0.f),FloatRound(+0.f),FloatRound(+0.3f),FloatRound(+0.9f),FloatRound(+1.2f),FloatRound(+1.6f) };
+	//constexpr bool isNegInf = FloatIsInfinite(kfNegativeInf);
+	//constexpr bool isPosInf = FloatIsInfinite(kfPositiveInf);
+	//constexpr bool isInf = FloatIsInfinite(0);
+	//float abs = FloatAbs(-2.0f);
+	////float mod = FloatMod(-2.4, 1.1f);
+	//float fast_sin = FloatSin(1);
+	//
+	//cout << FloatSin(2.946795) << " " << FloatSin(0) << endl;
 
-	printf("%f, %f, %f, %f, %f, %f, %f, %f\n", FloatRound(-1.1), FloatRound(-0.6), FloatRound(-0.1), FloatRound(-0.0f), FloatRound(+0.0), FloatRound(+0.1), FloatRound(+0.6), FloatRound(+1.1));
-	printf("-3PI:%f, -5/2PI:%f, -2PI:%f, -3/2PI:%f, -PI:%f, -1/2PI:%f, %f\n", FloatClampRadian(-kfHalfPi *6), FloatClampRadian(-kfHalfPi * 5), FloatClampRadian(-kfHalfPi * 4), FloatClampRadian(-kfHalfPi * 3), FloatClampRadian(-kfHalfPi * 2), FloatClampRadian(-kfHalfPi * 1), FloatClampRadian(0.0f));
-	printf("3PI:%f, 5/2PI:%f, 2PI:%f, 3/2PI:%f, PI:%f, 1/2PI:%f, %f\n", FloatClampRadian(kfHalfPi * 6), FloatClampRadian(kfHalfPi * 5), FloatClampRadian(kfHalfPi * 4), FloatClampRadian(kfHalfPi * 3), FloatClampRadian(kfHalfPi * 2), FloatClampRadian(kfHalfPi * 1), FloatClampRadian(0.0f));
-	
-	cout << " Test floor Time:" << endl;
-	TestError(FloatFloor, std::floorf, false, -10000, 10000, 1000000);
+	//cout << sin(2.946795) << " " << sin(0) << endl;
+	//cout << FloatExp2(2) << endl;
+	//cout << atan2f(1.0, 2.0f) << endl;
+	//cout << FloatAtanPos(1.0, 2.0f) << endl;
+	//
 
-	cout << " Test Round Time:" << endl;
-	TestError(FloatRound, std::roundf, false, -10000, 10000 , 1000000);
+	//printf("%f, %f, %f, %f, %f, %f, %f, %f\n", FloatRound(-1.1), FloatRound(-0.6), FloatRound(-0.1), FloatRound(-0.0f), FloatRound(+0.0), FloatRound(+0.1), FloatRound(+0.6), FloatRound(+1.1));
+	//printf("-3PI:%f, -5/2PI:%f, -2PI:%f, -3/2PI:%f, -PI:%f, -1/2PI:%f, %f\n", FloatClampRadian(-kfHalfPi *6), FloatClampRadian(-kfHalfPi * 5), FloatClampRadian(-kfHalfPi * 4), FloatClampRadian(-kfHalfPi * 3), FloatClampRadian(-kfHalfPi * 2), FloatClampRadian(-kfHalfPi * 1), FloatClampRadian(0.0f));
+	//printf("3PI:%f, 5/2PI:%f, 2PI:%f, 3/2PI:%f, PI:%f, 1/2PI:%f, %f\n", FloatClampRadian(kfHalfPi * 6), FloatClampRadian(kfHalfPi * 5), FloatClampRadian(kfHalfPi * 4), FloatClampRadian(kfHalfPi * 3), FloatClampRadian(kfHalfPi * 2), FloatClampRadian(kfHalfPi * 1), FloatClampRadian(0.0f));
+	//
+	//cout << " Test floor Time:" << endl;
+	//TestError(FloatFloor, std::floorf, false, -10000, 10000, 1000000);
 
-	cout << " Test ClampedSin Time and accuracy:" << endl;
-	TestError(FloatFastSin, std::sinf, false, -kfPi, kfPi, 1000000);
+	//cout << " Test Round Time:" << endl;
+	//TestError(FloatRound, std::roundf, false, -10000, 10000 , 1000000);
 
-	//cout << " test case:" << FloatArctan(2) << " " << atan(2) << endl;
-	cout << " Test arctan Time and accuracy:" << endl;
-	TestError(FloatFastArctan, std::atan, false, -10, 10, 1000000);
+	//cout << " Test ClampedSin Time and accuracy:" << endl;
+	//TestError(FloatFastSin, std::sinf, false, -kfPi, kfPi, 1000000);
 
-	cout << " Test floor Time:" << endl;
-	TestError(FloatCeil, std::ceilf, false, -10000, 10000, 1000000);
+	////cout << " test case:" << FloatArctan(2) << " " << atan(2) << endl;
+	//cout << " Test arctan Time and accuracy:" << endl;
+	//TestError(FloatFastArctan, std::atan, false, -10, 10, 1000000);
 
-	cout << " Test mod Time:" << endl;
-	TestError(FloatMod, fmodf, true, -100, 100, 1,2, 1000000);
+	//cout << " Test floor Time:" << endl;
+	//TestError(FloatCeil, std::ceilf, false, -10000, 10000, 1000000);
 
-	
-	int a = 0;
+	//cout << " Test mod Time:" << endl;
+	//TestError(FloatMod, fmodf, true, -100, 100, 1,2, 1000000);
+
+	float a = 1 << -1;
+	cout << " Test exp2 Time:" << FloatFastExp2(-1.0f)<< endl;
+	TestError(FloatFastExp2, std::exp2f, false, -1, 1, 1000000);
+
+	int c = 0;
 }

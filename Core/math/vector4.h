@@ -32,7 +32,6 @@ namespace Aurora3D
 			static constexpr struct InitPoint3D {}   Point3D{};
 			static constexpr struct InitLine3D {}    Line3D{};
 
-			
 			/**  construction*/
 			
 			// (0.0f, 0.0f, 0.0f, 0.0f)
@@ -103,9 +102,9 @@ namespace Aurora3D
 
 			/** element reorder like shader vector4 */
 			A3D_FORCEINLINE Vector4 xxxx() const { float repeat = fArray[0]; return Vector4{ repeat,repeat ,repeat ,repeat }; }
-			A3D_FORCEINLINE Vector4 yyyy() const { float repeat = fArray[0]; return Vector4{ repeat,repeat ,repeat ,repeat }; }
-			A3D_FORCEINLINE Vector4 zzzz() const { float repeat = fArray[0]; return Vector4{ repeat,repeat ,repeat ,repeat }; }
-			A3D_FORCEINLINE Vector4 wwww() const { float repeat = fArray[0]; return Vector4{ repeat,repeat ,repeat ,repeat }; }
+			A3D_FORCEINLINE Vector4 yyyy() const { float repeat = fArray[1]; return Vector4{ repeat,repeat ,repeat ,repeat }; }
+			A3D_FORCEINLINE Vector4 zzzz() const { float repeat = fArray[2]; return Vector4{ repeat,repeat ,repeat ,repeat }; }
+			A3D_FORCEINLINE Vector4 wwww() const { float repeat = fArray[3]; return Vector4{ repeat,repeat ,repeat ,repeat }; }
 			A3D_FORCEINLINE Vector4 xywz() const { return Reorder<0, 1, 3, 2>(); }
 			A3D_FORCEINLINE Vector4 xzyw() const { return Reorder<0, 2, 1, 3>(); }
 			A3D_FORCEINLINE Vector4 xzwy() const { return Reorder<0, 2, 3, 1>(); }
@@ -506,8 +505,8 @@ namespace Aurora3D
 			constexpr Vector4 YAllOneMask{ 0u,kfAllOneMask,0u,0u };
 			constexpr Vector4 ZAllOneMask{ 0u,0u,kfAllOneMask,0u };
 			constexpr Vector4 WAllOneMask{ 0u,0u,0u,kfAllOneMask };
-			constexpr Vector4 AbsMask{ kfTopZero };
-			constexpr Vector4 SignMask{ kfTopOne };
+			constexpr Vector4 AbsMask{ kiAbsMask };
+			constexpr Vector4 SignMask{ kiSignMask };
 			constexpr Vector4 PositiveInf{ kfPositiveInf };
 			constexpr Vector4 NegativeInf{ kfNegativeInf };
 		}

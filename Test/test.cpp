@@ -11,6 +11,7 @@
 #include<immintrin.h>
 #include<inttypes.h>
 #include<float.h>
+#include<3rd/DirectXMath/Inc/DirectXMath.h>
 
 using namespace std;
 

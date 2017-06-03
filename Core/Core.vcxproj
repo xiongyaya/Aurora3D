@@ -98,6 +98,7 @@
     <ClInclude Include="math\capsule.h" />
     <ClInclude Include="math\color4.h" />
     <ClInclude Include="math\euler.h" />
+    <ClInclude Include="math\float16.h" />
     <ClInclude Include="math\float32.h" />
     <ClInclude Include="math\float16x16.h" />
     <ClInclude Include="math\float16x8.h" />
