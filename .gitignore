@@ -4,8 +4,4 @@ Debug/*
 Release/*
 *.VC.db
 .vs
-3rd/*
-!3rd/boost/*
-!3rd/lua-5.3.4
-!3rd/DirectXMath/*
 x64/*
