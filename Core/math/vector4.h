@@ -483,7 +483,7 @@ namespace Aurora3D
 			constexpr Vector4 Half{ 0.5f };
 			constexpr Vector4 Two{ 2.0f };
 			constexpr Vector4 OneOver2Pi{ kfOneOver2Pi };
-			constexpr Vector4 OneOver2PiSquare{ kf4PiOverSquareSQ };
+			constexpr Vector4 OneOver2PiSquare{ kf4OverPiSQ };
 			constexpr Vector4 TwoPi{ kf2Pi };
 			constexpr Vector4 Pi{ kfPi };
 			constexpr Vector4 HalfPi{ kfHalfPi };

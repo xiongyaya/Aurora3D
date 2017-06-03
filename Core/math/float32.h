@@ -16,14 +16,16 @@ namespace Aurora3D
 		static_assert(sizeof(float) == 4, "float32.h need IEEE754 4 byte float");
 
 		constexpr float kfPi = 3.1415926535897932f;
+		constexpr float kfHalfPi = kfPi / 2.0f;
 		constexpr float kf2Pi = 2 * kfPi;
 		constexpr float kf4Pi = 4 * kfPi;
+		constexpr float kfHalf = 1.0f / 2.0f;
 		constexpr float kf180OverPi = 180.0f / kfPi;   //radian to degree
 		constexpr float kfPiOver180 = kfPi / 180.0f;   //degree to radian
 		constexpr float kfOneOverPi = 1.0f / kfPi;
 		constexpr float kfOneOver2Pi = 1.0f / (2 * kfPi);
-		constexpr float kf4OverSquarePiSQ = 4.0f / ( kfPi * kfPi);
-		constexpr float kfHalfPi = kfPi / 2.0f;
+		constexpr float kf4OverPiSQ = 4.0f / ( kfPi * kfPi);
+		constexpr int kiAbsMask = 0x7fffffff;
 		constexpr float kfQuarterPi = kfPi / 4.0f;
 		constexpr float kf4OverPi = 4.0 / kfPi;
 		constexpr int32 kfTopZero = 0x7fffffff;
@@ -99,6 +101,7 @@ namespace Aurora3D
 			return F > 0.0f ? 1.0f : -1.0f;
 		}
 
+		// faster then fmodf
 		A3D_FORCEINLINE constexpr float FloatMod(float X, float Y)
 		{
 			return X - FloatIntPart(X / Y)*Y;
@@ -114,7 +117,6 @@ namespace Aurora3D
 			return F < cmp ? 1.0f : 0.0f;
 		}
 
-		//1/9 time of ceil(F)
 		A3D_FORCEINLINE constexpr float FloatCeil(float F)
 		{
 			return FloatIntPart(F) + FloatStep(F, 0.f);
@@ -122,7 +124,7 @@ namespace Aurora3D
 
 		A3D_FORCEINLINE constexpr float FloatFloor(float F)
 		{
-			return FloatIntPart(F) - FloatRStep(F, 0.f);
+			return FloatIntPart(F) -FloatRStep(F, 0.f);
 		}
 
 		A3D_FORCEINLINE constexpr float FloatAbs(float F)
@@ -132,8 +134,7 @@ namespace Aurora3D
 
 		A3D_FORCEINLINE constexpr float FloatRound(float F)
 		{
-			float Abs = FloatAbs(F);
-			return FloatSign(F) * (FloatIntPart(Abs) + FloatStep(FloatFracPart(Abs), 0.5f));
+			return FloatFloor(F + 0.5f);
 		}
 
 		A3D_FORCEINLINE constexpr float FloatRadianToDegree(float F)
@@ -146,77 +147,43 @@ namespace Aurora3D
 			return F * kfPiOver180;
 		}
 
-		A3D_FORCEINLINE float FloatExp(float F)
-		{
-			return expf(F);
-		}
-
-		A3D_FORCEINLINE float FloatExp2(float F)
-		{
-			return exp2f(F);
-		}
-
-		A3D_FORCEINLINE float FloatLogE(float F)
-		{
-			return logf(F);
-		}
-
-		A3D_FORCEINLINE float FloatLogX(float F, float base)
-		{
-			return logf(F) / logf(base);
-		}
-
-		A3D_FORCEINLINE float FloatLog2(float F)
-		{
-			return log2f(F);
-		}
+		
 		
 		//convert ambitracy range to [-Pi~+ Pi]
 		A3D_FORCEINLINE float FloatClampRadian(float R)
 		{
-			float signPi = FloatSign(R)*kfPi;
-			return FloatMod(R + signPi, kf2Pi) - signPi;
-		}
-
-		float sine(float x)
-		{
-			const float pi = 3.1415926536f;
-
-			const float P = 0.225f;
-			const float A = 16 * sqrt(P);
-			const float B = (1 - P) / sqrt(P);
-
-			float y = x / (2 * pi);
-			//   mulps xmm0, inv2PI
-
-			y = y - round(y + 0.5);  // y in range -0.5..0.5
-									 // using SSE2 here, RN flag set
-									 //   cvtps2dq xmm1, xmm0
-									 //   cvtdq2ps xmm1, xmm1
-									 //   subps xmm0, xmm1
-
-			y = A * y * (0.5 - abs(y));
-			//   movaps xmm1, xmm0
-			//   andps xmm1, abs
-			//   subps xmm1, half
-			//   mulps xmm0, xmm1
-			//   mulps xmm0, minusA
-
-			return y * (B + abs(y));
-			//   movaps xmm1, xmm0
-			//   andps xmm1, abs
-			//   addps xmm1, B
-			//   mulps xmm0, xmm1
+			return R - FloatFloor(R*kfOneOver2Pi + 0.5f)*kf2Pi;
 		}
 
 		//Vector4 algorithm |-PI~PI| Accurate loss less then 0.001
-		//1/19 time of sin(F) at release mode
-		//based on a good discussion here http://forum.devmaster.net/t/fast-and-accurate-sine-cosine/9648
-		A3D_FORCEINLINE float FloatFastSin(float F)
+		//test data from -PI - PI 1000000 samples
+		// ==> 1/2 time of sin(F) 
+		//FloatFastClampedSin times : 15.659444 ms average times : 0.000016 ms
+		//std::sin            times : 34.593553 ms average times : 0.000035 ms
+		//Max Error : 0.001090 average Error : 0.000505
+		//Max Error Data : 2.948705 Result1 : 0.190603, Result2 : 0.191693
+		A3D_FORCEINLINE float FloatFastClampedSin(float F)
 		{
 			constexpr float P = 0.225;
-			float Y = kf4OverPi * F - kf4OverSquarePiSQ*F*FloatAbs(F);
+			float Y = kf4OverPi * F - kf4OverPiSQ*F*FloatAbs(F);
 			return P *(Y*FloatAbs(Y) - Y) + Y;
+		}
+
+		//based on a good discussion here http://forum.devmaster.net/t/fast-and-accurate-sine-cosine/9648
+		//test data from -3PI - 3PI 1000000 samples
+		//FloatFastSin times : 26.282251 ms average times : 0.000026 ms
+		//std::sin     times : 34.347825 ms average times : 0.000034 ms
+		//Max Error : 0.001091 average Error : 0.000505
+		//Max Error Data : 6.476406 Result1 : 0.190930, Result2 : 0.192021
+		A3D_FORCEINLINE float FloatFastSin(float F)
+		{
+			static const float P = 0.225f;
+			static const float A = 16 * sqrt(P);
+			static const float B = (1 - P) / sqrt(P);
+			float y = F *kfOneOver2Pi;
+			y = y - FloatFloor(y + 0.5f);
+			y = A * y * (0.5f - FloatAbs(y));
+			return y * (B + FloatAbs(y));
 		}
 
 		A3D_FORCEINLINE float FloatFastCos(float F)
@@ -224,7 +191,42 @@ namespace Aurora3D
 			return FloatFastSin(F + kfHalfPi);
 		}
 
-		
+		A3D_FORCEINLINE float FloatSin(float F)
+		{
+			return sin(F);
+		}
+
+		A3D_FORCEINLINE float FloatCos(float F)
+		{
+			return cos(F);
+		}
+
+		//2x faster then atan, max error less then 0.0015, avearage error less then 0.0011
+		//from method metioned at http://www.ntu.edu.sg/home/aukil/papers/conf/2011_IEEE-ISIE11_Fast-arctan.pdf
+		//FloatFastArctan times:19.512873 average times:0.000020
+		//std::atanf      times:43.719867 average times:0.000044
+		//Max Error:0.001509 average Error:0.001103
+		//Max Error Data:2.096100 Result1:1.127164, Result2:1.125655
+		A3D_FORCEINLINE float FloatFastArctan(float F)
+		{
+			if (F < 1.0f)
+			{
+				float absF = FloatAbs(F);
+				return kfQuarterPi * F - F*(absF - 1)*(0.2447 + 0.0663*absF);
+			}
+			else 
+			{
+				//use the fact that  arctan(x) + arctan(1/x) = Pi/2 * sign(x)
+				F = 1 / F;
+				float absF = FloatAbs(F);
+				return FloatSign(F)*kfHalfPi - kfQuarterPi * F + F*(absF - 1)*(0.2447 + 0.0663*absF);
+			}
+		}
+
+		A3D_FORCEINLINE float FloatArctan(float F)
+		{
+			return std::atanf(F);
+		}
 
 		A3D_FORCEINLINE float FloatFastTan(float F)
 		{
@@ -244,6 +246,31 @@ namespace Aurora3D
 		A3D_FORCEINLINE float FloatAtan(float F)
 		{
 			return atan(F);
+		}
+
+		A3D_FORCEINLINE float FloatExp(float F)
+		{
+			return std::expf(F);
+		}
+
+		A3D_FORCEINLINE float FloatExp2(float F)
+		{
+			return std::exp2f(F);
+		}
+
+		A3D_FORCEINLINE float FloatLogE(float F)
+		{
+			return logf(F);
+		}
+
+		A3D_FORCEINLINE float FloatLogX(float F, float base)
+		{
+			return logf(F) / logf(base);
+		}
+
+		A3D_FORCEINLINE float FloatLog2(float F)
+		{
+			return log2f(F);
 		}
 
 		inline float  FloatAtanPos(float X, float Y)
@@ -302,6 +329,12 @@ namespace Aurora3D
 			return floor;
 		}
 
+		A3D_FORCEINLINE int32 CountHeadZero(int32 V)
+		{
+			if (0 == V) return 32;
+			return 31 - IntFloorLog2(V);
+		}
+
 		A3D_FORCEINLINE float FloatPow(float X, float Y)
 		{
 			return powf(X, Y);
@@ -310,12 +343,6 @@ namespace Aurora3D
 		A3D_FORCEINLINE float FloatPow2(float F)
 		{
 			return powf(2.0f, F);
-		}
-
-		A3D_FORCEINLINE int32 CountHeadZero(int32 V)
-		{
-			if (0 == V) return 32;
-			return 31 - FloatFloorLog2(V);
 		}
 
 		A3D_FORCEINLINE int32 CountTailZero(int32 V)

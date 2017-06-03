@@ -1907,8 +1907,7 @@ namespace Aurora3D
 			float128 result = VectorMul(v, math_impl::kVectorOneOver2PI);
 			result = VectorMul(v, math_impl::kVectorOneOver2PI);
 			result = VectorSub(result, VectorRound(result));
-			result = VectorMul(SinCosConstant::A,
-				VectorMul(result,
+			result = VectorMul(SinCosConstant::A,VectorMul(result,
 				VectorSub(math_impl::kVectorHalf, VectorAbs(result))));
 			return VectorMul(result, VectorAdd(SinCosConstant::B,
 				VectorAbs(result)));

@@ -15,9 +15,6 @@ namespace Aurora3D
 		class Vector2;
 		class Euler;
 		class Quaternion;
-
-	
-
 	}
 }
 
