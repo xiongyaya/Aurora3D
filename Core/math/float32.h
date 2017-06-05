@@ -1,6 +1,7 @@
-#pragma once
+﻿#pragma once
 
-#include<cmath>
+
+#include<cmath>  
 #include<Core/type.h>
 
 #if   defined(AURORA3D_SSE)
@@ -19,17 +20,19 @@ namespace Aurora3D
 		constexpr float kfHalf = 1.0f / 2.0f;
 		constexpr float kfPi = 3.1415926535897932f;
 		constexpr float kfHalfPi = kfPi / 2.0f;
-		constexpr float kfQuaterNegtivePi = -kfPi / 4.0f;
+		constexpr float kfNegtivePi = -kfPi / 2.0f;
 		constexpr float kfQuarterPi = kfPi / 4.0f;
+		constexpr float kfNegtiveQuaterPi = -kfPi / 4.0f;
 		constexpr float kf2Pi = 2 * kfPi;
 		constexpr float kf4Pi = 4 * kfPi;
 		constexpr float kf180OverPi = 180.0f / kfPi;   //radian to degree
 		constexpr float kfPiOver180 = kfPi / 180.0f;   //degree to radian
 		constexpr float kfOneOverPi = 1.0f / kfPi;
+		constexpr float kfOneOverPiSQ = 1.0f / (kfPi*kfPi);
 		constexpr float kfOneOver2Pi = 1.0f / (2 * kfPi);
-		constexpr float kf4OverPiSQ = 4.0f / ( kfPi * kfPi);
 		constexpr float kf4OverPi = 4.0 / kfPi;
-		constexpr int   kiAbsMask  = 0x7fffffff;
+		constexpr float kf4OverPiSQ = 4.0f / (kfPi * kfPi);
+		constexpr int32 kiAbsMask = 0x7fffffff;
 		constexpr int32 kiSignMask = 0x80000000;
 		constexpr int32 kfAllOneMask = 0xffffffff;
 		constexpr int32 kfAllZeroMask = 0x00000000;
@@ -39,24 +42,24 @@ namespace Aurora3D
 		constexpr float kfSmallEpiside = 1.e-6f;
 		constexpr float kfMiddleEpiside = 1.e-4f;
 		constexpr float kfMiddleSQEpiside = 5.e-6f;
-		constexpr float kfLn2 = 0.69314718056;
-		constexpr float kfLn2_2Q = 0.48045301391;
-		constexpr float kfLn2_3Q = 0.333024652;
-		constexpr float kfln2_4Q = 0.230835098583;
-		constexpr float kfLn2_5Q = 0.160002697757;
-		constexpr float kfLn2_6Q = 0.110905418832;
+		constexpr float kfLn2 = 0.69314718056;          //ln2
+		constexpr float kfLn2_2Q = 0.48045301391;       //ln2^2
+		constexpr float kfLn2_3Q = 0.333024652;         //ln2^3
+		constexpr float kfln2_4Q = 0.230835098583;      //ln2^4
+		constexpr float kfLn2_5Q = 0.160002697757;      //ln2^5
+		constexpr float kfLn2_6Q = 0.110905418832;      //ln2^6
 
 		///IEEE 754 Format
 		/**************************************************************************************************************************************
 		*   type     sign      real exp                stored exp                   tail                      value
 		*   +0        0        -127                      0                       0x00000000                  +0.0
 		*   -0        1        -127                      0                       0x00000000                  -0.0
-		*   +1        0         0                        127                     0x00000000                  +1.0                            
+		*   +1        0         0                        127                     0x00000000                  +1.0
 		*   -1        1         0                        127                     0x00000000                  -1.0
 		*  +Inf       0         128                      255                     0x7fffffff                   --
 		*  -Inf       1         128                      255                     0x7fffffff                   --
 		*   NaN      0/1        128                      255                     non-zero                    NaN
-		* regular Number       -126~127                 1~254                
+		* regular Number       -126~127                 1~254
 		*/
 		union Float32
 		{
@@ -65,7 +68,7 @@ namespace Aurora3D
 			struct
 			{
 				uint32 tail : 23;   //hide 1.x and store x
-				uint32 exp :  8;    //range -(2^7-1) ~(2^7) (+offset 2^7-1 => 0~2^8-1)
+				uint32 exp : 8;    //range -(2^7-1) ~(2^7) (+offset 2^7-1 => 0~2^8-1)
 				uint32 sign : 1;    //0 positive, 1 negtive
 			} component;
 		};
@@ -148,7 +151,7 @@ namespace Aurora3D
 
 		A3D_FORCEINLINE constexpr float FloatFloor(float F)
 		{
-			return FloatIntPart(F) -FloatRStep(F, 0.f);
+			return FloatIntPart(F) - FloatRStep(F, 0.f);
 		}
 
 		A3D_FORCEINLINE constexpr float FloatAbs(float F)
@@ -171,93 +174,56 @@ namespace Aurora3D
 			return F * kfPiOver180;
 		}
 
-		//convert ambitracy range to [-Pi~+ Pi]
-		A3D_FORCEINLINE float FloatClampRadian(float R)
-		{
-			return R - FloatFloor(R*kfOneOver2Pi + 0.5f)*kf2Pi;
-		}
-
-		//Vector4 algorithm |-PI~PI| Accurate loss less then 0.001
-		//test data from -PI - PI 1000000 samples
-		// ==> 1/2 time of sin(F) 
-		//FloatFastClampedSin times : 15.659444 ms average times : 0.000016 ms
-		//std::sin            times : 34.593553 ms average times : 0.000035 ms
-		//Max Error : 0.001090 average Error : 0.000505
-		//Max Error Data : 2.948705 Result1 : 0.190603, Result2 : 0.191693
-		A3D_FORCEINLINE float FloatFastClampedSin(float F)
-		{
-			constexpr float P = 0.225;
-			float Y = kf4OverPi * F - kf4OverPiSQ*F*FloatAbs(F);
-			return P *(Y*FloatAbs(Y) - Y) + Y;
-		}
-
-		// for SIMD Algorithm Example, ambitrary range
-		//based on a good discussion here http://forum.devmaster.net/t/fast-and-accurate-sine-cosine/9648
-		//test data from -3PI - 3PI 1000000 samples
-		//FloatFastSin times : 26.282251 ms average times : 0.000026 ms
-		//std::sin     times : 34.347825 ms average times : 0.000034 ms
-		//Max Error : 0.001091 average Error : 0.000505
-		//Max Error Data : 6.476406 Result1 : 0.190930, Result2 : 0.192021
-		A3D_FORCEINLINE float FloatFastSin(float F)
-		{
-			static const float P = 0.225f;
-			static const float A = 16 * sqrt(P);
-			static const float B = (1 - P) / sqrt(P);
-			float y = F *kfOneOver2Pi;
-			y = y - FloatFloor(y + 0.5f);
-			y = A * y * (0.5f - FloatAbs(y));
-			return y * (B + FloatAbs(y));
-		}
-
-		A3D_FORCEINLINE float FloatFastCos(float F)
-		{
-			return FloatFastSin(F + kfHalfPi);
-		}
-
+		// For SIMD Algorithm Example
+		// from method metioned by William and Cody
+		// r5 modified to Get 0 at Pi (clamped)
+		//
+		// ---------Test Case 1 -------Range(-100 ,100) ------- Test at VS15 Release 1000000 Samples -----------
+		// FloatSin    : 12.701865 ms average times : 0.000013 ms
+		// std::sinf   : 22.278055 ms average times : 0.000022 ms
+		// Max Error   : 0.000026 average Error : 0.000004
+		// Max Error F : 90.863388, FloatSin : 0.240447, std::sinf : 0.240420
+		//
+		// TODO: Test On Mac/Phone/Linux/Android
 		A3D_FORCEINLINE float FloatSin(float F)
 		{
-			return sin(F);
+#ifdef AURORA3D_FLOAT_HIGH_PRECISION
+			return std::sinf(F);
+#else
+			constexpr float r1 = -0.1666666660883;
+			constexpr float r2 = 0.008333330720556;
+			constexpr float r3 = -0.0001984083282313;
+			constexpr float r4 = 0.000002752397106775;
+			constexpr float r5 = -0.0000000232425;
+			float signOffset = F >= 0.0 ? 0.5f : -0.5f;
+			F = F - ((int32)(F*kfOneOver2Pi + signOffset))*kf2Pi;        //clamped to [-Pi, Pi]
+			float F2 = F*F;
+			return (((((r5*F2 + r4)*F2 + r3)*F2 + r2)*F2 + r1)*F2 + 1.0f)*F;
+#endif
 		}
 
 		A3D_FORCEINLINE float FloatCos(float F)
 		{
-			return cos(F);
+			return FloatSin(F + kfHalfPi);
 		}
 
-		//sometime 2x faster then atan, 
-		//from method metioned at http://www.ntu.edu.sg/home/aukil/papers/conf/2011_IEEE-ISIE11_Fast-arctan.pdf
-		//FloatFastArctan times:26.512873 ms  1000000 times
-		//std::atanf      times:43.719867 ms
-		//Max Error:0.001509 average Error:0.001103  
-		//Max Error Data:2.096100 Result1:1.127164, Result2:1.125655
-		//Max 0.27 degree error average 0.18 degree error
-		A3D_FORCEINLINE float FloatApproxArctan(float F)
+		// For SIMD Algorithm Example
+		// from method metioned at http://www.ntu.edu.sg/home/aukil/papers/conf/2011_IEEE-ISIE11_Fast-arctan.pdf
+		// original fomula :                    F*(F − 1)*(0.2447 + 0.0663*F)
+		// improved By additional Polynomial To F*(F - 1)*(0.21758 + 0.200587*F - 0.137*F*F) 
+		// 
+		// ----------Test Case 1 -------Range(-10000 ,10000) 1000000 Samples -------- Test at VS15 Release---------
+		//FloatArctan times : 10.939223 ms average times : 0.000011 ms
+		//std::atanf  times : 20.358904 ms average times : 0.000020 ms
+		//Max Error         : 0.000137 average Error : 0.000002
+		//Max Error F       : -2.680664 ,FloatArctan : -1.213880, std::atanf : -1.213743
+		//
+		// TODO: Test On Mac/Phone/Linux/Android
+		A3D_FORCEINLINE float FloatArctan(float F)
 		{
-			float sign = FloatSign(F);
-			float absF = sign*F;
-			if (absF < 1.0f)
-			{
-				return F*(kfQuarterPi - (absF - 1)*(0.2447 + 0.0663*absF));
-			}
-			else 
-			{
-				//use the fact that  arctan(x) + arctan(1/x) = Pi/2 * sign(x)
-				F = 1 / F;
-				absF = F*sign;
-				return sign*kfHalfPi - F*(kfQuarterPi - (absF - 1)*(0.2447 + 0.0663*absF));
-			}
-		}
-
-		// for SIMD Algorithm Example
-		// float version 2x faster then std::atan at Release
-		// deduce from FloatApproxArctan 
-		// improve to formula kfQuarterPi * F - F*(F - 1)*(0.21758 + 0.200587*F - 0.137*F*F);
-		// FloatFastArctan : 25.3309  ms 1000000 times
-		// std::atan       : 54.5346  ms
-		// Max Error : 0.000137 average Error : 0.000063
-		// Max Error Data : 2.656998 Result1 : 1.210967, Result2 : 1.210830
-		A3D_FORCEINLINE float FloatFastArctan(float F)
-		{
+#ifdef AURORA3D_FLOAT_HIGH_PRECISION
+			return std::atanf(F);
+#else
 			constexpr float A = kfQuarterPi + 0.21758f;
 			constexpr float B = 0.200587f - 0.21758f;
 			constexpr float C = -0.137f - 0.200587f;
@@ -271,56 +237,94 @@ namespace Aurora3D
 				absF = sign*F;
 				step = -2.0f;
 			}
-			return kfQuaterNegtivePi*step*sign + (step+1.0f) * F* ((A + B*absF) + F*F*(C + D*absF));
+			return kfNegtiveQuaterPi*step*sign + (step + 1.0f) * F* ((A + B*absF) + F*F*(C + D*absF));
+#endif
 		}
 
-		A3D_FORCEINLINE float FloatArctan(float F)
+		// For Vector4 Algorithm Example  
+		// From tylor-expansion 2^x = 1 + ln2*x + ln2^2/2 x^2 + ln2^3/(3*2*1)*x^3 ... iterate 6 time is enough
+		//
+		// ----------Test Case 1 --------Range(0.0f,33.0f) 1000000 Samples -------- Test at VS15 Release  -------
+		// nearly 7x faster then std::exp2f  (can't believe my eyes)
+		// FloatExp2   : 11.962299 ms average times : 0.000012 ms
+		// std::expf   : 79.797091 ms average times : 0.000080 ms
+		// Max Error   : 0.000008 average Error : 0.000001 (Reletive Error Because 2^F always greater equal then 1.0f )
+		// Max Error F : 6.999399 FloatExp2 : 127.945625, std::expf : 127.946709
+		//
+		// ----------Test Case 2 --------Range(-33.0f,0.0f) 1000000 Samples -------- Test at VS15 Release  -------
+		// FloatExp2 times : 11.736838 ms average times : 0.000012 ms
+		// std::expf times : 79.340074 ms average times : 0.000079 ms
+		// Max Error       : 0.000028 average Error : 0.000003 (Absolute Error because 2^F always less then 1.0f )
+		// Max Error F     : -7.999992 Result1 : 0.003906, Result2 : 0.003906
+		A3D_FORCEINLINE float FloatExp2(float F)
 		{
-			return std::atanf(F);
-		}
+#ifdef AURORA3D_FLOAT_HIGH_PRECISION
+			return std::exp2f(F);
+#else
+			constexpr float t1 = kfLn2;
+			constexpr float t2 = kfLn2_2Q / 2.0f;
+			constexpr float t3 = kfLn2_3Q / 6.f;
+			constexpr float t4 = kfln2_4Q / 24.f;
+			constexpr float t5 = kfLn2_5Q / 120.f;
+			constexpr float t6 = kfLn2_6Q / 720.f;
 
-		//For Vector4 Algorithm Example  
-		//tylor-expansion 2^x = 1 + ln2*x + ln2^2/2 x^2 + ln2^3/(3*2*1)*x^3 ... iterate 5 time is enough
-		// 3x faster then std::exp2f at Release
-		//FloatFastExp2 times:  35.617070 ms 1000000 times
-		//std::exp2f    times : 90.409712 ms 
-		//Max Error :   0.000330 average Error : 0.000025
-		//Max Error Data : -9.999960 Result1 : 0.000976, Result2 : 0.000977
-		A3D_FORCEINLINE float FloatFastExp2(float F)
-		{
 			int exp = (127 + (int)F) << 23;
 			const float int_exp = *reinterpret_cast<float*>(&exp);
 			F = F - (int)F;
-			const float F2 = F*F;
-			const float F3 = F2*F;
-			return int_exp*(1 + kfLn2*F + (kfLn2_2Q / 2.f)*F2 + (kfLn2_3Q / 6.f)*F3 + (kfln2_4Q / 24.f)*F2*F2 + (kfLn2_5Q / 120.f)*F2*F3);
+			return int_exp*(1 + F*(t1 + F*(t2 + F*(t3 + F*(t4 + F*(t5 + t6*F))))));
+#endif
 		}
 
-		// can be 2x faster then std::tan(F) in vs15 Release mode
-		// For Vector4 Algorithm Example  
-		// #### => Test Case 1 range from (0 ~ Pi/2- 0.03f(0.54 degree to Pi/2) )
-		//   FloatFastTan times:28.918495 average times:0.000029
-		//   std:: times : 54.519266 average times : 0.000055
-		//   Max Error : 0.000158 average Error : 0.000004  Reletive Error
-		//   Max Error Data : 1.540749 Result1 : 33.265118, Result2 : 33.270367
-		// #### => Test Case 2 range (0~ Pi/2 -0.003f(0.054 degree to Pi/2))
-		//   func1 times:  26.213905 average times: 0.000026
-		//   func2 times : 53.265736 average times: 0.000053
-		//   Max Error : 0.001934 average Error : 0.000012
-		//   Max Error Data : 1.567790 Result1 : 332.005402, Result2 : 332.647491
-		A3D_FORCEINLINE float FloatFastTan(float F)
+		A3D_FORCEINLINE float FloatExp(float F)
 		{
-			constexpr float p1 = -0.1113614403566;
-			constexpr float p2 = 0.001075154738488;
-			constexpr float q1 = -0.4446947720281;
-			constexpr float q2 = 0.015973392133;
+			
+			return 1 + F*(1.0f / 2.0f + F*(1.0f / 6.0f + F*(1.0f / 24.0f + F*(1.0f / 120.0f + F*1.0f / 720.0f)))) / den;
+		}
+
+
+
+		// For Vector4 Algorithm Example  
+		// from method metioned by William and Cody
+		//
+		// ----------Test Case 1 --------Range(-Pi/2+0.0001 , Pi/2-0.0001 (+-)0.018 Degree ) 1000000 Samples -------- Test at VS15 Release  -------
+		//FloatTan    : 13.658875 ms average times : 0.000014 ms
+		//std::tanf   : 27.357839 ms average times : 0.000027 ms
+		//Max Error   : 0.00086909 average Error : 0.00000021
+		//Max Error F : -1.57068062, FloatTan : -8649.92382813, std::tanf : -8642.406250
+		//
+		// ----------Test Case 2 --------Range(-Pi/2+0.001 , Pi/2-0.001 (+-)0.18 Degree ) 1000000 Samples -------- Test at VS15 Release  -------
+		//func1 times : 13.912238 ms average times : 0.000014 ms
+		//func2 times : 28.605415 ms average times : 0.000029 ms
+		//Max Error : 0.00009596 average Error : 0.00000015
+		//Max Error F : -1.56970215, FloatTan : -914.01513672, std::tanf : -913.927429
+		//
+		A3D_FORCEINLINE float FloatTan(float F)
+		{
+#ifdef AURORA3D_FLOAT_HIGH_PRECISION
+			return std::tanf(F);
+#else
+			constexpr float p1 = -0.1282834704095743847;
+			constexpr float p2 = 0.002805918241169988906;
+			constexpr float p3 = -0.000007483634966612065149;
+			constexpr float q1 = -0.461616803742904884;
+			constexpr float q2 = 0.02334485282206872802;
+			constexpr float q3 = -0.0002084480442203870948;
+
+			float signOffset = F >= 0.0 ? 0.5f : -0.5f;
+			F = F - ((int32)(F*kfOneOverPi + signOffset))*kfPi;        //clamped to [-Pi/2, Pi/2]
 			float F2 = F*F;
-			return F*(1.0f + F2*(p2*F2 + p1)) / (1.0f + (q2*F2+q1)*F2);
+			return F*(1.0f + F2*((p3*F2+p2)*F2 + p1)) / (1.0f + ((q3*F2+q2)*F2 + q1)*F2);
+#endif
 		}
 
 		A3D_FORCEINLINE float FloatAsin(float F)
 		{
-			return sinf(F);
+			float absF = FloatAbs(F);
+			if (absF > 1.0f) return kfNaN;  //not a number
+			
+			const float F2 = F*F;
+
+			return F*(1 + F2*(1 / 6 + F2*(5 / 112 + +35 / 1152 * F2)));
 		}
 
 		A3D_FORCEINLINE float FloatAcos(float F)
@@ -333,15 +337,7 @@ namespace Aurora3D
 			return atan(F);
 		}
 
-		A3D_FORCEINLINE float FloatExp(float F)
-		{
-			return std::expf(F);
-		}
-
-		A3D_FORCEINLINE float FloatExp2(float F)
-		{
-			return std::exp2f(F);
-		}
+	
 
 		A3D_FORCEINLINE float FloatLogE(float F)
 		{
@@ -449,7 +445,7 @@ namespace Aurora3D
 		}
 
 		A3D_FORCEINLINE float FloatSqrt(float F)
-		{
+		{   
 #if   defined(AURORA3D_SSE) 
 			return _mm_sqrt_ss(_mm_load1_ps(&F)).m128_f32[0];
 #elif 
@@ -459,23 +455,13 @@ namespace Aurora3D
 #endif
 		}
 
-		//fast 1/x^1/2 accuracy loss less then 0.0001
-		A3D_FORCEINLINE float FloatFastRcpSqrt(float F)
-		{
-			constexpr float one = 1.0f;
-#if   defined(AURORA3D_SSE) 
-			return _mm_rsqrt_ss(_mm_load_ss(&F)).m128_f32[0];
-#elif defined(AURORA3D_NEON)
-			__n128 sqrt = vsqrtq_f32(vdupq_n_f32(F);
-			__n128 rcp_sqrt = vrecpeq_f32(sqrt);
-			return vmulq_f32(vrecpsq_f32(sqrt, rcp_sqrt), rcp_sqrt).n128_f32[0];
-#else
-			return 1.0f / sqrtf(F);
-#endif
-		}
 
 		//1 iteration Newton-Raphson, Accuracy is enough
-		//error less then 0.0000001
+		//
+		//FloatRcpSqrt    : 8.700963 ms average times : 0.000009 ms
+		//1.0f/ std::sqrt : 11.520356 ms average times : 0.000012 ms
+		//Max Error       : 0.00000028 average Error : 0.00000004
+		//Max Error F     : 38.87512207, FloatRcpSqrt : 0.16038510, 1.0f/ std::sqrt : 0.160385
 		A3D_FORCEINLINE float FloatRcpSqrt(float F)
 		{
 			float p = F / 2.0f;

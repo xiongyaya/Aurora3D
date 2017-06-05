@@ -52,7 +52,7 @@ void TestError(std::function<float(float)> func1, std::function<float(float)> fu
 	int count = 0;
 	for (int i = 0; i < times; ++i)
 	{
-		if (abs(second_data[i]) < 0.000005f) continue;                          //data too small
+		if (abs(second_data[i]) < 0.0001f) continue;                          //data too small
 		count++;
 
 		double error;
@@ -70,11 +70,11 @@ void TestError(std::function<float(float)> func1, std::function<float(float)> fu
 	AvaError = totalError / count;
 	double time1 = (point2 - point1).count() / 1000000.0; //ms
 	double time2 = (point3 - point2).count() / 1000000.0; //ms
-	printf("func1 times:%lf average times:%lf \n", time1, time1 / (double)times);
-	printf("func2 times:%lf average times:%lf \n", time2, time2 / (double)times);
+	printf("func1 times:%lf ms average times:%lf ms \n", time1, time1 / (double)times);
+	printf("func2 times:%lf ms average times:%lf ms \n", time2, time2 / (double)times);
 	float data = start + MaxI*slice;
-	printf("Max Error:%lf average Error:%lf\n", MaxError, AvaError);
-	printf("Max Error Data:%lf Result1:%lf, Result2:%lf\n\n", data, first_data[MaxI], second_data[MaxI]);
+	printf("Max Error:%0.8lf average Error:%0.8lf\n", MaxError, AvaError);
+	printf("Max Error F:%0.8lf ,Result1:%0.8lf, Result2:%lf\n\n", data, first_data[MaxI], second_data[MaxI]);
 	
 }
 
@@ -284,6 +284,12 @@ A3D_FORCENOINLINE __m128  LoadSint
 #endif
 }
 
+__forceinline float TestRSqrt(float F)
+{
+	return 1.0f/sqrtf(F);
+}
+
+
 inline void TestFloat()
 {
 	
@@ -379,8 +385,8 @@ inline void TestFloat()
 		//		for(int l=-0;l<=0;++l)
 		//	{
 		//		//auto fun = std::bind(FloatFastTan, 0.0147+0.000001f*i, 0.01f*j, std::placeholders::_1);
-		//		auto fun = std::bind(FloatFastTan, -2.481933f+0.0000001f*i, 0.20f+0.001f*j,0.01f*k, std::placeholders::_1);
-		//		TestSuitableParameter(fun, std::tanf, true, 0, kfHalfPi-0.0001f, 1000, MaxError);
+		//		auto fun = std::bind(FloatExp, -0.1+0.01f*i, -0.5+0.01f*j, 0.1f*k, 0.1f*l, std::placeholders::_1);
+		//		TestSuitableParameter(fun, std::tanf, true, 0, 5, 1000, MaxError);
 		//		if (MaxError < minError)
 		//		{
 		//			minError = MaxError;
@@ -395,10 +401,14 @@ inline void TestFloat()
 	printf("most suitable I:%d %d %d %d MaxError:%lf \n\n ", SuitableI, SuitableJ, SuitableK,SuitableL, minError);
 	//auto fun = std::bind(FloatFastArctan, -0.76, 0.7f, 1.35f, -0.084f, std::placeholders::_1);
 	//auto fun = std::bind(FloatFastTan, -2.48193f, 0.2f,0.0f, std::placeholders::_1);
-	TestError(FloatFastTan, std::tanf, true, 0, kfHalfPi-0.003f, 1000000);
+	//TestError(FloatCos, std::cosf, true, 0, 33.f, 1000000);
+
+	cout << "----" << endl;
+	//TestError(FloatExp, expf, true, -10 , 0, 1000000);
+	cout << " ----" << endl;
 	//TestError(FloatFastTan, std::tanf, true, kfQuarterPi, kfHalfPi-1.0f, 1000000);
 	//cout << " " << FloatFastArctan(-200.0f) << " " << FloatFastArctan(-5.0f) << " " << FloatFastArctan(-0.5f) << " " << FloatFastArctan(0.0f) << " " << FloatFastArctan(0.5f) << " " << FloatFastArctan(5.0f) << " " << FloatFastArctan(100.0f) << " " << endl;
 	//cout << " " << atanf(-200.0f) << " " << atanf(-5.0f) << " " << atanf(-0.5f) << " " << atanf(0.0f) << " " << atanf(0.5f) << " " << atanf(5.0f) << " " << atanf(100.0f) << " " << endl;
-
+	TestError(FloatSin, std::sinf, true, 0, 33.f, 1000000);
 	int c = 0;
 }
