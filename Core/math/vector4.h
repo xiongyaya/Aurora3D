@@ -566,7 +566,6 @@ namespace Aurora3D
 		A3D_FORCEINLINE bool Vector4::AnyFalse3() const { return VectorAnyFalse3(vec); }
 		A3D_FORCEINLINE bool Vector4::AnyFalse2() const { return VectorAnyFalse2(vec); }
 #else //FPU implements
-        
 #endif
 	
 	}

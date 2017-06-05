@@ -2,6 +2,7 @@
 
 #include<Core/math/float32.h>
 #include<functional>
+#include<functional>
 #include<random>
 #include<memory>
 #include<chrono>
@@ -11,7 +12,7 @@ using namespace Aurora3D::math;
 typedef float(*PFunc)(float);
 typedef float(*PFunc2)(float,float);
 
-void TestError(PFunc func1, PFunc func2, bool releativeError, float start, float end, int times)
+void TestError(std::function<float(float)> func1, std::function<float(float)> func2, bool releativeError, float start, float end, int times)
 {
 	float range = end - start;
 	float slice = range / (float)times;
@@ -51,12 +52,12 @@ void TestError(PFunc func1, PFunc func2, bool releativeError, float start, float
 	int count = 0;
 	for (int i = 0; i < times; ++i)
 	{
-		if (second_data[i] < 0.0005f) continue;                          //data too small
+		if (abs(second_data[i]) < 0.000005f) continue;                          //data too small
 		count++;
 
 		double error;
 		if (releativeError)
-			error = (second_data[i] - first_data[i]) / second_data[i];   //releative error
+			error = (second_data[i] - first_data[i]) / first_data[i];   //releative error
 		else
 			error = (second_data[i] - first_data[i]);                    //absolute error
 
@@ -73,11 +74,71 @@ void TestError(PFunc func1, PFunc func2, bool releativeError, float start, float
 	printf("func2 times:%lf average times:%lf \n", time2, time2 / (double)times);
 	float data = start + MaxI*slice;
 	printf("Max Error:%lf average Error:%lf\n", MaxError, AvaError);
-	printf("Max Error Data:%lf Result1:%lf, Result2:%lf\n\n", data, func1(data), func2(data));
+	printf("Max Error Data:%lf Result1:%lf, Result2:%lf\n\n", data, first_data[MaxI], second_data[MaxI]);
 	
 }
 
 
+void TestSuitableParameter(std::function<float(float)> func1, std::function<float(float)> func2, bool releativeError, float start, float end, int times, double& outMaxError)
+{
+	float range = end - start;
+	float slice = range / (float)times;
+	std::unique_ptr<float[]> input_data(new float[times]);
+	std::unique_ptr<float[]> input_data2(new float[times]);
+	std::unique_ptr<float[]> first_data(new float[times]);
+	std::unique_ptr<float[]> second_data(new float[times]);
+
+	for (int i = 0; i < times; ++i)
+	{
+		input_data[i] = start + i*slice;
+	}
+	std::chrono::high_resolution_clock clock;
+	/*std::default_random_engine generator(time(nullptr));
+	std::uniform_real_distribution<float> dis(start, end);
+	auto Random = std::bind(dis, generator);*/
+
+
+	auto point1 = clock.now();
+
+	for (int i = 0; i < times; ++i)
+	{
+		first_data[i] = func1(input_data[i]);
+	}
+
+	auto point2 = clock.now();
+	for (int i = 0; i < times; ++i)
+	{
+		second_data[i] = func2(input_data[i]);
+	}
+	auto point3 = clock.now();
+
+	double MaxError = 0;
+	double AvaError = 0.0f;
+	double totalError = 0.0f;
+	int MaxI = 0;
+	int count = 0;
+	for (int i = 0; i < times; ++i)
+	{
+		//if (first_data[i] > 1.0f) continue;
+		if (abs(second_data[i]) < 0.001f) continue;                          //data too small
+		count++;
+
+		double error;
+		if (releativeError)
+			error = (second_data[i] - first_data[i]) / first_data[i];   //releative error
+		else
+			error = (second_data[i] - first_data[i]);                    //absolute error
+
+		if (abs(error) > abs(MaxError)) {
+			MaxError = abs(error);
+			outMaxError = MaxError;
+			MaxI = i;
+		}
+		totalError += abs(error);
+	}
+	AvaError = totalError / count;
+	
+}
 
 void TestError(PFunc2 func1, PFunc2 func2, bool releativeError, float start1, float end1,  float start2, float end2, int times)
 {
@@ -265,19 +326,79 @@ inline void TestFloat()
 	//cout << " Test ClampedSin Time and accuracy:" << endl;
 	//TestError(FloatFastSin, std::sinf, false, -kfPi, kfPi, 1000000);
 
-	////cout << " test case:" << FloatArctan(2) << " " << atan(2) << endl;
-	//cout << " Test arctan Time and accuracy:" << endl;
-	//TestError(FloatFastArctan, std::atan, false, -10, 10, 1000000);
+	//cout << " test case:" << FloatArctan(2) << " " << atan(2) << endl;
+	/*cout << " Test arctan Time and accuracy:" << endl;
+	TestError(FloatFastArctan, std::atan, false, -10, 10, 1000000);
 
-	//cout << " Test floor Time:" << endl;
-	//TestError(FloatCeil, std::ceilf, false, -10000, 10000, 1000000);
+	cout << " Test floor Time:" << endl;
+	TestError(FloatCeil, std::ceilf, false, -10000, 10000, 1000000);
 
-	//cout << " Test mod Time:" << endl;
-	//TestError(FloatMod, fmodf, true, -100, 100, 1,2, 1000000);
-
-	float a = 1 << -1;
 	cout << " Test exp2 Time:" << FloatFastExp2(-1.0f)<< endl;
-	TestError(FloatFastExp2, std::exp2f, false, -1, 1, 1000000);
+	TestError(FloatFastExp2, std::exp2f, true, -20, 20, 1000000);
+
+	cout << " Test mod Time:" << endl;
+	TestError(FloatMod, fmodf, false, -100, 100, 1, 2, 1000000);*/
+
+	//cout << " test case:" << FloatArctan(2) << " " << atan(2) << endl;
+	cout << " Test arctan Time and accuracy:" << endl;
+	int SuitableI = 0;
+	int SuitableJ = 0;
+	int SuitableK = 0;
+	int SuitableL = 0;
+	double MaxError = 0.0;
+	double minError = 1000000000.0f;
+	
+	// arctan
+	// 0.22    0.2      -0.14
+	// 0.217   0.203    -0.139
+	// 0.2176  0.2005   -0.13
+	// 0.21758 0.2006   -0.137
+	// 0.21758 0.200587 -0.137
+	// I:1 -6 9 0 MaxError:0.422036
+	 //I:3 - 10 4 8 MaxError : 0.478804
+	// I:9 3 -5 1 MaxError:0.015901
+
+	//I:0 40 0 0 MaxError:0.047289
+	//I:-1 -15 0 0 MaxError:0.030989
+	//I:-53 -20 0 0 MaxError:0.025970
+	//I: 4 -20 0 0 MaxError:0.025949
+	//I:0 0 0 0 MaxError:0.210513
+
+	// 0.1 0.1 0.01 
+    // I:0 1 7 0 MaxError:0.009937
+	// I:0 1 -2 0 MaxError:0.007879
+	// I:0 1 4 0 MaxError:0.007668
+
+	//I:3 0 0 0 MaxError:0.102996
+
+	//I:-2 2 0 0 MaxError:0.005882
+	//I: 1 2 0 0 MaxError:0.005871
+	 //for(int i=-10; i<=10; ++i)
+		//for(int j=-10; j<=10; ++j)
+		//	for (int k = -10; k <= 10; ++k)
+		//		for(int l=-0;l<=0;++l)
+		//	{
+		//		//auto fun = std::bind(FloatFastTan, 0.0147+0.000001f*i, 0.01f*j, std::placeholders::_1);
+		//		auto fun = std::bind(FloatFastTan, -2.481933f+0.0000001f*i, 0.20f+0.001f*j,0.01f*k, std::placeholders::_1);
+		//		TestSuitableParameter(fun, std::tanf, true, 0, kfHalfPi-0.0001f, 1000, MaxError);
+		//		if (MaxError < minError)
+		//		{
+		//			minError = MaxError;
+		//			SuitableI = i;
+		//			SuitableJ = j;
+		//			SuitableK = k;
+		//			SuitableL = l;
+		//		}
+		//	}
+		//printf("MaxError:%lf \n", MaxError);
+	
+	printf("most suitable I:%d %d %d %d MaxError:%lf \n\n ", SuitableI, SuitableJ, SuitableK,SuitableL, minError);
+	//auto fun = std::bind(FloatFastArctan, -0.76, 0.7f, 1.35f, -0.084f, std::placeholders::_1);
+	//auto fun = std::bind(FloatFastTan, -2.48193f, 0.2f,0.0f, std::placeholders::_1);
+	TestError(FloatFastTan, std::tanf, true, 0, kfHalfPi-0.003f, 1000000);
+	//TestError(FloatFastTan, std::tanf, true, kfQuarterPi, kfHalfPi-1.0f, 1000000);
+	//cout << " " << FloatFastArctan(-200.0f) << " " << FloatFastArctan(-5.0f) << " " << FloatFastArctan(-0.5f) << " " << FloatFastArctan(0.0f) << " " << FloatFastArctan(0.5f) << " " << FloatFastArctan(5.0f) << " " << FloatFastArctan(100.0f) << " " << endl;
+	//cout << " " << atanf(-200.0f) << " " << atanf(-5.0f) << " " << atanf(-0.5f) << " " << atanf(0.0f) << " " << atanf(0.5f) << " " << atanf(5.0f) << " " << atanf(100.0f) << " " << endl;
 
 	int c = 0;
 }
