@@ -78,15 +78,15 @@ void TestError(std::function<float(float)> func1, std::function<float(float)> fu
 	
 }
 
-
-void TestSuitableParameter(std::function<float(float)> func1, std::function<float(float)> func2, bool releativeError, float start, float end, int times, double& outMaxError)
+typedef double(*Standard)(double);
+void TestSuitableParameter(std::function<double(double)> func1, Standard func2, bool releativeError, double start, double end, int times, double& outMaxError)
 {
-	float range = end - start;
-	float slice = range / (float)times;
-	std::unique_ptr<float[]> input_data(new float[times]);
-	std::unique_ptr<float[]> input_data2(new float[times]);
-	std::unique_ptr<float[]> first_data(new float[times]);
-	std::unique_ptr<float[]> second_data(new float[times]);
+	double range = end - start;
+	double slice = range / times;
+	std::unique_ptr<double[]> input_data(new double[times]);
+	std::unique_ptr<double[]> input_data2(new double[times]);
+	std::unique_ptr<double[]> first_data(new double[times]);
+	std::unique_ptr<double[]> second_data(new double[times]);
 
 	for (int i = 0; i < times; ++i)
 	{
@@ -120,7 +120,7 @@ void TestSuitableParameter(std::function<float(float)> func1, std::function<floa
 	for (int i = 0; i < times; ++i)
 	{
 		//if (first_data[i] > 1.0f) continue;
-		if (abs(second_data[i]) < 0.001f) continue;                          //data too small
+		if (abs(second_data[i]) < 0.000000001f) continue;                          //data too small
 		count++;
 
 		double error;
@@ -354,54 +354,37 @@ inline void TestFloat()
 	double MaxError = 0.0;
 	double minError = 1000000000.0f;
 	
-	// arctan
-	// 0.22    0.2      -0.14
-	// 0.217   0.203    -0.139
-	// 0.2176  0.2005   -0.13
-	// 0.21758 0.2006   -0.137
-	// 0.21758 0.200587 -0.137
-	// I:1 -6 9 0 MaxError:0.422036
-	 //I:3 - 10 4 8 MaxError : 0.478804
-	// I:9 3 -5 1 MaxError:0.015901
-
-	//I:0 40 0 0 MaxError:0.047289
-	//I:-1 -15 0 0 MaxError:0.030989
-	//I:-53 -20 0 0 MaxError:0.025970
-	//I: 4 -20 0 0 MaxError:0.025949
-	//I:0 0 0 0 MaxError:0.210513
-
-	// 0.1 0.1 0.01 
-    // I:0 1 7 0 MaxError:0.009937
-	// I:0 1 -2 0 MaxError:0.007879
-	// I:0 1 4 0 MaxError:0.007668
-
-	//I:3 0 0 0 MaxError:0.102996
-
-	//I:-2 2 0 0 MaxError:0.005882
-	//I: 1 2 0 0 MaxError:0.005871
-	 //for(int i=-10; i<=10; ++i)
-		//for(int j=-10; j<=10; ++j)
-		//	for (int k = -10; k <= 10; ++k)
-		//		for(int l=-0;l<=0;++l)
-		//	{
-		//		//auto fun = std::bind(FloatFastTan, 0.0147+0.000001f*i, 0.01f*j, std::placeholders::_1);
-		//		auto fun = std::bind(FloatExp, -0.1+0.01f*i, -0.5+0.01f*j, 0.1f*k, 0.1f*l, std::placeholders::_1);
-		//		TestSuitableParameter(fun, std::tanf, true, 0, 5, 1000, MaxError);
-		//		if (MaxError < minError)
-		//		{
-		//			minError = MaxError;
-		//			SuitableI = i;
-		//			SuitableJ = j;
-		//			SuitableK = k;
-		//			SuitableL = l;
-		//		}
-		//	}
-		//printf("MaxError:%lf \n", MaxError);
 	
-	printf("most suitable I:%d %d %d %d MaxError:%lf \n\n ", SuitableI, SuitableJ, SuitableK,SuitableL, minError);
+	/*for (int i = -10000; i <= 10000; ++i)
+		for (int j = -0; j <= 0; ++j)
+			for (int k = -0; k <= 0; ++k)
+				for (int l = -0; l <= 0; ++l)*/
+	/*for (int i = -10; i <= 10; ++i)
+		for (int j = -10; j <= 10; ++j)
+			for (int k = -10; k <= 10; ++k)
+				for (int l = -0; l <= 0; ++l)
+			{
+				
+				auto fun = std::bind(FloatLog2, -0.286+0.0001*i,1.300+0.001*j,0.01*k, std::placeholders::_1);
+				TestSuitableParameter(fun, log2, false, 1, 2, 1000, MaxError);
+				
+				if (MaxError < minError)
+				{
+					minError = MaxError;
+					SuitableI = i;
+					SuitableJ = j;
+					SuitableK = k;
+					SuitableL = l;
+				}
+			}
+		printf("MaxError:%lf \n", MaxError);
+	
+	printf("most suitable I:%d %d %d %d MaxError:%lf \n\n ", SuitableI, SuitableJ, SuitableK,SuitableL, minError);*/
 	//auto fun = std::bind(FloatFastArctan, -0.76, 0.7f, 1.35f, -0.084f, std::placeholders::_1);
 	//auto fun = std::bind(FloatFastTan, -2.48193f, 0.2f,0.0f, std::placeholders::_1);
-	TestError(FloatExp, std::expf, true, -30, 30, 1000000);
+	//TestError(FloatLog2, std::log2f, false, 1, 2, 1000000);
+
+	 
 
 	cout << FloatExp10(1) << " " << FloatExp10(2) << " " << FloatExp10(3) << " " << FloatExp10(4) << " " << FloatExp10(5) << " " << FloatExp10(6) << " " << endl;
 	cout << FloatExp10(-1) << " " << FloatExp10(-2) << " " << FloatExp10(-3) << " " << FloatExp10(-4) << " " << FloatExp10(-5) << " " << FloatExp10(-6) << " " << endl;

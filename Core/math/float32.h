@@ -19,6 +19,8 @@ namespace Aurora3D
 		//some constexpr value
 		constexpr float kfHalf = 1.0f / 2.0f;
 		constexpr float kfPi = 3.1415926535897932f;
+		constexpr float kfLn2 = 0.69314718055994531f;
+		constexpr float kfE =  2.718281828459f;
 		constexpr float kfHalfPi = kfPi / 2.0f;
 		constexpr float kfNegtivePi = -kfPi / 2.0f;
 		constexpr float kfQuarterPi = kfPi / 4.0f;
@@ -42,12 +44,11 @@ namespace Aurora3D
 		constexpr float kfSmallEpiside = 1.e-6f;
 		constexpr float kfMiddleEpiside = 1.e-4f;
 		constexpr float kfMiddleSQEpiside = 5.e-6f;
-		constexpr float kfLn2 = 0.69314718056;          //ln2
-		constexpr float kfLn2_2Q = 0.48045301391;       //ln2^2
-		constexpr float kfLn2_3Q = 0.333024652;         //ln2^3
-		constexpr float kfln2_4Q = 0.230835098583;      //ln2^4
-		constexpr float kfLn2_5Q = 0.160002697757;      //ln2^5
-		constexpr float kfLn2_6Q = 0.110905418832;      //ln2^6
+		constexpr int32 kiFloatExpMask = 0x7f800000;
+		constexpr int32 kiFloatBaseMask = 0x807fffff;
+		constexpr int32 kiFloatExpShiftCount = 23;
+		constexpr int32 kiFloatExpOffset = 127;
+		constexpr int32 kiEvenOddMask = 0x00000001;
 
 		///IEEE 754 Format
 		/**************************************************************************************************************************************
@@ -190,15 +191,15 @@ namespace Aurora3D
 #ifdef AURORA3D_FLOAT_HIGH_PRECISION
 			return std::sinf(F);
 #else
-			constexpr float r1 = -0.1666666660883;
-			constexpr float r2 = 0.008333330720556;
-			constexpr float r3 = -0.0001984083282313;
-			constexpr float r4 = 0.000002752397106775;
-			constexpr float r5 = -0.0000000232425;
+			constexpr float t1 = -0.1666666660883;
+			constexpr float t2 = 0.008333330720556;
+			constexpr float t3 = -0.0001984083282313;
+			constexpr float t4 = 0.000002752397106775;
+			constexpr float t5 = -0.0000000232425;
 			float signOffset = F >= 0.0 ? 0.5f : -0.5f;
 			F = F - ((int32)(F*kfOneOver2Pi + signOffset))*kf2Pi;        //clamped to [-Pi, Pi]
 			float F2 = F*F;
-			return (((((r5*F2 + r4)*F2 + r3)*F2 + r2)*F2 + r1)*F2 + 1.0f)*F;
+			return (((((t5*F2 + t4)*F2 + t3)*F2 + t2)*F2 + t1)*F2 + 1.0f)*F;
 #endif
 		}
 
@@ -258,10 +259,10 @@ namespace Aurora3D
 #ifdef AURORA3D_FLOAT_HIGH_PRECISION
 			return std::atanf(F);
 #else
-			constexpr float A = kfQuarterPi + 0.21758f;
-			constexpr float B = 0.200587f - 0.21758f;
-			constexpr float C = -0.137f - 0.200587f;
-			constexpr float D = 0.137f;
+			constexpr float t1 = kfQuarterPi + 0.21758f;
+			constexpr float t2 = 0.200587f - 0.21758f;
+			constexpr float t3 = -0.137f - 0.200587f;
+			constexpr float t4 = 0.137f;
 			float sign = FloatSign(F);
 			float absF = F*sign;
 			float step = 0.0f;
@@ -271,7 +272,7 @@ namespace Aurora3D
 				absF = sign*F;
 				step = -2.0f;
 			}
-			return kfNegtiveQuaterPi*step*sign + (step + 1.0f) * F* ((A + B*absF) + F*F*(C + D*absF));
+			return kfNegtiveQuaterPi*step*sign + (step + 1.0f) * F* ((t1 + t2*absF) + F*F*(t3 + t4*absF));
 #endif
 		}
 
@@ -296,16 +297,15 @@ namespace Aurora3D
 			return std::exp2f(F);
 #else
 			constexpr float t1 = kfLn2;
-			constexpr float t2 = kfLn2_2Q / 2.0f;
-			constexpr float t3 = kfLn2_3Q / 6.f;
-			constexpr float t4 = kfln2_4Q / 24.f;
-			constexpr float t5 = kfLn2_5Q / 120.f;
-			constexpr float t6 = kfLn2_6Q / 720.f;
-
-			int exp = (127 + (int)F) << 23;
-			const float int_exp = *reinterpret_cast<float*>(&exp);
+			constexpr float t2 = t1 * kfLn2 / 2.0f;
+			constexpr float t3 = t2 * kfLn2 / 3.0f;
+			constexpr float t4 = t3 * kfLn2 / 4.0f;
+			constexpr float t5 = t4 * kfLn2 / 5.0f;
+			constexpr float t6 = t5 * kfLn2 / 6.0f;
+			int iexp = (kiFloatExpOffset + (int)F) << kiFloatExpShiftCount;
+			const float fexp = *reinterpret_cast<float*>(&iexp);
 			F = F - (int)F;
-			return int_exp*(1 + F*(t1 + F*(t2 + F*(t3 + F*(t4 + F*(t5 + t6*F))))));
+			return fexp*(1 + F*(t1 + F*(t2 + F*(t3 + F*(t4 + F*(t5 + t6*F))))));
 #endif
 		}
 
@@ -334,7 +334,6 @@ namespace Aurora3D
 			const float absBase = FloatAbs(base);
 			const float basExp = FloatAbs(exp);
 			if (absBase < 0.00001 || exp < 0.0001) return 1.0f;
-
 			return 0.0f;
 		}
 
@@ -342,6 +341,7 @@ namespace Aurora3D
 		{
 			float absF = FloatAbs(F);
 			if (absF > 1.0f) return kfNaN;  //not a number
+			
 			
 			const float F2 = F*F;
 
@@ -353,10 +353,20 @@ namespace Aurora3D
 			return acos(F);
 		}
 
-		A3D_FORCEINLINE float FloatLog2(float F)
+		A3D_FORCEINLINE double FloatLog2(double A, double B, double C, double F)
 		{
+			//uint32 iF = *reinterpret_cast<int*>(&F);
+			//int32 exp = (iF & kiFloatExpMask) >> kiFloatExpShiftCount;
+			//int32 base = iF&kiFloatBaseMask;
+			//float fBase = *reinterpret_cast<float*>(&base);   // fBase range in [1.0f, 2.0f)
 
-		}
+			F = F - 1.0;
+			double F2 = F;
+			return A*F*F + B*F + C;
+
+			//return 2 * F2*(1 + F4*(1 / 3 + F4*(1 / 5 + F4*(1 / 7 + F4*(1 / 9 + F4*(1/11 + F4 *1/13)))))) / kfLn2;
+			//return  A*F + B*F*F + C*F*F*F +D*F*F*F*F;
+   		}
 		
 		//logE(F)
 		A3D_FORCEINLINE float FloatLn(float F)
@@ -365,17 +375,17 @@ namespace Aurora3D
 			return logf(F);
 		}
 
+		A3D_FORCEINLINE float FloatLog10(float F)
+		{
 
+		}
 
-		A3D_FORCEINLINE float FloatLogX(float F, float base)
+		A3D_FORCEINLINE float FloatLog(float F, float base)
 		{
 			return logf(F) / logf(base);
 		}
 
-		A3D_FORCEINLINE float FloatLog2(float F)
-		{
-			return log2f(F);
-		}
+	
 
 		inline float  FloatAtanPos(float X, float Y)
 		{
@@ -439,10 +449,7 @@ namespace Aurora3D
 			return 31 - IntFloorLog2(V);
 		}
 
-		A3D_FORCEINLINE float FloatPow(float X, float Y)
-		{
-			return powf(X, Y);
-		}
+	
 
 		A3D_FORCEINLINE float FloatPow2(float F)
 		{
