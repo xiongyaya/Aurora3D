@@ -207,6 +207,40 @@ namespace Aurora3D
 			return FloatSin(F + kfHalfPi);
 		}
 
+		// For Vector4 Algorithm Example  
+		// from method metioned by William and Cody
+		//
+		// ----------Test Case 1 --------Range(-Pi/2+0.0001 , Pi/2-0.0001 (+-)0.018 Degree ) 1000000 Samples -------- Test at VS15 Release  -------
+		//FloatTan    : 13.658875 ms average times : 0.000014 ms
+		//std::tanf   : 27.357839 ms average times : 0.000027 ms
+		//Max Error   : 0.00086909 average Error : 0.00000021
+		//Max Error F : -1.57068062, FloatTan : -8649.92382813, std::tanf : -8642.406250
+		//
+		// ----------Test Case 2 --------Range(-Pi/2+0.001 , Pi/2-0.001 (+-)0.18 Degree ) 1000000 Samples -------- Test at VS15 Release  -------
+		//func1 times : 13.912238 ms average times : 0.000014 ms
+		//func2 times : 28.605415 ms average times : 0.000029 ms
+		//Max Error : 0.00009596 average Error : 0.00000015
+		//Max Error F : -1.56970215, FloatTan : -914.01513672, std::tanf : -913.927429
+		//
+		A3D_FORCEINLINE float FloatTan(float F)
+		{
+#ifdef AURORA3D_FLOAT_HIGH_PRECISION
+			return std::tanf(F);
+#else
+			constexpr float p1 = -0.1282834704095743847;
+			constexpr float p2 = 0.002805918241169988906;
+			constexpr float p3 = -0.000007483634966612065149;
+			constexpr float q1 = -0.461616803742904884;
+			constexpr float q2 = 0.02334485282206872802;
+			constexpr float q3 = -0.0002084480442203870948;
+
+			float signOffset = F >= 0.0 ? 0.5f : -0.5f;
+			F = F - ((int32)(F*kfOneOverPi + signOffset))*kfPi;        //clamped to [-Pi/2, Pi/2]
+			float F2 = F*F;
+			return F*(1.0f + F2*((p3*F2 + p2)*F2 + p1)) / (1.0f + ((q3*F2 + q2)*F2 + q1)*F2);
+#endif
+		}
+
 		// For SIMD Algorithm Example
 		// from method metioned at http://www.ntu.edu.sg/home/aukil/papers/conf/2011_IEEE-ISIE11_Fast-arctan.pdf
 		// original fomula :                    F*(F − 1)*(0.2447 + 0.0663*F)
@@ -245,7 +279,7 @@ namespace Aurora3D
 		// From tylor-expansion 2^x = 1 + ln2*x + ln2^2/2 x^2 + ln2^3/(3*2*1)*x^3 ... iterate 6 time is enough
 		//
 		// ----------Test Case 1 --------Range(0.0f,33.0f) 1000000 Samples -------- Test at VS15 Release  -------
-		// nearly 7x faster then std::exp2f  (can't believe my eyes)
+		// nearly 7x faster then std::exp2f  (?????????????)
 		// FloatExp2   : 11.962299 ms average times : 0.000012 ms
 		// std::expf   : 79.797091 ms average times : 0.000080 ms
 		// Max Error   : 0.000008 average Error : 0.000001 (Reletive Error Because 2^F always greater equal then 1.0f )
@@ -277,47 +311,34 @@ namespace Aurora3D
 
 		A3D_FORCEINLINE float FloatExp(float F)
 		{
-			
-			return 1 + F*(1.0f / 2.0f + F*(1.0f / 6.0f + F*(1.0f / 24.0f + F*(1.0f / 120.0f + F*1.0f / 720.0f)))) / den;
-		}
-
-
-
-		// For Vector4 Algorithm Example  
-		// from method metioned by William and Cody
-		//
-		// ----------Test Case 1 --------Range(-Pi/2+0.0001 , Pi/2-0.0001 (+-)0.018 Degree ) 1000000 Samples -------- Test at VS15 Release  -------
-		//FloatTan    : 13.658875 ms average times : 0.000014 ms
-		//std::tanf   : 27.357839 ms average times : 0.000027 ms
-		//Max Error   : 0.00086909 average Error : 0.00000021
-		//Max Error F : -1.57068062, FloatTan : -8649.92382813, std::tanf : -8642.406250
-		//
-		// ----------Test Case 2 --------Range(-Pi/2+0.001 , Pi/2-0.001 (+-)0.18 Degree ) 1000000 Samples -------- Test at VS15 Release  -------
-		//func1 times : 13.912238 ms average times : 0.000014 ms
-		//func2 times : 28.605415 ms average times : 0.000029 ms
-		//Max Error : 0.00009596 average Error : 0.00000015
-		//Max Error F : -1.56970215, FloatTan : -914.01513672, std::tanf : -913.927429
-		//
-		A3D_FORCEINLINE float FloatTan(float F)
-		{
 #ifdef AURORA3D_FLOAT_HIGH_PRECISION
-			return std::tanf(F);
+			return std::expf(F);
 #else
-			constexpr float p1 = -0.1282834704095743847;
-			constexpr float p2 = 0.002805918241169988906;
-			constexpr float p3 = -0.000007483634966612065149;
-			constexpr float q1 = -0.461616803742904884;
-			constexpr float q2 = 0.02334485282206872802;
-			constexpr float q3 = -0.0002084480442203870948;
-
-			float signOffset = F >= 0.0 ? 0.5f : -0.5f;
-			F = F - ((int32)(F*kfOneOverPi + signOffset))*kfPi;        //clamped to [-Pi/2, Pi/2]
-			float F2 = F*F;
-			return F*(1.0f + F2*((p3*F2+p2)*F2 + p1)) / (1.0f + ((q3*F2+q2)*F2 + q1)*F2);
+			constexpr float OneOverLn2 = 0.69314718055994530941723212145818f;
+			return FloatExp2(F*OneOverLn2);
 #endif
 		}
 
-		A3D_FORCEINLINE float FloatAsin(float F)
+		A3D_FORCEINLINE float FloatExp10(float F)
+		{
+			constexpr float OneOverLog10_2 = 3.32192809488736234787f;
+#ifdef AURORA3D_FLOAT_HIGH_PRECISION
+			return std::exp2f(F*OneOverLog10_2);
+#else
+			return FloatExp2(F*OneOverLog10_2);
+#endif
+		}
+
+		A3D_FORCEINLINE float FloatPow(float base, float exp)
+		{
+			const float absBase = FloatAbs(base);
+			const float basExp = FloatAbs(exp);
+			if (absBase < 0.00001 || exp < 0.0001) return 1.0f;
+
+			return 0.0f;
+		}
+
+		A3D_FORCEINLINE float FloatArcsin(float F)
 		{
 			float absF = FloatAbs(F);
 			if (absF > 1.0f) return kfNaN;  //not a number
@@ -327,22 +348,24 @@ namespace Aurora3D
 			return F*(1 + F2*(1 / 6 + F2*(5 / 112 + +35 / 1152 * F2)));
 		}
 
-		A3D_FORCEINLINE float FloatAcos(float F)
+		A3D_FORCEINLINE float FloatArccos(float F)
 		{
 			return acos(F);
 		}
 
-		A3D_FORCEINLINE float FloatAtan(float F)
+		A3D_FORCEINLINE float FloatLog2(float F)
 		{
-			return atan(F);
+
 		}
-
-	
-
-		A3D_FORCEINLINE float FloatLogE(float F)
+		
+		//logE(F)
+		A3D_FORCEINLINE float FloatLn(float F)
 		{
+			
 			return logf(F);
 		}
+
+
 
 		A3D_FORCEINLINE float FloatLogX(float F, float base)
 		{

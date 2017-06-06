@@ -401,7 +401,11 @@ inline void TestFloat()
 	printf("most suitable I:%d %d %d %d MaxError:%lf \n\n ", SuitableI, SuitableJ, SuitableK,SuitableL, minError);
 	//auto fun = std::bind(FloatFastArctan, -0.76, 0.7f, 1.35f, -0.084f, std::placeholders::_1);
 	//auto fun = std::bind(FloatFastTan, -2.48193f, 0.2f,0.0f, std::placeholders::_1);
-	//TestError(FloatCos, std::cosf, true, 0, 33.f, 1000000);
+	TestError(FloatExp, std::expf, true, -30, 30, 1000000);
+
+	cout << FloatExp10(1) << " " << FloatExp10(2) << " " << FloatExp10(3) << " " << FloatExp10(4) << " " << FloatExp10(5) << " " << FloatExp10(6) << " " << endl;
+	cout << FloatExp10(-1) << " " << FloatExp10(-2) << " " << FloatExp10(-3) << " " << FloatExp10(-4) << " " << FloatExp10(-5) << " " << FloatExp10(-6) << " " << endl;
+
 
 	cout << "----" << endl;
 	//TestError(FloatExp, expf, true, -10 , 0, 1000000);
