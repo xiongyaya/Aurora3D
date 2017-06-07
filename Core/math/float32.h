@@ -371,7 +371,6 @@ namespace Aurora3D
 		//logE(F)
 		A3D_FORCEINLINE float FloatLn(float F)
 		{
-			
 			return logf(F);
 		}
 

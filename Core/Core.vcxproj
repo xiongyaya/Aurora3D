@@ -240,6 +240,7 @@
     <ClInclude Include="mpl\type_traits\remove_top_const.h" />
     <ClInclude Include="mpl\type_traits\remove_volatile.h" />
     <ClInclude Include="mpl\type_traits\copy_qualifers.h" />
+    <ClInclude Include="mpl\type_traits\result_of.h" />
     <ClInclude Include="mpl\type_traits\underlying_type.h" />
     <ClInclude Include="preprocessor\bit4x4_add.h" />
     <ClInclude Include="preprocessor\bit4x4_equal.h" />

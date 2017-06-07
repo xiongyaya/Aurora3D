@@ -717,6 +717,9 @@
     <ClInclude Include="math\float16.h">
       <Filter>math</Filter>
     </ClInclude>
+    <ClInclude Include="mpl\type_traits\result_of.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\Users\xiongya\Desktop\testccpuid\ccpuid.cpp">

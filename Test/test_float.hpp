@@ -384,7 +384,21 @@ inline void TestFloat()
 	//auto fun = std::bind(FloatFastTan, -2.48193f, 0.2f,0.0f, std::placeholders::_1);
 	//TestError(FloatLog2, std::log2f, false, 1, 2, 1000000);
 
-	 
+	FILE* file = fopen("log2Result.txt", "wt");
+	if (file == nullptr) {
+		printf("open file failed.\n");
+		getchar();
+		return;
+	}
+	for (int i = 0; i < 1000; ++i)
+	{
+		char buffer[128];
+		memset(buffer, 0, 128);
+		sprintf(buffer, "%0.10lf, %0.10lf\n", 1.0+1.0/1000*i, log2(1.0 + 1.0 / 1000 * i));
+		buffer[127] = 0;
+		fwrite(buffer,  1, strlen(buffer), file);
+	}
+	fclose(file);
 
 	cout << FloatExp10(1) << " " << FloatExp10(2) << " " << FloatExp10(3) << " " << FloatExp10(4) << " " << FloatExp10(5) << " " << FloatExp10(6) << " " << endl;
 	cout << FloatExp10(-1) << " " << FloatExp10(-2) << " " << FloatExp10(-3) << " " << FloatExp10(-4) << " " << FloatExp10(-5) << " " << FloatExp10(-6) << " " << endl;

@@ -9,7 +9,8 @@ namespace Aurora3D
 	{
 		namespace detail
 		{
-			template<typename T, bool bool VoidOrLRef = IsVoid<T>::value || IsLValueRef<T>::value > struct AddConstRefHelper { typedef const T& type; };
+			template<typename T, bool bool VoidOrLRef = IsVoid<T>::value || IsLValueRef<T>::value > 
+								 struct AddConstRefHelper { typedef const T& type; };
 			template<typename T> struct AddConstRefHelper<T, true> { typedef const T type; };
 		}
 
