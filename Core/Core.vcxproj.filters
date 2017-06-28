@@ -726,6 +726,12 @@
     <ClInclude Include="mpl\enable_if.h">
       <Filter>mpl</Filter>
     </ClInclude>
+    <ClInclude Include="mpl\bit_op.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\bit_or.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\Users\xiongya\Desktop\testccpuid\ccpuid.cpp">

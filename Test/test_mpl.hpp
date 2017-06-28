@@ -11,6 +11,7 @@ using namespace std;
 #include<Core/mpl/int_.h>
 #include<Core/mpl/sizet_.h>
 #include<Core/mpl/enable_if.h>
+#include<Core/mpl/bit_op.h>
 
 using namespace Aurora3D::mpl;
 
@@ -62,7 +63,7 @@ inline void TestMpl()
 	cout << "value:" << Min<4u, 2, 3, 2, 4>::value << endl;
 	cout << "value:" << TypeMin<Int_<3>, Int_<2>, Sizet_<3>, Int_<2>, Int_<1> >::value << endl;
 
-	
+	cout << BitOperator<7,0,3,5>::value << endl;
 
 	//cout << "value" << Max<int, 1>::value << endl;
 	//cout << "value" << Max<int, 1, 2>::value << endl;

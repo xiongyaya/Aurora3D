@@ -1,6 +1,5 @@
 #pragma once
 
-#include<core/compile.h>
 
 namespace Aurora3D
 {

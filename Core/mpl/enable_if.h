@@ -14,8 +14,5 @@ namespace Aurora3D
 
 		template<bool B, typename T>
 		using DisableIf_t = typename DisableIf<B, T>::type;
-
-
-
 	}
 }
