@@ -15,6 +15,6 @@ namespace Aurora3D
 		//defined typedef int (TestOperator::*CallType)(float);
 		//CallType t = &TestOperator::operator[];  will be error
 		//but TestOperator::operator[](float) is allow
-		HAS_MEMBER_FN_DECL(operator[], IndexOperator);
+		HAS_MEMBER_FN_DECL(operator[], Indexer);
 	}
 }

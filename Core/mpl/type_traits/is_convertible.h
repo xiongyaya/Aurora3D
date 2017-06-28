@@ -9,7 +9,7 @@ namespace Aurora3D
 		//implicitly convertible, use no-explicit-construction
 		//e.g.string a = 1.1; not works  no suitable construction
 		template<typename From, typename To> struct IsConvertible :public Bool_<__is_convertible_to(From,To)> {};
-		template<typename From, typename To> using IsConvertible_t = typename IsConvertible<From,To>::type;
+		
 #define IsConvertible_v(From,To)  IsConvertible<From,To>::value
 #define NotConvertible_v(From,To) (!IsConvertible<From,To>::value)
 

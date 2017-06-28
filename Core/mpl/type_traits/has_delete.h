@@ -3,7 +3,6 @@
 #include<new>
 #include<Core/mpl/bool_.h>
 #include<Core/mpl/type_traits/has_operator_type.h>
-#include<Core/mpl/type_traits/has_operator.h>
 #include<Core/mpl/type_traits/has_new_delete_decl.h>
 
 namespace Aurora3D

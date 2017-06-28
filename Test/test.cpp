@@ -26,9 +26,9 @@ int main()
 	//ProcessTool();
 	//TestProprecessor();
 	//TestTypeTraits();
-	//TestMpl();
+	TestMpl();
 	//TestVector();
-	TestFloat();
+	//TestFloat();
 	getchar();
 	return 0;
 }

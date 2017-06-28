@@ -7,7 +7,6 @@ namespace Aurora3D
 {
 	namespace math
 	{
-	
 		//_MM_TRANSPOSE4_PS (__m128 row0, __m128 row1, __m128 row2, __m128 row3)
 		struct alignas(16) Matrix4
 		{

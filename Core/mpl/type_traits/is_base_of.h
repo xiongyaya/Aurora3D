@@ -9,15 +9,14 @@ namespace Aurora3D
 	namespace mpl
 	{
 		//T1 may be same to T2
-		template<typename T1, typename T2> struct IsBaseOf :public Bool_<__is_base_of(T1, T2)> {};
-		//T1 can't be same with T2
-		template<typename T1, typename T2> struct IsDeriveFrom :public And< Bool_<__is_base_of(T2, T1)>, Not<IsSame<T1,T2>>>{};
-		template<typename T1, typename T2> using IsBaseOf_t = typename IsBaseOf<T1,T2>::type;
-		template<typename T1, typename T2> using IsDeriveFrom_t = typename IsDeriveFrom<T1, T2>::type;
-#define IsBaseOf_v(T)         IsBaseOf<T>::value
-#define NotBaseOf_v(T)       (!IsBaseOf<T>::value)
-#define IsDeriveFrom_v(T)     IsDeriveFrom<T>::value
-#define NotDeriveFrom_v(T)   (!IsDeriveFrom<T>::value)
+		template<typename T1, typename T2> struct IsBaseOf  :public Bool_<__is_base_of(T1, T2)> {};
+		//T1 derived from T2
+		template<typename T1, typename T2> struct IsChildOf :public And < IsBaseOf<T2, T1>, Not<IsSame<T1, T2>> >{};
 
+		
+#define IsBaseOf_v(T)           IsBaseOf<T>::value
+#define IsChildOf_v(T)          IsChildOf<T>::value
+#define NotBaseOf_v(T)        (!IsBaseOf<T>::value)
+#define NotChildOf_v(T)       (!IsChildOf<T>::value)
 	}
 }

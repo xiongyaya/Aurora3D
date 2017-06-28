@@ -6,7 +6,8 @@ namespace Aurora3D
 {
 	namespace mpl
 	{
-		template<typename T> struct AddPointer { typedef typename RemoveRef<T>::type* type; };
+		//pointer to reference ill-legal
+		template<typename T> struct AddPointer { typedef  RemoveRef_t<T>* type; };
 		template<typename T> using AddPointer_t = typename AddPointer<T>::type;
 	}
 }

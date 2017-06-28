@@ -10,7 +10,6 @@ namespace Aurora3D
 		template<typename T> struct IsArray<T[]> :public True_ {};
 		template<typename T, unsigned int N> struct IsArray<T[N]> :public True_ {};
 
-		template<typename T> using  IsArray_t = typename IsArray<T>::type;
 #define IsArray_v(T)     IsArray<T>::value
 #define NotArray_v(T)    (!IsArray<T>::value)
 	}

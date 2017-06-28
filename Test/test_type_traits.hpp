@@ -37,13 +37,10 @@
 #include<Core/mpl/type_traits/is_array.h>
 #include<Core/mpl/type_traits/is_base_of.h>
 #include<Core/mpl/type_traits/is_convertible.h>
-#include<Core/mpl/type_traits/has_assigner.h>
-#include<Core/mpl/type_traits/has_constructor.h>
-#include<Core/mpl/type_traits/has_destructor.h>
+
 #include<core/mpl/type_traits/add_lvalue_ref.h>
 #include<core/mpl/type_traits/add_rvalue_ref.h>
 #include<core/mpl/type_traits/add_const.h>
-#include<core/mpl/type_traits/add_const_lref.h>
 #include<core/mpl/type_traits/add_volatile.h>
 #include<core/mpl/type_traits/add_cv.h>
 #include<core/mpl/type_traits/add_top_const.h>
@@ -55,13 +52,16 @@
 #include<core/mpl/type_traits/remove_volatile.h>
 #include<core/mpl/type_traits/remove_const.h>
 #include<core/mpl/type_traits/remove_ref.h>
-#include<core/mpl/type_traits/remove_all_extent.h>
-#include<core/mpl/type_traits/remove_extent.h>
+#include<core/mpl/type_traits/remove_all_dimension.h>
+#include<core/mpl/type_traits/remove_dimension.h>
 #include<core/mpl/type_traits/first_template.h>
+#include<Core/mpl/type_traits/decay.h>
+#include<Core/mpl/type_traits/compatible_type.h>
 #include<core/mpl/type_traits/align_of.h>
 #include<core/mpl/type_traits/aligned_storage.h>
-#include<core/mpl/type_traits/array_dim.h>
-#include<core/mpl/type_traits/array_len.h>
+#include<core/mpl/type_traits/aligned_max.h>
+#include<core/mpl/type_traits/array_dimension.h>
+#include<core/mpl/type_traits/array_length.h>
 #include<core/mpl/type_traits/has_add.h>
 #include<core/mpl/type_traits/has_sub.h>
 #include<core/mpl/type_traits/has_div.h>
@@ -72,10 +72,14 @@
 #include<core/mpl/type_traits/has_logic_and.h>
 #include<core/mpl/type_traits/has_front_dec.h>
 #include<core/mpl/type_traits/has_new.h>
-#include<core/mpl/type_traits/has_invoke_operator.h>
-#include<core/mpl/type_traits/has_index_operator.h>
+#include<core/mpl/type_traits/has_invoker.h>
+#include<core/mpl/type_traits/has_indexer.h>
 #include<core/mpl/type_traits/has_refer_arrow.h>
+#include<Core/mpl/type_traits/has_assigner.h>
+#include<Core/mpl/type_traits/has_constructor.h>
+#include<Core/mpl/type_traits/has_destructor.h>
 #include<boost/type_traits.hpp>
+
 
 #include"print_type.h"
 #include"print_value.h"
@@ -187,14 +191,42 @@ class TestDeriveOperator :public TestOperator
 public:
 	int a;
 	TestDeriveOperator():TestOperator(0, 0) {}
-	
 };
+
+template<typename T>
+struct TestCap
+{
+	void operator()()
+	{
+		cout << "normal" << endl;
+	}
+};
+
+template<typename T>
+struct TestCap<const T>
+{
+	void operator()()
+	{
+		cout << "const" << endl;
+	}
+};
+
+template<typename T>
+struct TestCap<T[]>
+{
+	void operator()()
+	{
+		cout << "vector" << endl;
+	}
+};
+
+
 
 inline void TestTypeTraits()
 {
 	//test set
 #define CLASS_SET       (void,nullptr_t, int,TestUnion,TestNormalEnum, TestEmpty, TestFinal, TestAbstract, TestDrivied, TestCopyConstructible, TestNoCopyConstructible, TestNoMoveConstructible, TestMoveConstructible, NoDefaultConstructible)
-#define QUALIFERED_SET  A3D_PP_COMPOSE_EX( (int, const int, volatile int, const volatile int), (A3D_PP_NULL, &, &&, *, [2], [2][3], []), void)
+#define QUALIFERED_SET  A3D_PP_COMPOSE_EX( (int, const int, volatile int, const volatile int), (A3D_PP_NULL, &, &&, *, * const, * volatile, * const volatile, [2], [2][3], []), void)
 #define ALL_TYPE_SET    (void, nullptr_t, int, float, void(int), int(*)(char), int*,int[2],int&,int&&, decltype(&TestDrivied::Test), decltype(&TestDrivied::data), TestEnumClassInt8, TestNormalEnum, TestUnion, TestEmpty, TestTrivialConstruct1, TestAbstract, TestDrivied)
 #define BINARY_TEST_SET ((void, A3D_PP_NULL, 0), (nullptr_t, A3D_PP_NULL, 0), (char*, A3D_PP_NULL, 0), (int, void, 1), (float, void, 1),(TestOperator, void, 1), (int, float, 1), (float, int, 1), (int, ingore_t, 1), (float, A3D_PP_NULL, 0),(ingore_t, A3D_PP_NULL, 0), (TestOperator, A3D_PP_NULL, 0), (int*, float*, 1))
 
@@ -206,12 +238,13 @@ inline void TestTypeTraits()
 
 	//test case
 #define TEST_TYPE_CONVERTER_BATCH(Func)               A3D_PP_FOREACH_ITEM(TEST_TYPE_CONVERTER, QUALIFERED_SET, Func) cout << endl;
+	//A3D_PP_FOREACH_ITEM(TEST_TYPE_CONVERTER, ALL_TYPE_SET, Func) 
 #define TEST_TYPE_CONVERTER_BATCH_SP(Func, Seq)       A3D_PP_FOREACH_ITEM(TEST_TYPE_CONVERTER, Seq, Func) cout << endl;
 #define TEST_TYPE_VALUE_BATCH(Templ, Seq)             A3D_PP_FOREACH_ITEM(TEST_1TYPE_VALUE, Seq, Templ);    cout << endl;
 #define TEST_HAS_OP_VALUE_BATCH(Func, Seq, ...)        A3D_PP_FOREACH_TUPLE(Func,Seq,__VA_ARGS__)
 #define TEST_NORMAL_HAS(Templ)	TypeValue<Templ<float*, int*>>{}(); TypeValue<Templ<float*, int>>{}(); TypeValue<Templ<int, int>>{}(); TypeValue<Templ<void, char>>{}(); TypeValue<Templ<int, void>>{}(); TypeValue<Templ<void*, char>>{}();
 
-	cout << " Test Unary/Binary HasOperatorXX" << endl;
+	cout << "==== Test Unary/Binary HasOperatorXX ====" << endl;
 	/*TEST_HAS_OP_VALUE_BATCH(PRINT_HAS_BINARY_OP_VALUE, BINARY_TEST_SET,TestOperator, HasAdd);
 	TEST_NORMAL_HAS(HasAdd);*/
 	//TEST_HAS_OP_VALUE_BATCH(PRINT_HAS_BINARY_OP_VALUE, BINARY_TEST_SET, TestOperator, HasSub);
@@ -231,7 +264,7 @@ inline void TestTypeTraits()
 	//TypeValue<HasFrontDec<char>>{}();
 	//TypeValue<HasFrontDec<TestOperator>>{}();
 
-	cout << " Test HasNew/HasDelete" << endl;
+	cout << "==== Test HasNew/HasDelete ====" << endl;
 	//cout << HasDefaultNew<TestOperator>::value << endl;
 	//cout << HasNothrowNew<TestOperator>::value << endl;
 	//cout << HasPlacementNew<TestOperator>::value << endl;
@@ -244,81 +277,147 @@ inline void TestTypeTraits()
 	//cout << HasInvokerOperator<TestOperator, bool, int, int>::value << endl;
 	//cout << HasInvokerOperator<TestOperator, bool, int, TestOperator>::value << endl;
 	//cout << typeid(decltype(&TestOperator::operator[])).name() << endl;
-	cout << HasReferArrow<TestOperator, bool>::value << endl;
-	cout << HasReferArrow<TestOperator, int>::value << endl;
+	//cout << HasReferArrow<TestOperator, bool>::value << endl;
+	//cout << HasReferArrow<TestOperator, int>::value << endl;
 
-	
-	cout << "  test AddConst " << endl;
+
+	cout << "==== Test top/bottom const ====" << endl;
+	/*cout << IsSame<const int &, int const &>::value << endl;
+	cout << IsSame<const int &, AddTopConst_t<int&>>::value << endl;
+	cout << IsSame<const int &, AddConst_t<int&>>::value << endl;
+	cout << IsSame<int& const, AddConst_t<int&>>::value << endl;
+	cout << TypeNameHelper<int& const>{}() << endl;
+
+	cout << IsSame<const int *, int const *>::value << endl;
+	cout << IsSame<const int *, AddTopConst_t<int*>>::value << endl;
+	cout << IsSame<const int *, AddConst_t<int*>>::value << endl;
+	cout << IsSame<int * const, AddConst_t<int*>>::value << endl;
+	cout << TypeNameHelper<int * const>{}() << endl;
+
+	cout << IsSame<const int *, int * const>::value << endl;
+	cout << IsSame<AddConst_t<int *>, int * const>::value << endl;
+	cout << IsSame<const int &, int & const>::value << endl;*/
+
+	cout << "==== Test print type name: ====" << endl;
+	/*cout << TypeNameHelper<int>{}() << endl;
+	cout << TypeNameHelper<const int>{}() << endl;
+	cout << TypeNameHelper<volatile int>{}() << endl;
+	cout << TypeNameHelper<const volatile int>{}() << endl;
+	cout << TypeNameHelper<int&>{}() << endl;
+	cout << TypeNameHelper<const int&>{}() << endl;
+	cout << TypeNameHelper<volatile int&>{}() << endl;
+	cout << TypeNameHelper<const volatile int&>{}() << endl;
+	cout << TypeNameHelper<int&&>{}() << endl;
+	cout << TypeNameHelper<int*>{}() << endl;
+	cout << TypeNameHelper<const int*>{}() << endl;
+	cout << TypeNameHelper<volatile int*>{}() << endl;
+	cout << TypeNameHelper<const volatile int*>{}() << endl;
+	cout << TypeNameHelper<int* const>{}() << endl;
+	cout << TypeNameHelper<const int* const>{}() << endl;
+	cout << TypeNameHelper<volatile int* const>{}() << endl;
+	cout << TypeNameHelper<const volatile int* const>{}() << endl;
+	cout << TypeNameHelper<int* volatile>{}() << endl;
+	cout << TypeNameHelper<const int* volatile>{}() << endl;
+	cout << TypeNameHelper<volatile int* volatile>{}() << endl;
+	cout << TypeNameHelper<const volatile int* volatile>{}() << endl;
+	cout << TypeNameHelper<int* const volatile>{}() << endl;
+	cout << TypeNameHelper<const int* const volatile>{}() << endl;
+	cout << TypeNameHelper<volatile int* const volatile>{}() << endl;
+	cout << TypeNameHelper<const volatile int* const volatile>{}() << endl;*/
+
+	cout << "==== Test AddConst/RemoveConst ====" << endl;
 	//TEST_TYPE_CONVERTER_BATCH(AddConst);
+	//TEST_TYPE_CONVERTER_BATCH(RemoveConst);
 
-	cout << "  test AddConstLRef " << endl;
-	//TEST_TYPE_CONVERTER_BATCH(AddConstLRef);
-
-	cout << "  test AddVolatile " << endl;
+	cout << "==== Test AddVolatile/RemoveVolatile ====" << endl;
 	//TEST_TYPE_CONVERTER_BATCH(AddVolatile);
+	//TEST_TYPE_CONVERTER_BATCH(RemoveVolatile);
 
-	cout << "  test AddCV " << endl;
-	//TEST_TYPE_CONVERTER_BATCH(AddCV);
-
-	cout << "  test AddTopConst/RemoveTopConst " << endl;
+	cout << "==== Test AddTopConst/RemoveTopConst ====" << endl;
 	//TEST_TYPE_CONVERTER_BATCH(AddTopConst);
 	//TEST_TYPE_CONVERTER_BATCH(RemoveTopConst);
 
-	cout << " test AddPointer" << endl;
+	cout << "==== Test AddPointer/RemovePointer ====" << endl;
 	//TEST_TYPE_CONVERTER_BATCH(AddPointer);
+	//TEST_TYPE_CONVERTER_BATCH(RemovePointer);
 
-	cout << " test AddLValueRef" << endl;
-	//TEST_TYPE_CONVERTER_BATCH(AddLValueRef);
+	cout << "==== Test ConvertConstLRef ====" << endl;
+	//TEST_TYPE_CONVERTER_BATCH(ConvertConstLRef);
 
-	cout << " tset AddRValueRef" << endl;
-	//TEST_TYPE_CONVERTER_BATCH(AddRValueRef);
+	cout << "==== Test AddCV/RemoveCV ====" << endl;
+	//TEST_TYPE_CONVERTER_BATCH(AddCV);
+	//TEST_TYPE_CONVERTER_BATCH(RemoveCV);
 
-	cout << " test AddPointer" << endl;
-	//TEST_TYPE_CONVERTER_BATCH(AddPointer);
+	cout << "==== Test AddLValueRef/AddRValueRef/RemoveRef ====" << endl;
+	/*TEST_TYPE_CONVERTER_BATCH(AddLValueRef);
+	TEST_TYPE_CONVERTER_BATCH(AddRValueRef);
+	TEST_TYPE_CONVERTER_BATCH(RemoveRef);*/
 
-	cout << " 8. test AddLValueRef " << endl;
-	//TEST_TYPE_CONVERTER_BATCH(AddLValueRef);
-
-	cout << " 9. test AddRValueRef " << endl;
-	//TEST_TYPE_CONVERTER_BATCH(AddRValueRef);
-
-	cout << " test UnderlyingType/AddUnsigned/AddSigned" << endl;
-	//TEST_TYPE_CONVERTER_BATCH_SP(UnderlyingType, (TestEnumClass1, TestEnumClass2, TestNormalEnum, TestAbstract));
+	cout << "==== Test UnderlyingType/AddUnsigned/AddSigned ====" << endl;
+	//TEST_TYPE_CONVERTER_BATCH_SP(UnderlyingType, (TestNormalEnum, TestEnumClassInt8, TestEnumClassUint8, TestAbstract));
 	//TEST_TYPE_CONVERTER_BATCH_SP(AddUnsigned, (unsigned char, char, signed char, short, signed short, unsigned short, long int, TestEnumClassInt8, TestEnumClassUint8, TestNormalEnum));
 	//TEST_TYPE_CONVERTER_BATCH_SP(AddSigned, (unsigned char, char, signed char, short, unsigned short, long int, TestEnumClassInt8, TestEnumClassUint8, TestNormalEnum));
 
-	cout << " test RemoveRef" << endl;
-	//TEST_TYPE_CONVERTER_BATCH(RemoveRef);
 
-	cout << " test RemoveAllExtent" << endl;
-	//TEST_TYPE_CONVERTER_BATCH(RemoveAllExtent);
+	cout << "==== Test RemoveDim/RemoveAllAllDim ====" << endl;
+	//TEST_TYPE_CONVERTER_BATCH(RemoveDim);
+	//TEST_TYPE_CONVERTER_BATCH(RemoveAllDim);
 
-	cout << " test RemoveExtent" << endl;
-	//TEST_TYPE_CONVERTER_BATCH(RemoveExtent);
+	cout << "==== Test Decay ====" << endl;
+	//TEST_TYPE_CONVERTER_BATCH(Decay);
 
-	cout << "  test RemoveConst " << endl;
-	//TEST_TYPE_CONVERTER_BATCH(RemoveConst);
-
-	cout << " test ArrayDim" << endl;
+	cout << "==== Test ArrayDim ====" << endl;
 	//TEST_TYPE_VALUE_BATCH(ArrayDim, (int, int[3], const int[4], volatile int[4][5], const volatile int[3][4][5], int[], int[][3]));
 
-	cout << " test ArrayLen" << endl;
+	cout << "==== Test ArrayLen ====" << endl;
 	//TEST_TYPE_VALUE_BATCH(ArrayLen, (int, int[3], const int[4], volatile int[4][5], const volatile int[3][4][5], int[], int[][3]));
 
-	cout << " test AlignmentOf" << endl;
-	//TEST_TYPE_VALUE_BATCH(AlignmentOf, (int, char, short, long long, int[2], int *, long long *, int&&, int&));
+	cout << "==== test AlignOf/AlignedMax/Aligned/Storeage ====" << endl;
+	/*TEST_TYPE_VALUE_BATCH(AlignOf, (int, char, short, long long, int[2], int *, long long *, int&&, int&));
+	cout << AlignedMax_v(1, char) << endl;
+	cout << AlignedMax_v(2, char) << endl;
+	cout << AlignedMax_v(4, char) << endl;
+	cout << AlignedMax_v(8, char) << endl;
+	cout << AlignedMax_v(1, int) << endl;
+	cout << AlignedMax_v(1, long long) << endl;
+	cout << AlignedMax_v(1, short) << endl;
+	cout << AlignedMax_v(1, char[3]) << endl;
+	cout << AlignedMax_v(1, char[5]) << endl;
+	cout << AlignedMax_v(1, int[4]) << endl;
+	cout << AlignedMax_v(1, int[8]) << endl;
+	cout << AlignedMax_v(1, int[16]) << endl;
+	cout << AlignedMax_v(1, int[32]) << endl;
+	cout << AlignedMax_v(1, int[64]) << endl;
+	cout << AlignedMax_v(1, int[1], int[2], int[3], int[4]) << endl << endl;;
+#define AlignAndSize(T) " Type:"<<#T<<" Size: "<<sizeof(AlignedTypeStorage_t<T>)<<" Align:"<<alignof(AlignedTypeStorage_t<T>)
+	struct alignas(16) float4 {  float v[4]; };
+	cout << AlignAndSize(char) << endl;
+	cout << AlignAndSize(char[2]) << endl;
+	cout << AlignAndSize(char[3]) << endl;
+	cout << AlignAndSize(char[4]) << endl;
+	cout << AlignAndSize(char[5]) << endl;
+	cout << AlignAndSize(char[6]) << endl;
+	cout << AlignAndSize(char[7]) << endl;
+	cout << AlignAndSize(char[8]) << endl;
+	cout << AlignAndSize(short) << endl;
+	cout << AlignAndSize(int) << endl;
+	cout << AlignAndSize(long long ) << endl;
+	cout << AlignAndSize(float[4]) << endl;
+	cout << AlignAndSize(float[8]) << endl;
+	cout << AlignAndSize(float[16]) << endl;
+	cout << AlignAndSize(char[128]) << endl;
+	cout << AlignAndSize(char[132]) << endl ;
+	cout << AlignAndSize(float4) << endl << endl;*/
 
-	cout << " test AlignedStorage" << endl;
-	//AlignedStorage<4, 16>::type data;
-	//std::aligned_storage<4, 16>::type data2;
-	//cout << " data size:" << sizeof(data) << " size2:" << sizeof(data2) << endl;
-	//AlignedStorage<4, 8>::type data3;
-	//std::aligned_storage<4, 8>::type data4;
-	//cout << " data size:" << sizeof(data3) << " size2:" << sizeof(data4) << endl;
-	//AlignedStorage<4, 128>::type data5;
-	//std::aligned_storage<4, 128>::type data6;
-	//cout << " data size:" << sizeof(data5) <<" size2:"<<sizeof(data6) << endl;
+	cout << "==== Test CompatibleType ====" << endl;
+	//class BaseClass {};
+	//class DerivedClass :public BaseClass {};
+	//cout << TypeNameHelper<CompatibleType_t<BaseClass&, DerivedClass&>>{}() << endl;
+	//cout << TypeNameHelper<CompatibleType_t<BaseClass, DerivedClass>>{}() << endl;
+	//cout << TypeNameHelper<CompatibleType_t<float, int>>{}() << endl;
+	//cout << TypeNameHelper<CompatibleType_t<BaseClass* const, DerivedClass* const>>{}() << endl;
 
+	std::is_trivial<int>::value;
 	cout << " test IsConst" << endl;
 	//TEST_TYPE_VALUE_BATCH(IsConst, (void, char, const int, volatile const float, double const [2], double const * const, double& const, long * const [2] ))
 
@@ -344,6 +443,7 @@ inline void TestTypeTraits()
 	//cout << " is derive from value:" << IsDeriveFrom<TestDrivied, TestAbstract>::value << endl;
 	//cout << " is derive from value:" << IsDeriveFrom<TestDrivied, TestDrivied>::value << endl;
 
+	
 	cout << " test IsAssignable/IsConvertible" << endl;
 	//cout << " is RValueAssignable:" << IsRValueAssignable<int,int>::value << endl;
 	//cout << " is RValueAssignable:" << IsRValueAssignable<int,double>::value << endl;

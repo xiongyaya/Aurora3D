@@ -20,112 +20,83 @@ struct TypeNameHelper< const volatile T>
 {
 	string operator()()
 	{
-		return  string{}+ typeid(T).name() + " const volatile";
+		return  string{ "const volatile " }+TypeNameHelper<T>{}();
 	}
 };
 
 template<typename T>
-struct TypeNameHelper< const  T>
+struct TypeNameHelper< const T>
 {
 	string operator()()
 	{
-		return  string{}+typeid(T).name() + " const";
+		return  string{"const "}+TypeNameHelper<T>{}();
 	}
 };
 
 template<typename T>
-struct TypeNameHelper<  volatile T>
+struct TypeNameHelper<volatile T>
 {
 	string operator()()
 	{
-		return string{}+typeid(T).name() + " volatile";
+		return string{"volatile "}+TypeNameHelper<T>{}();
 	}
 };
 
-template<typename T>
-struct TypeNameHelper< const volatile T&>
-{
-	string operator()()
-	{
-		return  string{}+typeid(T).name() + " const volatile &";
-	}
-};
-
-template<typename T>
-struct TypeNameHelper<volatile T&>
-{
-	string operator()()
-	{
-		return  string{}+typeid(T).name() + " volatile &";
-	}
-};
-
-template<typename T>
-struct TypeNameHelper<const T&>
-{
-	string operator()()
-	{
-		return  string{}+typeid(T).name() + " const &";
-	}
-};
 template<typename T>
 struct TypeNameHelper<T&>
 {
 	string operator()()
 	{
-
-		return  string{}+typeid(T).name() + " &";
+		return  string{}+TypeNameHelper<T>{}() + " &";
 	}
 };
 
-
-template<typename T>
-struct TypeNameHelper< const volatile T&&>
-{
-	string operator()()
-	{
-		return  string{}+typeid(T).name() + " const volatile &&";
-	}
-};
-
-template<typename T>
-struct TypeNameHelper<volatile T&&>
-{
-	string operator()()
-	{
-		return  string{}+typeid(T).name() + " volatile &&";
-	}
-};
-
-template<typename T>
-struct TypeNameHelper<const T&&>
-{
-	string operator()()
-	{
-		return  string{}+typeid(T).name() + " const &&";
-	}
-};
 template<typename T>
 struct TypeNameHelper<T&&>
 {
 	string operator()()
 	{
-		return  string{}+typeid(T).name() + " &&";
+		return  string{}+TypeNameHelper<T>{}() + " &&";
 	}
 };
 
-//template<typename T>
-//struct TypeInnerType
-//{
-//	typedef T trait;
-//	typedef T type;
-//};
-//
-//template<typename Trait, typename T>
-//struct TypeInnerType< Trait<T> >
-//{
-//	typedef 
-//};
+template<typename T>
+struct TypeNameHelper<T*>
+{
+	string operator()()
+	{
+		return string{}+TypeNameHelper<T>{}() + " *";
+	}
+};
+
+template<typename T>
+struct TypeNameHelper<T* const>
+{
+	string operator()()
+	{
+		return string{}+TypeNameHelper<T>{}() + " * const";
+	}
+};
+
+template<typename T>
+struct TypeNameHelper<T* volatile>
+{
+	string operator()()
+	{
+		return string{}+TypeNameHelper<T>{}() + " * volatile";
+	}
+};
+
+template<typename T>
+struct TypeNameHelper<T* const volatile>
+{
+	string operator()()
+	{
+		return string{}+TypeNameHelper<T>{}() + " * const volatile";
+	}
+};
+
+
 
 
 template<typename T>

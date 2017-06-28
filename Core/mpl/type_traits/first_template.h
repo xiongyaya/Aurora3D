@@ -13,9 +13,9 @@ namespace Aurora3D
 		template<typename T> struct FirstTemplateType< TemplateType<T> > :public FirstTemplateType<T> {};
 
 #define TEMPLATE_SET  (AddConst, AddCV, AddLValueRef, AddRValueRef, AddPointer, AddUnsigned, AddVolatile,\
-                AddSigned, AddConstLRef,\
-				RemoveAllExtent, RemoveConst, RemoveCV, RemoveExtent, RemovePointer, RemoveRef, RemoveTopConst,\
-				RemoveVolatile, UnderlyingType)
+                AddSigned, AddConstLRef, AddTopConst, ConvertConstLRef,\
+				RemoveAllDim, RemoveConst, RemoveCV, RemoveDim, RemovePointer, RemoveRef, RemoveTopConst,\
+				RemoveVolatile, UnderlyingType, Decay)
 		A3D_PP_FOREACH_ITEM(FIRST_TEMPLATE_TYPE, TEMPLATE_SET);
 #undef FIRST_TEMPLATE_TYPE
 #undef TEMPLATE_SET

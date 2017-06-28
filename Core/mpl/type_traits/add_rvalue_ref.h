@@ -9,7 +9,7 @@ namespace Aurora3D
 		// T  => T&&
 		// T& => T&
 		// T&&=> T&&
-		//void unchange
+		//void => void
 
 		namespace detail
 		{

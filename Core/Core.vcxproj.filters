@@ -25,7 +25,7 @@
     <Filter Include="preprocessor">
       <UniqueIdentifier>{aaa970fb-831d-4f26-8748-97760875ca7f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="mpl\function">
+    <Filter Include="mpl\mata_function">
       <UniqueIdentifier>{3c46b793-a52e-4ac8-9059-8a936f6d4f72}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -294,19 +294,10 @@
     <ClInclude Include="mpl\arithmetic_min.h">
       <Filter>mpl</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\arithmetic_max.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\logic_equal.h">
       <Filter>mpl</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\add_const.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\add_const_lref.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\add_const_ref.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\add_cv.h">
@@ -337,18 +328,6 @@
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\aligned_storage.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\aligned_union.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\array_dim.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\array_len.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\common.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\has_assigner.h">
@@ -537,16 +516,10 @@
     <ClInclude Include="mpl\type_traits\is_void.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\type_traits\remove_all_extent.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\type_traits\remove_const.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\remove_cv.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\remove_extent.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\remove_pointer.h">
@@ -568,9 +541,6 @@
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\decay.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\is_stateless.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\integral_.h">
@@ -687,12 +657,6 @@
     <ClInclude Include="mpl\type_traits\has_operator_type.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\type_traits\has_index_operator.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\has_invoke_operator.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\type_traits\has_member_fn_decl.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
@@ -700,9 +664,6 @@
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\has_refer_arrow.h">
-      <Filter>mpl\type_traits</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\type_traits\copy_qualifers.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\has_operator_decl.h">
@@ -719,6 +680,51 @@
     </ClInclude>
     <ClInclude Include="mpl\type_traits\result_of.h">
       <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\convert_const_lref.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\aligned_max.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\remove_dimension.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\remove_all_dimension.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\array_dimension.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\array_length.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\compatible_type.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\function_traits.h">
+      <Filter>mpl\mata_function</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\copy_cv.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\has_invoker.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\has_indexer.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\is_value_type_same.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\arithmetic_max.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\condition_derive.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\enable_if.h">
+      <Filter>mpl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

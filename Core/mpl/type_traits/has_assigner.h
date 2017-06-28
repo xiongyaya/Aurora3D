@@ -4,7 +4,8 @@
 #include<Core/mpl/logic_or.h>
 #include<Core/mpl/type_traits/remove_cv.h>
 #include<Core/mpl/type_traits/is_base_same.h>
-#include<Core/mpl/type_traits/add_const_lref.h>
+#include<Core/mpl/type_traits/convert_const_lref.h>
+#include<Core/mpl/type_traits/add_lvalue_ref.h>
 namespace Aurora3D
 {
 	namespace mpl
@@ -16,34 +17,31 @@ namespace Aurora3D
 
 		//string() = 1  right value assign,  for  compound type, works because compound inner member data is always left value
 		//int() = 1     literal assign ,  for  fundumental type, always false, not work 
-		template<typename Left, typename Right> struct CanAnonymousAssign:public Bool_<HAS_ASSIGNER(Left, Right)>{};
-		template<typename Left, typename Right> struct CanAnonymousTrivialAssign :public Bool_<HAS_TRIVIAL_ASSIGNER(Left, Right)> {};
-		template<typename Left, typename Right> struct CanAnonymousNothrowAssign :public Bool_<HAS_NOTHROW_ASSIGNER(Left, Right)> {};
+		template<typename Left, typename Right> struct HasAnonymousAssigner:public Bool_<HAS_ASSIGNER(Left, Right)>{};
+		template<typename Left, typename Right> struct HasAnonymousTrivialAssigner :public Bool_<HAS_TRIVIAL_ASSIGNER(Left, Right)> {};
+		template<typename Left, typename Right> struct HasAnonymousNothrowAssigner :public Bool_<HAS_NOTHROW_ASSIGNER(Left, Right)> {};
 		
 		// use assign function to judge
 		//Left t = Right&&  left value assign
 		//const Left = Right&&  don't work???????? , use IsBaseSame workaround
 		//Base* = Derive*  works
-		//Base = Derive    works
-		template<typename Left, typename Right> struct HasAssigner : Or< Bool_<HAS_ASSIGNER(typename AddLValueRef<Left>::type, Right)>, IsBaseSame<Left,Right>> {};
-		template<typename Left, typename Right> struct HasTrivialAssigner :public  Or< Bool_<HAS_TRIVIAL_ASSIGNER(typename AddLValueRef<Left>::type, Right)>, IsBaseSame<Left, Right>> {};
-		template<typename Left, typename Right> struct HasNothrowAssigner :public  Or< Bool_<HAS_NOTHROW_ASSIGNER(typename AddLValueRef<Left>::type, Right)>, IsBaseSame<Left, Right>> {};
+		//Base =  Derive   works
+		template<typename Left, typename Right> struct HasAssigner : Or< Bool_<HAS_ASSIGNER(AddLValueRef_t<Left>, Right) >, IsBaseSame<Left,Right>> {};
+		template<typename Left, typename Right> struct HasTrivialAssigner :public  Or< Bool_<HAS_TRIVIAL_ASSIGNER(AddLValueRef_t<Left>, Right)>, IsBaseSame<Left, Right>> {};
+		template<typename Left, typename Right> struct HasNothrowAssigner :public  Or< Bool_<HAS_NOTHROW_ASSIGNER(AddLValueRef_t<Left>, Right)>, IsBaseSame<Left, Right>> {};
 
-		//T a = const T b
-		template<typename T> struct HasCopyAssigner :public Bool_<HAS_ASSIGNER(typename AddLValueRef<T>::type, typename AddConstLRef<T>::type)> {};
-		template<typename T> struct HasTrivialCopyAssigner :public Bool_<HAS_TRIVIAL_ASSIGNER(typename AddLValueRef<T>::type, typename AddConstLRef<T>::type)> {};
-		template<typename T> struct HasNoThrowCopyAssigner :public Bool_<HAS_NOTHROW_ASSIGNER(typename AddLValueRef<T>::type, typename AddConstLRef<T>::type)> {};
+		//T a = const T& b
+		template<typename T> struct HasCopyAssigner :public Bool_<HAS_ASSIGNER( AddLValueRef_t<T>,  ConvertConstLRef_t<T> )> {};
+		template<typename T> struct HasTrivialCopyAssigner :public Bool_<HAS_TRIVIAL_ASSIGNER(AddLValueRef_t<T>,  ConvertConstLRef_t<T>)> {};
+		template<typename T> struct HasNoThrowCopyAssigner :public Bool_<HAS_NOTHROW_ASSIGNER(AddLValueRef_t<T>,  ConvertConstLRef_t<T>)> {};
 
 		//T a = T&& b
-		template<typename T> struct HasMoveAssigner :public Bool_<HAS_ASSIGNER(typename AddLValueRef<T>::type, T)> {};
-		template<typename T> struct HasTriviallyMoveAssigner :public Bool_<HAS_TRIVIAL_ASSIGNER(typename AddLValueRef<T>::type, T)> {};
-		template<typename T> struct HasNoThrowMoveAssigner :public Bool_<HAS_NOTHROW_ASSIGNER(typename AddLValueRef<T>::type, T)> {};
+		template<typename T> struct HasMoveAssigner :public Bool_<HAS_ASSIGNER(AddLValueRef_t<T>, T)> {};
+		template<typename T> struct HasTriviallyMoveAssigner :public Bool_<HAS_TRIVIAL_ASSIGNER(AddLValueRef_t<T>, T)> {};
+		template<typename T> struct HasNoThrowMoveAssigner :public Bool_<HAS_NOTHROW_ASSIGNER(AddLValueRef_t<T>, T)> {};
 
 #undef HAS_ASSIGNER
 #undef HAS_TRIVIAL_ASSIGNER
 #undef HAS_NOTHROW_ASSIGNER
-
-
-
 	}
 }
