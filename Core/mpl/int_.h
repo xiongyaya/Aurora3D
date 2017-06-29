@@ -12,5 +12,10 @@ namespace Aurora3D
 			typedef Int_<N + 1> next;
 			typedef Int_<N - 1> prior;
 		};
+
+		typedef Int_<-1> NOne_;
+		typedef Int_<0>  Zero_;
+		typedef Int_<1>  One_;
+		typedef Int_<2>  Two_;
 	}
 }

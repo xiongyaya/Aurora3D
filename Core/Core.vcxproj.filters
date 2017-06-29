@@ -726,10 +726,25 @@
     <ClInclude Include="mpl\enable_if.h">
       <Filter>mpl</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\bit_op.h">
+    <ClInclude Include="mpl\bit_or.h">
       <Filter>mpl</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\bit_or.h">
+    <ClInclude Include="mpl\bit_and.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\bit_not.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\bit_compose.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\bit_shift_left.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\bit_shift_right.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\bit_sequence.h">
       <Filter>mpl</Filter>
     </ClInclude>
   </ItemGroup>

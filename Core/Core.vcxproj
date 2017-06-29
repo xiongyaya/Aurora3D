@@ -120,8 +120,13 @@
     <ClInclude Include="memory\place_new.h" />
     <ClInclude Include="mpl\arithmetic_max.h" />
     <ClInclude Include="mpl\arithmetic_min.h" />
+    <ClInclude Include="mpl\bit_and.h" />
+    <ClInclude Include="mpl\bit_not.h" />
     <ClInclude Include="mpl\bit_or.h" />
-    <ClInclude Include="mpl\bit_op.h" />
+    <ClInclude Include="mpl\bit_compose.h" />
+    <ClInclude Include="mpl\bit_sequence.h" />
+    <ClInclude Include="mpl\bit_shift_left.h" />
+    <ClInclude Include="mpl\bit_shift_right.h" />
     <ClInclude Include="mpl\condition_derive.h" />
     <ClInclude Include="mpl\enable_if.h" />
     <ClInclude Include="mpl\ingore_t.h" />

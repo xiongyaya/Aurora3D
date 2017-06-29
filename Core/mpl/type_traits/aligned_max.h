@@ -10,8 +10,8 @@ namespace Aurora3D
 		template<size_t MinAlign, typename First, typename... Others>
 		struct AlignedMax
 		{
-			static constexpr size_t MaxSize = SizetMax<MinAlign, sizeof(First), sizeof(Others)...>::value;
-			static constexpr size_t MaxAlign = SizetMax<alignof(First), alignof(Others)...>::value;
+			static constexpr size_t MaxSize = Max<MinAlign, sizeof(First), sizeof(Others)...>::value;
+			static constexpr size_t MaxAlign = Max<alignof(First), alignof(Others)...>::value;
 			struct type
 			{
 				alignas(MaxAlign) char padding[MaxSize];
@@ -19,8 +19,8 @@ namespace Aurora3D
 			static constexpr int value = sizeof(type);
 		};
 
-		template<size_t LeastAlign, typename First, typename... Others>
-		using AlignedMax_t = typename AlignedMax<LeastAlign, First, Others...>::type;
+		template<size_t MinAlign, typename First, typename... Others>
+		using AlignedMax_t = typename AlignedMax<MinAlign, First, Others...>::type;
 #define AlignedMax_v(MinAlign, T0, ...)  (AlignedMax<MinAlign,T0,__VA_ARGS__>::value)
 
 	}

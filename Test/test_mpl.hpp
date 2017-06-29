@@ -11,7 +11,10 @@ using namespace std;
 #include<Core/mpl/int_.h>
 #include<Core/mpl/sizet_.h>
 #include<Core/mpl/enable_if.h>
-#include<Core/mpl/bit_op.h>
+#include<Core/mpl/bit_compose.h>
+#include<Core/mpl/bit_or.h>
+#include<Core/mpl/bit_and.h>
+#include<Core/mpl/bit_sequence.h>
 
 using namespace Aurora3D::mpl;
 
@@ -63,7 +66,22 @@ inline void TestMpl()
 	cout << "value:" << Min<4u, 2, 3, 2, 4>::value << endl;
 	cout << "value:" << TypeMin<Int_<3>, Int_<2>, Sizet_<3>, Int_<2>, Int_<1> >::value << endl;
 
-	cout << BitOperator<7,0,3,5>::value << endl;
+	cout << "==== BitCompose ====" << endl;
+	cout << BitCompose<7,0,3,5>::value << endl;
+	cout << TypeBitCompose< Int_<0>, Int_<1>, Int_<2>, Int_<3> >::value << endl;
+
+	cout << "==== BitSequence ====" << endl;
+	cout << BitSequence<1101>::value << endl;
+	cout << BitSequence<111>::value << endl;
+	cout << BitSequence<11>::value << endl;
+	cout << BitSequence<1>::value << endl;
+
+	cout << "==== BitOr/BitAnd ====" << endl;
+	cout << BitOr<1, 2, 4, 7>::value << endl;
+	cout << TypeBitOr< Int_<1>, Int_<2>, Int_<4>, Int_<8> >::value << endl;
+
+	cout << BitAnd<15, 7>::value << endl;
+	cout << TypeBitAnd< Int_<7>, Int_<15>, Int_<1>>::value << endl;
 
 	//cout << "value" << Max<int, 1>::value << endl;
 	//cout << "value" << Max<int, 1, 2>::value << endl;
