@@ -1,6 +1,6 @@
 #pragma once
 #include<core/mpl/bool_.h>
-#include<core/mpl/condition_derive.h>
+#include<core/mpl/if.h>
 
 namespace Aurora3D
 {
@@ -9,6 +9,6 @@ namespace Aurora3D
 		//lazy
 		template<typename... Args> struct Or:public False_ {};
 		template<typename First, typename... Other> struct Or<First, Other...> 
-			: public TypeConditionDerive<First, True_, Or<Other...>>{};
+			: public If<First, True_, Or<Other...>>{};
 	}
 }

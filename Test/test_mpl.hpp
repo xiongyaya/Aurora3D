@@ -15,7 +15,8 @@ using namespace std;
 #include<Core/mpl/bit_or.h>
 #include<Core/mpl/bit_and.h>
 #include<Core/mpl/bit_sequence.h>
-
+#include<Core/mpl/type_traits/is_integral.h>
+#include<Core/mpl/mata_function/apply.h>
 using namespace Aurora3D::mpl;
 
 inline EnableIf_t<true, int> TestEnableIf()
@@ -61,10 +62,15 @@ inline void TestMpl()
 	cout << "value£º" << And<True_, True_, True_>::value << endl;
 	cout << "value£º" << And<True_, False_, True_>::value << endl;
 
-	cout << "value:" << Max<1, 2, 3, 2, 1>::value << endl;
-	cout << "value:" << TypeMax<Int_<1>, Sizet_<2>, Int_<3>, Sizet_<2>, Int_<1> >::value << endl;
-	cout << "value:" << Min<4u, 2, 3, 2, 4>::value << endl;
-	cout << "value:" << TypeMin<Int_<3>, Int_<2>, Sizet_<3>, Int_<2>, Int_<1> >::value << endl;
+	cout << "==== Max/Min ====" << endl;
+	cout << "value:" << IntMax<1, 2, 3, 2, 1>::value << endl;
+	cout << "value:" << Max<Int_<1>, Sizet_<2>, Int_<3>, Sizet_<2>, Int_<1> >::value << endl;
+	cout << "value:" << IntMin<4u, 2, 3, 2, 4>::value << endl;
+	cout << "value:" << Min<Int_<3>, Int_<2>, Sizet_<3>, Int_<2>, Int_<1> >::value << endl;
+	cout << Min_Fn::Apply<Int_<3>, Int_<2>, Sizet_<3>>::value << endl;
+	cout << Apply< Min_Fn, Int_<3>, Int_<1>, Sizet_<3>>::value << endl;
+
+	//MinTest< Int_<3>, Int_<2>, Sizet_<3>, Int_<2>, Int_<1>>::value;
 
 	cout << "==== BitCompose ====" << endl;
 	cout << BitCompose<7,0,3,5>::value << endl;
@@ -82,6 +88,15 @@ inline void TestMpl()
 
 	cout << BitAnd<15, 7>::value << endl;
 	cout << TypeBitAnd< Int_<7>, Int_<15>, Int_<1>>::value << endl;
+
+
+	cout << "==== If ====" << endl;
+	cout << IsIntegral<int>::value << endl;
+	cout << IsIntegral<float>::value << endl;
+	cout << If<IsIntegral<int>, True_, False_>::value << endl;
+	cout << If<IsIntegral<float>, True_, False_>::value << endl;
+	cout << BoolIf<false, True_, False_>::value << endl;
+	cout << BoolIf<true, True_, False_>::value << endl;
 
 	//cout << "value" << Max<int, 1>::value << endl;
 	//cout << "value" << Max<int, 1, 2>::value << endl;

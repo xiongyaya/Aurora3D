@@ -2,6 +2,7 @@
 
 
 #include<cmath>  
+#include<Core/compile.h>
 #include<Core/type.h>
 
 #if   defined(AURORA3D_SSE)

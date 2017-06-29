@@ -13,6 +13,7 @@ namespace Aurora3D
 			template<typename T> struct IsPointerHelper<T*> :public True_ {};
 		}
 
+		//for non-member-pointer
 		template<typename T> struct IsPointer :public detail::IsPointerHelper< typename RemoveCV<T>::type> {};
 #define IsPointer_v(T)     IsPointer<T>::value
 #define NotPointer_v(T)   (!IsPointer<T>::value)

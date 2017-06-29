@@ -10,6 +10,17 @@ namespace Aurora3D
 			typedef T value;
 		};
 
+
+		template<>
+		struct Arg<1>
+		{
+			template<typename T1, typename TS...>
+			struct Apply
+			{
+				typedef T1 type;
+			};
+		};
+
 		typedef Arg<1> _1;
 		typedef Arg<2> _2;
 		typedef Arg<3> _3;

@@ -106,6 +106,7 @@
     <ClInclude Include="math\math_impl.h" />
     <ClInclude Include="math\matrix4.h" />
     <ClInclude Include="math\plane.h" />
+    <ClInclude Include="math\quantity.h" />
     <ClInclude Include="math\quaternion.h" />
     <ClInclude Include="math\sphere.h" />
     <ClInclude Include="math\uint8x16.h" />
@@ -118,8 +119,14 @@
     <ClInclude Include="memory\aligned_allocator.h" />
     <ClInclude Include="memory\heap_allocator.h" />
     <ClInclude Include="memory\place_new.h" />
+    <ClInclude Include="mpl\arithmatic_add.h" />
+    <ClInclude Include="mpl\arithmatic_div.h" />
+    <ClInclude Include="mpl\arithmatic_mod.h" />
+    <ClInclude Include="mpl\arithmatic_mul.h" />
+    <ClInclude Include="mpl\arithmatic_sub.h" />
     <ClInclude Include="mpl\arithmetic_max.h" />
     <ClInclude Include="mpl\arithmetic_min.h" />
+    <ClInclude Include="mpl\binary_op_decl.h" />
     <ClInclude Include="mpl\bit_and.h" />
     <ClInclude Include="mpl\bit_not.h" />
     <ClInclude Include="mpl\bit_or.h" />
@@ -127,7 +134,7 @@
     <ClInclude Include="mpl\bit_sequence.h" />
     <ClInclude Include="mpl\bit_shift_left.h" />
     <ClInclude Include="mpl\bit_shift_right.h" />
-    <ClInclude Include="mpl\condition_derive.h" />
+    <ClInclude Include="mpl\container\vector.h" />
     <ClInclude Include="mpl\enable_if.h" />
     <ClInclude Include="mpl\ingore_t.h" />
     <ClInclude Include="mpl\integral_.h" />
@@ -141,6 +148,7 @@
     <ClInclude Include="mpl\int_.h" />
     <ClInclude Include="mpl\logic_not.h" />
     <ClInclude Include="mpl\logic_or.h" />
+    <ClInclude Include="mpl\mata_function\apply.h" />
     <ClInclude Include="mpl\placeholder.h" />
     <ClInclude Include="mpl\sizet_.h" />
     <ClInclude Include="mpl\type_traits\add_const.h" />
@@ -251,6 +259,8 @@
     <ClInclude Include="mpl\type_traits\result_of.h" />
     <ClInclude Include="mpl\type_traits\underlying_type.h" />
     <ClInclude Include="mpl\type_traits\is_value_type_same.h" />
+    <ClInclude Include="mpl\units\base_demension.h" />
+    <ClInclude Include="mpl\units\units.h" />
     <ClInclude Include="preprocessor\bit4x4_add.h" />
     <ClInclude Include="preprocessor\bit4x4_equal.h" />
     <ClInclude Include="preprocessor\bit4x4_less.h" />

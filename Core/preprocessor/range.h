@@ -15,6 +15,7 @@
 				A3D_PP_RANGE_END,                                                    \
 				A3D_PP_RANGE_CMP)##(content, from, to, step)                         
 
+//[From, To)
 #define A3D_PP_RANGE(content, from, to) A3D_PP_RANGE_STEP(content, from, to, 1)
 
 #define A3D_PP_RANGE_END(...)

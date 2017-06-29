@@ -28,6 +28,12 @@
     <Filter Include="mpl\mata_function">
       <UniqueIdentifier>{3c46b793-a52e-4ac8-9059-8a936f6d4f72}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mpl\units">
+      <UniqueIdentifier>{e64c091b-4bcc-4695-b6b9-0198e944e34d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mpl\container">
+      <UniqueIdentifier>{c22c21cd-b6ac-4e6e-ba3d-246e170cccc3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="compile.h" />
@@ -720,16 +726,10 @@
     <ClInclude Include="mpl\arithmetic_max.h">
       <Filter>mpl</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\condition_derive.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\enable_if.h">
       <Filter>mpl</Filter>
     </ClInclude>
     <ClInclude Include="mpl\bit_or.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\bit_and.h">
       <Filter>mpl</Filter>
     </ClInclude>
     <ClInclude Include="mpl\bit_not.h">
@@ -746,6 +746,42 @@
     </ClInclude>
     <ClInclude Include="mpl\bit_sequence.h">
       <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\arithmatic_add.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\arithmatic_div.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\arithmatic_mod.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\arithmatic_mul.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\arithmatic_sub.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\bit_and.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\binary_op_decl.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\vector.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\units\base_demension.h">
+      <Filter>mpl\units</Filter>
+    </ClInclude>
+    <ClInclude Include="math\quantity.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\units\units.h">
+      <Filter>mpl\units</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\mata_function\apply.h">
+      <Filter>mpl\mata_function</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
