@@ -10,7 +10,6 @@ namespace Aurora3D
 			typedef T value;
 		};
 
-
 		template<>
 		struct Arg<1>
 		{

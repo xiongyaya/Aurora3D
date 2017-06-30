@@ -24,8 +24,23 @@ inline EnableIf_t<true, int> TestEnableIf()
 	return 0;
 }
 
+
+template<typename T>
+struct Wrap {};
+
+
+template< typename T  >
+struct Lambda
+{
+	typedef False_ type;
+};
+
+template< template<typename T1> typename T, typename P >
+struct Lambda< T<P> > { typedef int type; };
+
 inline void TestMpl()
 {
+	cout << typeid(Lambda <Wrap<int> >::type).name() << endl;
 
 	//test replace_type
 	//TypeName<replace_type<const int, int, long>::type>{}();

@@ -149,7 +149,8 @@
     <ClInclude Include="mpl\logic_not.h" />
     <ClInclude Include="mpl\logic_or.h" />
     <ClInclude Include="mpl\mata_function\apply.h" />
-    <ClInclude Include="mpl\placeholder.h" />
+    <ClInclude Include="mpl\mata_function\lambda.h" />
+    <ClInclude Include="mpl\mata_function\placeholder.h" />
     <ClInclude Include="mpl\sizet_.h" />
     <ClInclude Include="mpl\type_traits\add_const.h" />
     <ClInclude Include="mpl\type_traits\convert_const_lref.h" />

@@ -69,9 +69,6 @@
     <ClInclude Include="container\char_trait.h">
       <Filter>container</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\placeholder.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\if.h">
       <Filter>mpl</Filter>
     </ClInclude>
@@ -781,6 +778,12 @@
       <Filter>mpl\units</Filter>
     </ClInclude>
     <ClInclude Include="mpl\mata_function\apply.h">
+      <Filter>mpl\mata_function</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\mata_function\lambda.h">
+      <Filter>mpl\mata_function</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\mata_function\placeholder.h">
       <Filter>mpl\mata_function</Filter>
     </ClInclude>
   </ItemGroup>
