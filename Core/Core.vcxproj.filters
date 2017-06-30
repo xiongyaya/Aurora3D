@@ -216,9 +216,6 @@
     <ClInclude Include="preprocessor\ingore.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
-    <ClInclude Include="preprocessor\range.h">
-      <Filter>preprocessor</Filter>
-    </ClInclude>
     <ClInclude Include="preprocessor\seq_at.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
@@ -785,6 +782,12 @@
     </ClInclude>
     <ClInclude Include="mpl\mata_function\placeholder.h">
       <Filter>mpl\mata_function</Filter>
+    </ClInclude>
+    <ClInclude Include="preprocessor\repeat_range.h">
+      <Filter>preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="preprocessor\repeat_range_split.h">
+      <Filter>preprocessor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

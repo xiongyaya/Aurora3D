@@ -17,6 +17,9 @@ using namespace std;
 #include<Core/mpl/bit_sequence.h>
 #include<Core/mpl/type_traits/is_integral.h>
 #include<Core/mpl/mata_function/apply.h>
+#include<Core/mpl/mata_function/lambda.h>
+#include<Core/mpl/mata_function/placeholder.h>
+
 using namespace Aurora3D::mpl;
 
 inline EnableIf_t<true, int> TestEnableIf()
@@ -41,6 +44,8 @@ struct Lambda< T<P> > { typedef int type; };
 inline void TestMpl()
 {
 	cout << typeid(Lambda <Wrap<int> >::type).name() << endl;
+	cout << IsPlaceholder<_1>::value << endl;
+	cout << IsPlaceholder<int>::value << endl;
 
 	//test replace_type
 	//TypeName<replace_type<const int, int, long>::type>{}();

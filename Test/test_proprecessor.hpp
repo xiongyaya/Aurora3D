@@ -30,13 +30,14 @@ using namespace std;
 #include<Core/preprocessor/seq_foreach_item.h>
 #include<Core/preprocessor/seq_foreach_tuple.h>
 #include<Core/preprocessor/while.h>
-#include<Core/preprocessor/range.h>
+#include<Core/preprocessor/repeat_range.h>
+#include<Core/preprocessor/repeat_range_split.h>
 
 #define MACRO_TEST(name)  cout << " test " << (#name) << endl; cout <<"         value :"<< (name) << endl;  cout <<"         stringize :"<< A3D_PP_STRINGIZE(name) << endl;
 #define NEW_LINE cout<<endl;
 
 
-template<A3D_PP_RANGE(typename T, 0,4)>
+template<A3D_PP_REPEAT_RANGE(typename T, 0, 4, A3D_PP_NULL)>
 struct vector4_
 {
 	T0 t0;
@@ -131,6 +132,13 @@ inline void TestProprecessor()
 
 	cout << "    test  range :" << endl;
 	typedef vector4_<int, short, char, long long> int_vector_;
+	bool a0 = false;
+	bool a1 = false;
+	bool a2 = false;
+	bool a3 = false;
+	bool or4 = A3D_PP_REPEAT_RANGE_SPLIT( a, 0, 4, A3D_PP_NULL , | );
+
+
 	cout << "      " << typeid(int_vector_).name() << endl;
 	cout << "========================= end preprocessor ==============================" << endl;
 }

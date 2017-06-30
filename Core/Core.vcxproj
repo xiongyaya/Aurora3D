@@ -292,7 +292,8 @@
     <ClInclude Include="preprocessor\byte_unpack.h" />
     <ClInclude Include="preprocessor\connect.h" />
     <ClInclude Include="preprocessor\ingore.h" />
-    <ClInclude Include="preprocessor\range.h" />
+    <ClInclude Include="preprocessor\repeat_range.h" />
+    <ClInclude Include="preprocessor\repeat_range_split.h" />
     <ClInclude Include="preprocessor\seq_at.h" />
     <ClInclude Include="preprocessor\seq_compose.h" />
     <ClInclude Include="preprocessor\seq_expand.h" />

@@ -1,22 +1,41 @@
 #pragma once
 
+#include<core/mpl/bool_.h>
+
 namespace Aurora3D
 {
 	namespace mpl
 	{
-		template<int T>
+#define A3D_PP_PLACEHOLDER_MAX 16
+
+		template<int64 T>
 		struct Arg
 		{
-			typedef T value;
+			static constexpr int64 value = T;
 		};
+
+		template<typename T> struct IsPlaceholder:public False_ {};
+		template<int N> struct IsPlaceholder< Arg<N> >:public True_{};
 
 		template<>
 		struct Arg<1>
 		{
-			template<typename T1, typename TS...>
+			template<typename T1, typename... TS>
 			struct Apply
 			{
 				typedef T1 type;
+			};
+		};
+
+		typedef Arg<-1> _n;
+
+		template<>
+		struct Arg<2>
+		{
+			template<typename T1, typename T2, typename... TS>
+			struct Apply
+			{
+				typedef T2 type;
 			};
 		};
 
@@ -35,6 +54,6 @@ namespace Aurora3D
 		typedef Arg<13> _13;
 		typedef Arg<14> _14;
 		typedef Arg<15> _15;
-		typedef Arg<-1> _n;
+		
 	}
 }
