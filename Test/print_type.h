@@ -107,3 +107,12 @@ struct TypeName
 		cout<<"      "<< left<<setw(40) <<TypeNameHelper<typename FirstTemplateType<T>::type >{}()<<" ==> " << TypeNameHelper<typename T::type >{}() << endl;
 	}
 };
+
+template<typename T>
+struct NormalTypeName
+{
+	void operator()()
+	{
+		cout << "      " << left << setw(40) <<"type name:" << TypeNameHelper<T>{}() << endl;
+	}
+};

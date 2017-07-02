@@ -2,9 +2,9 @@
 #include<core/preprocessor/bool_if.h>
 #include<core/preprocessor/bit4x4_equal.h>
 #include<core/preprocessor/bit4x4_less.h>
-#include<core/preprocessor/byte_unpack.h>
+#include<core/preprocessor/seq_unpack.h>
 
-#define A3D_PP_BYTE_LESS(byte1, byte2) A3D_PP_BYTE_LESS_CONNECT_REPARSE(A3D_PP_BYTE_LESS_EXPLICIT,(A3D_PP_BYTE_UNPACK(byte1), A3D_PP_BYTE_UNPACK(byte2)))
+#define A3D_PP_BYTE_LESS(byte1, byte2) A3D_PP_BYTE_LESS_CONNECT_REPARSE(A3D_PP_BYTE_LESS_EXPLICIT,(A3D_PP_SEQ_UNPACK(byte1), A3D_PP_SEQ_UNPACK(byte2)))
 
 //compare x7x6x5x4 with y7y6y5y4, if         x7x6x5x4 == y7y6y5y4   goto compare x3x2x1x0 with y3y2y1y0
 //                                else  if   x7x6x5x4 <  y7y6y5y4   return 1 

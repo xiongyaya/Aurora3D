@@ -1,59 +1,57 @@
 #pragma once
 
-#include<core/mpl/bool_.h>
+#include<Core/preprocessor/range_call.h>
+#include<Core/preprocessor/range_prefix.h>
+#include<Core/preprocessor/range_wrap.h>
+#include<Core/mpl/bool_.h>
+#include<core/mpl/int_.h>
+#include<Core/mpl/ingore_t.h>
+
 
 namespace Aurora3D
 {
 	namespace mpl
 	{
-#define A3D_PP_PLACEHOLDER_MAX 16
-
 		template<int64 T>
 		struct Arg
 		{
 			static constexpr int64 value = T;
 		};
 
-		template<typename T> struct IsPlaceholder:public False_ {};
-		template<int N> struct IsPlaceholder< Arg<N> >:public True_{};
-
-		template<>
-		struct Arg<1>
-		{
-			template<typename T1, typename... TS>
-			struct Apply
-			{
-				typedef T1 type;
-			};
-		};
-
+		template<typename T> struct IsPlaceholder :public False_ {};
 		typedef Arg<-1> _n;
 
+#define A3D_PP_PLACEHOLDER_MAX 16
+
 		template<>
-		struct Arg<2>
+		struct Arg<-1>
 		{
-			template<typename T1, typename T2, typename... TS>
-			struct Apply
-			{
-				typedef T2 type;
-			};
+			template<int64 Pos, A3D_PP_RANGE_WRAP(typename T,
+				1, A3D_PP_PLACEHOLDER_MAX, = ingore_t, (, )), typename... TS>
+			struct Apply:public Arg<Pos>:: template Apply<Pos,
+				A3D_PP_RANGE_PREFIX(T,1, A3D_PP_PLACEHOLDER_MAX, (,)), TS...>{};
 		};
 
-		typedef Arg<1> _1;
-		typedef Arg<2> _2;
-		typedef Arg<3> _3;
-		typedef Arg<4> _4;
-		typedef Arg<5> _5;
-		typedef Arg<6> _6;
-		typedef Arg<7> _7;
-		typedef Arg<8> _8;
-		typedef Arg<9> _9;
-		typedef Arg<10> _10;
-		typedef Arg<11> _11;
-		typedef Arg<12> _12;
-		typedef Arg<13> _13;
-		typedef Arg<14> _14;
-		typedef Arg<15> _15;
+
+
+#define PLACEHOLDER_SPECIALIZATION_DECL(N, index, _)        \
+		template<>                                          \
+		struct Arg<N>                                       \
+		{											        \
+			template<int64 Pos, A3D_PP_RANGE_PREFIX(        \
+				typename T,1, N, (,)), typename... TS>      \
+			struct Apply                                    \
+			{                                               \
+				typedef T##N type;                          \
+			};                                              \
+		};                                                  \
+		typedef Arg<N> _##N;                                \
+		template<> struct IsPlaceholder< Arg<N> >:public True_{};
+
+A3D_PP_RANGE_CALL(1, A3D_PP_PLACEHOLDER_MAX, 1, PLACEHOLDER_SPECIALIZATION_DECL, _)
+#undef PLACEHOLDER_SPECIALIZATION_DECL
+		
+
 		
 	}
 }

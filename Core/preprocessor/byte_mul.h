@@ -3,7 +3,7 @@
 #include<core/preprocessor/byte_add.h>
 #include<core/preprocessor/byte_shift_attribute.h>
 #include<core/preprocessor/byte_shift_left.h>
-#include<core/preprocessor/byte_unpack.h>
+#include<core/preprocessor/seq_unpack.h>
 #include<core/preprocessor/bool_and.h>
 #include<core/preprocessor/uint8_less.h>
 
@@ -15,6 +15,7 @@
 #define A3D_PP_BYTE_MUL_CONNECT_REPARSE2(x, y) A3D_PP_BYTE_MUL_CONNECT_REPARSE2_STEP1(x, y)
 #define A3D_PP_BYTE_MUL_CONNECT_REPARSE2_STEP1(x, y) A3D_PP_BYTE_MUL_CONNECT_REPARSE2_STEP2(x y)
 #define A3D_PP_BYTE_MUL_CONNECT_REPARSE2_STEP2(result) result
+
 //for last add
 #define A3D_PP_BYTE_MUL_SHIFT_LEFT_IF(Condi, byte, n) A3D_PP_IF(Condi, A3D_PP_BYTE_SHIFT_LEFT(byte,n), (0,0,0,0,0,0,0,0) )
 #define A3D_PP_BYTE_MUL_UNCHANGE_IF(Condi, byte)      A3D_PP_IF(Condi, byte, (0,0,0,0,0,0,0,0) )
@@ -53,11 +54,11 @@
 
 #define A3D_PP_BYTE_MUL_DO_UNPACK_BYTE1(byte1, byte2, lzeros1,bit_width1, lzeros2,bit_width2) \
 			A3D_PP_BYTE_MUL_CONNECT_REPARSE2( A3D_PP_BYTE_MUL_DO_SPERATE_SHIFT_ADD,           \
-				(byte2,bit_width1, A3D_PP_BYTE_UNPACK( A3D_PP_BYTE_SHIFT_LEFT( byte1, lzeros1) )))
+				(byte2,bit_width1, A3D_PP_SEQ_UNPACK( A3D_PP_BYTE_SHIFT_LEFT( byte1, lzeros1) )))
 
 #define A3D_PP_BYTE_MUL_DO_UNPACK_BYTE2(byte1, byte2, lzeros1,bit_width1, lzeros2,bit_width2) \
 			A3D_PP_BYTE_MUL_CONNECT_REPARSE2( A3D_PP_BYTE_MUL_DO_SPERATE_SHIFT_ADD,           \
-				(byte1, bit_width2, A3D_PP_BYTE_UNPACK( A3D_PP_BYTE_SHIFT_LEFT(byte2, lzeros2) )))
+				(byte1, bit_width2, A3D_PP_SEQ_UNPACK( A3D_PP_BYTE_SHIFT_LEFT(byte2, lzeros2) )))
 
 // dispatcher 
 #define A3D_PP_BYTE_MUL_DO_SPERATE_SHIFT_ADD(byte, bit_width, b7,b6,b5,b4,b3,b2,b1,b0) \

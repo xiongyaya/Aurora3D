@@ -40,7 +40,7 @@
 #define A3D_PP_BYTE_DIV_CONNECT_REPARSE2_STEP1(x, y) A3D_PP_BYTE_DIV_CONNECT_REPARSE2_STEP2(x y)
 #define A3D_PP_BYTE_DIV_CONNECT_REPARSE2_STEP2(result) result
 
-
+// byte1 / byte2
 #define A3D_PP_BYTE_DIV(byte1, byte2)                                                   \
 			A3D_PP_BYTE_DIV_CONNECT_REPARSE1(                                           \
 				A3D_PP_IF( A3D_PP_BYTE_LESS(byte2, byte1),                              \

@@ -207,9 +207,6 @@
     <ClInclude Include="preprocessor\byte_to_uint8.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
-    <ClInclude Include="preprocessor\byte_unpack.h">
-      <Filter>preprocessor</Filter>
-    </ClInclude>
     <ClInclude Include="preprocessor\connect.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
@@ -783,10 +780,25 @@
     <ClInclude Include="mpl\mata_function\placeholder.h">
       <Filter>mpl\mata_function</Filter>
     </ClInclude>
-    <ClInclude Include="preprocessor\repeat_range.h">
+    <ClInclude Include="preprocessor\range_call.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
-    <ClInclude Include="preprocessor\repeat_range_split.h">
+    <ClInclude Include="preprocessor\range_inner_call.h">
+      <Filter>preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="preprocessor\seq_unpack.h">
+      <Filter>preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="preprocessor\range_prefix.h">
+      <Filter>preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="preprocessor\range_wrap.h">
+      <Filter>preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\transform_vargs.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="preprocessor\range_declare.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
   </ItemGroup>

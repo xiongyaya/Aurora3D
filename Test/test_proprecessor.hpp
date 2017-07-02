@@ -30,25 +30,28 @@ using namespace std;
 #include<Core/preprocessor/seq_foreach_item.h>
 #include<Core/preprocessor/seq_foreach_tuple.h>
 #include<Core/preprocessor/while.h>
-#include<Core/preprocessor/repeat_range.h>
-#include<Core/preprocessor/repeat_range_split.h>
+#include<Core/preprocessor/range_prefix.h>
+#include<Core/preprocessor/range_declare.h>
+#include<Core/preprocessor/range_wrap.h>
+#include<Core/preprocessor/range_call.h>
+#include<Core/preprocessor/uint8_comma_if.h>
+#include<Core/preprocessor/bool_if.h>
+#include<Core/preprocessor/seq_unpack.h>
+
 
 #define MACRO_TEST(name)  cout << " test " << (#name) << endl; cout <<"         value :"<< (name) << endl;  cout <<"         stringize :"<< A3D_PP_STRINGIZE(name) << endl;
 #define NEW_LINE cout<<endl;
 
 
-template<A3D_PP_REPEAT_RANGE(typename T, 0, 4, A3D_PP_NULL)>
-struct vector4_
-{
-	T0 t0;
-	T1 t1;
-	T2 t2;
-	T3 t3;
-};
+//range_call  compose with range_repeat
+#define VECTOR_DECLARE(i, index, _) \
+template<A3D_PP_RANGE_PREFIX(typename T, 1, i, (, ))> \
+struct vector##i{};
+A3D_PP_RANGE_CALL(10,100,30, VECTOR_DECLARE, _) 
+
 
 inline void TestProprecessor()
 {	
-	//BOOST_PP_ARRAY_ELEM()
 	cout << "==================== TEST PREPROCESSOR LIB ==============================" << endl;
 	cout << "  **** **** 1. sub and add test: **** ****" << endl;
 	cout << "stringize :" << A3D_PP_STRINGIZE(A3D_PP_BYTE_SUB((1, 0, 0, 0, 1, 0, 0, 0), (0, 1, 1, 1, 0, 0, 0, 0))) << endl;
@@ -104,7 +107,6 @@ inline void TestProprecessor()
 
 	cout << "  **** **** 4. while foreach range compose+foreach: **** ****" << endl;
 
-
 	cout << "    test  while loop:" << endl;
 #define WHILE_CONDI2(depth, down, up) A3D_PP_INT_IF(down, 1, 0)           // down !=0
 #define WHILE_LOOP(depth, down, up)  A3D_PP_SUB1(down), A3D_PP_ADD1(up)   //++down, --up
@@ -130,24 +132,36 @@ inline void TestProprecessor()
 	cout << A3D_PP_STRINGIZE(A3D_PP_FOREACH_TUPLE(TEST_TUPLE, ((1, 2, 1), (3, 4, 2), (A3D_PP_NULL, p, 3), (0, A3D_PP_NULL, 4), (1, 1, 4), (2, 3, 4)), -)) << endl;
 
 
-	cout << "    test  range :" << endl;
-	typedef vector4_<int, short, char, long long> int_vector_;
-	bool a0 = false;
-	bool a1 = false;
-	bool a2 = false;
-	bool a3 = false;
-	bool or4 = A3D_PP_REPEAT_RANGE_SPLIT( a, 0, 4, A3D_PP_NULL , | );
+	cout << "==== test  range  ====" << endl;
+	cout << A3D_PP_DIV(5, 2) << endl;
+	cout << A3D_PP_STRINGIZE(A3D_PP_RANGE_PREFIX_STEP(typename T, 0, 6, 2, (,))) << endl;
+	cout << A3D_PP_STRINGIZE(A3D_PP_RANGE_PREFIX(typename T, 6, 0, (, ))) << endl;
+	cout << A3D_PP_STRINGIZE(A3D_PP_RANGE_WRAP(typename T, 6, 0, =ingore_t, (, ))) << endl;
+	cout << A3D_PP_STRINGIZE(A3D_PP_RANGE_DECLARE(typedef A, ::type, B, 0, 6, (;))) << endl;
+	cout << A3D_PP_STRINGIZE(A3D_PP_RANGE_CHAIN_DECLARE(typedef A, A3D_PP_NULL,  B, 1, 6, (;))) << endl;
 
 
-	cout << "      " << typeid(int_vector_).name() << endl;
+	cout << "==== test  seq_unpack ====" << endl;
+	//seq as code
+	cout << A3D_PP_STRINGIZE(A3D_PP_SEQ_UNPACK((1, 2, 3))) << endl;
+	cout << typeid(A3D_PP_SEQ_UNPACK((int))).name() << endl;
+	//seq as parameters
+#define TEST_UNPACK_PARAMETER(p1,p2,p3) p1 | p2 | p3
+	cout << A3D_PP_STRINGIZE(A3D_PP_SEQ_UNPACK_CONNECT(TEST_UNPACK_PARAMETER, (1, A3D_PP_SEQ_UNPACK((2, 3)) )) ) << endl;
+
 	cout << "========================= end preprocessor ==============================" << endl;
 }
 
 
 inline void ProcessTool()
 {
+	for (int i = 1; i <= 254; ++i)
+	{
+		printf("#define A3D_PP_RANGE_INNER_CALL_LOOP%d(N, step, call, op, ...)   A3D_PP_RANGE_INNER_CALL_CONNECT(call,(N, %d, __VA_ARGS__))  A3D_PP_RANGE_INNER_CALL_LOOP%d( op(N, step), step, call, op, __VA_ARGS__)\n", i,i,i-1);
+	}
+
 	//generate seq_at
-	for (int i = 0; i <= 126; ++i)
+	/*for (int i = 0; i <= 126; ++i)
 	{
 		printf("#define A3D_PP_AT_POS%d(",i);
 		for (int j = 0; j <= i; ++j)
@@ -155,7 +169,7 @@ inline void ProcessTool()
 			printf("p%d,", j);
 		}
 		printf("...)  p%d\n", i);
-	}
+	}*/
 	//generate while loop
 	//for (int i = 2; i < 256; ++i)
 	//{

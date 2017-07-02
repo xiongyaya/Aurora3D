@@ -10,6 +10,6 @@ namespace Aurora3D
 		//lazy 
 		template<typename... Args> struct And : public True_ {};
 		template<typename First, typename... Other> struct And<First, Other...> 
-			: public If<First, And<Other...>, False_>{};
+			: public DeriveIf<First, And<Other...>, False_>{};
 	}
 }
