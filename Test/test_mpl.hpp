@@ -52,12 +52,17 @@ inline void TestMpl()
 	cout << IsPlaceholder<_1>::value << endl;
 	cout << IsPlaceholder<_2>::value << endl;
 	cout << IsPlaceholder<Arg<17>>::value << endl;
+	cout << ContainNPlaceholder<_n>::value << endl;
+	cout << ContainNPlaceholder<_1, _2>::value << endl;
+	cout << ContainNPlaceholder<_1, _2, _n>::value << endl;
+	
 
 	//Apply< Lambda<add_pointer<_1>>, int>::
 	Apply< Lambda<AddPointer<_1>>, int>::type pint_a;
 	Apply< Lambda<AddPointer<float>>, int>::type pfloat_a;
 	//Lambda<Add<_1, _2>>::Apply<int, float>::type a;
 	typedef TransformTable<AddPointer_Fn, int, float, char, long> TA;
+	cout << TA::value << endl;
 
 	//Apply< Lambda<Add<_1, _2>>, Int_<21>, Int_<22> >::type::value;
 	int a = 0;

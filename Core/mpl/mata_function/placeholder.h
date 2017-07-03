@@ -6,6 +6,7 @@
 #include<Core/mpl/bool_.h>
 #include<core/mpl/int_.h>
 #include<Core/mpl/ingore_t.h>
+#include<Core/mpl/logic_or.h>
 
 
 namespace Aurora3D
@@ -20,7 +21,7 @@ namespace Aurora3D
 
 		template<typename T> struct IsPlaceholder :public False_ {};
 		typedef Arg<-1> _n;
-
+		
 #define A3D_PP_PLACEHOLDER_MAX 16
 
 		template<>
@@ -32,7 +33,12 @@ namespace Aurora3D
 				A3D_PP_RANGE_PREFIX(T,1, A3D_PP_PLACEHOLDER_MAX, (,)), TS...>{};
 		};
 
+		template<> struct IsPlaceholder<Arg<-1>> :public True_ {};
 
+		template<typename T,typename... Args> struct ContainNPlaceholder
+			:public Or<ContainNPlaceholder<T>,ContainNPlaceholder<Args>...>{};
+		template<> struct ContainNPlaceholder<Arg<-1>> :public True_ {};
+		template<typename T> struct ContainNPlaceholder<T> :public False_ {};
 
 #define PLACEHOLDER_SPECIALIZATION_DECL(N, index, _)        \
 		template<>                                          \

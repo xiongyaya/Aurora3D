@@ -27,11 +27,14 @@ namespace Aurora3D
 		{
 #define     A3D_PP_TRANSFORM_VARGS_MAX 16
 
-			template<int size, typename Fn, typename RL> struct TransformTableHelper {};
+			//no parameters
+			template<int size, typename Fn, typename RL> struct TransformTableHelper:public Int_<0> {};
+
 
 #define  TRANSFORM_TABLE_HELPER_DECL( Index, _1, _2)      \
 			template<typename Fn, typename N0>            \
-			struct TransformTableHelper<Index, Fn, N0>    \
+			struct TransformTableHelper<Index, Fn, N0>:   \
+				public Int_<Index>                        \
 			{                                             \
 				A3D_PP_RANGE_CHAIN_DECLARE(typedef typename N, ::next, N, 1, Index, (;)); \
 				A3D_PP_RANGE_CHAIN_DECLARE(typedef typename N, ::type, T, 1, Index, (;)); \

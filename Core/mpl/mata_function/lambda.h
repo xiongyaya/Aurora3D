@@ -3,7 +3,7 @@
 #include<Core/mpl/int_.h>
 #include<Core/mpl/if.h>
 #include<Core/mpl/mata_function/placeholder.h>
-
+#include<Core/mpl/transform_vargs.h>
 
 namespace Aurora3D
 {
@@ -11,22 +11,18 @@ namespace Aurora3D
 	{
 		namespace detail
 		{
-			//not placeholder
-			template<bool IsPlaceholder, typename Counter, typename T, typename... Args>
+			//no _n placeholder
+			template<bool containNPlaceholder,typename Fn, typename T,typename... TArgs >
 			struct LambdaHelper
 			{
-				typedef T type;
-				static constexpr int64 value = Counter::value;
+				template<typename N,typename... NArgs>
+				struct Apply
+				{
+
+				};
 			};
 
-			//is placeholder ,apply transform
-			template<typename Counter, typename T, typename... Args>
-			struct LambdaHelper<true, Counter, T, Args...>
-				:public T::template Apply<Counter::value, Args...>
-			{
-				//override 
-				static constexpr int64 value = Counter::value + 1;
-			};
+			
 		}
 
 		//for Mata-Function Class
