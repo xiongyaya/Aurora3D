@@ -9,22 +9,6 @@ namespace Aurora3D
 {
 	namespace mpl
 	{
-		namespace detail
-		{
-			//no _n placeholder
-			template<bool containNPlaceholder,typename Fn, typename T,typename... TArgs >
-			struct LambdaHelper
-			{
-				template<typename N,typename... NArgs>
-				struct Apply
-				{
-
-				};
-			};
-
-			
-		}
-
 		//for Mata-Function Class
 		template<typename T>
 		struct Lambda
@@ -33,26 +17,41 @@ namespace Aurora3D
 			struct Apply:public T::template Apply<Args...> {};
 		};
 
+		template<int Index, typename T, typename N, typename... NArgs>
+		struct LambdaGetParameter :
+			public DeriveIf<IsPlaceholder<T>,
+						DeriveIf<IsNPlaceholder<T>,
+								 Arg<Index>::template Apply<N, NArgs...>,
+							     T::template Apply<N, NArgs...>>, T>{};
+
+
 		//For One Parameter MataFunction Template Class
-		template< template<typename T1> typename Fn, typename T1>
-		struct Lambda< Fn<T1> >
+		template< template<typename T> typename Fn, typename T>
+		struct Lambda< Fn<T> >
 		{
-			template<typename N1>
-			struct Apply: public DeriveIf< IsPlaceholder<T1>, Fn<N1>, Fn<T1> >{};
+			template<typename N, typename... NArgs>
+			struct Apply : public Fn < LambdaGetParameter<1, T, N, NArgs...>{}
 		};
 
 		//For variable Parameter MataFunction Template Class
-		template< template<typename T1,typename... TArgs> typename Fn, typename T1, typename... TArgs>
-		struct Lambda< Fn<T1,TArgs...> >
-		{
-			template<typename N1, typename... NArgs>
-			struct Apply 
+		template< template<typename T1,typename T2> typename Fn, typename T1, typename T2>
+		struct Lambda< Fn<T1,T2> >
+		{ 
+			typedef Int_<0> C1;
+
+			typedef IsNPlaceholder<T1> Judge1;
+			typedef IsNPlaceholder<T2> Judge2;
+
+			typedef DeriveIf<Judge1, C1::next, C1> C2;
+			typedef DeriveIf<Judge2, C2::next, C2> C3;
+
+			
+			template<typename N, typename... NArgs>
+			struct Apply
 			{
-				typedef Int_<0> v0;
-				/*typedef detail::LambdaHelper< IsPlaceholder<T1>::value, v0, T1, N1, Args...> v1;
-				typedef detail::LambdaHelper< IsPlaceholder<T2>::value, v1, T2, N1, Args...> v2;
-				typedef typename Fn<typename v1::type, typename v2::type>::type type;*/
-				typedef int type;
+				typedef typename LambdaGetParameter<C1::value, T1, N, NArgs...>::type P1;
+				typedef typename LambdaGetParameter<C2::value, T2, N, NArgs...>::type P2;
+				typedef typename Fn<P1, P2>::type type;
 			};
 		};
 

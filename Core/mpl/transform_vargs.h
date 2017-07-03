@@ -11,30 +11,55 @@ namespace Aurora3D
 {
 	namespace mpl
 	{
-		template<typename Fn, typename T1, typename... Args>
-		struct TransformList :public Fn::template Apply<T1>
+		//Fn::Apply do transform for each T...
+		//InState keep some information... OutState for next transform
+		//result type store in list node
+		template<typename Fn, typename InState, typename T, typename... Args>
+		struct TransformForeach
 		{
-			typedef TransformList<Fn, Args...> next;
+			typedef Fn::template Apply<T, InState> Transform;
+			typedef typename Transform::type type;
+			typedef typename Transform::OutState OutState;
+			typedef TransformForeach<Fn, OutState, Args...> next;
 		};
 
-		template<typename Fn, typename T>
-		struct TransformList<Fn, T>:public Fn::template Apply<T>
+		//list last node
+		template<typename Fn, typename InState, typename T>
+		struct TransformForeach<Fn, InState, T>:public Fn::template Apply<T, InState>
 		{
 			typedef ingore_t next;
 		};
+
+
+
+		template<typename List, typename T,typename... TArgs>
+		struct ListTransform
+		{
+			typedef typename List::type Fn;
+			typedef typename List::next ListNext;
+			typedef typename Fn::template Apply<T, TArgs...>::type type;
+			typedef ListTransform<ListNext, T, TArgs...> next;
+		};
+
+		//last node 
+		template<typename T, typename... TArgs>
+		struct ListTransform<ingore_t, T,TArgs...>
+		{
+			typedef ingore_t next;
+		};
+
 
 		namespace detail
 		{
 #define     A3D_PP_TRANSFORM_VARGS_MAX 16
 
 			//no parameters
-			template<int size, typename Fn, typename RL> struct TransformTableHelper:public Int_<0> {};
+			template<int size, typename list> struct TransformTableHelper{};
 
 
 #define  TRANSFORM_TABLE_HELPER_DECL( Index, _1, _2)      \
-			template<typename Fn, typename N0>            \
-			struct TransformTableHelper<Index, Fn, N0>:   \
-				public Int_<Index>                        \
+			template<typename N0>                         \
+			struct TransformTableHelper<Index, N0>        \
 			{                                             \
 				A3D_PP_RANGE_CHAIN_DECLARE(typedef typename N, ::next, N, 1, Index, (;)); \
 				A3D_PP_RANGE_CHAIN_DECLARE(typedef typename N, ::type, T, 1, Index, (;)); \
@@ -44,8 +69,10 @@ namespace Aurora3D
 #undef	  TRANSFORM_TABLE_HELPER_DECL
 		}
 
-		template<typename Fn, typename... Args>
+		//extract parameter from TransformList
+		//store in T1,T2,...,T[sizeof...(Args)]
+		template<typename Fn, typename InState, typename... Args>
 		struct TransformTable :public detail::TransformTableHelper<
-			sizeof...(Args), Fn, TransformList<Fn, Args...>> {};
+			sizeof...(Args), TransformForeach<Fn, InState, Args...>> {};
 	}
 }

@@ -34,11 +34,12 @@ namespace Aurora3D
 		};
 
 		template<> struct IsPlaceholder<Arg<-1>> :public True_ {};
+		template<typename T> struct IsNPlaceholder :public False_ {};
+		template<> struct IsNPlaceholder<Arg<-1>> :public True_ {};
 
 		template<typename T,typename... Args> struct ContainNPlaceholder
-			:public Or<ContainNPlaceholder<T>,ContainNPlaceholder<Args>...>{};
-		template<> struct ContainNPlaceholder<Arg<-1>> :public True_ {};
-		template<typename T> struct ContainNPlaceholder<T> :public False_ {};
+			:public Or<IsNPlaceholder<T>, IsNPlaceholder<Args>...>{};
+
 
 #define PLACEHOLDER_SPECIALIZATION_DECL(N, index, _)        \
 		template<>                                          \

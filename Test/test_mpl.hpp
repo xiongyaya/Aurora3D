@@ -39,10 +39,11 @@ struct Wrap {};
 
 struct AddPointer_Fn
 {
-	template<typename T>
+	template<typename T,typename InState>
 	struct Apply
 	{
 		typedef typename AddPointer<T>::type type;
+		typedef Int_<0> OutState;
 	};
 };
 
@@ -61,8 +62,9 @@ inline void TestMpl()
 	Apply< Lambda<AddPointer<_1>>, int>::type pint_a;
 	Apply< Lambda<AddPointer<float>>, int>::type pfloat_a;
 	//Lambda<Add<_1, _2>>::Apply<int, float>::type a;
-	typedef TransformTable<AddPointer_Fn, int, float, char, long> TA;
-	cout << TA::value << endl;
+	typedef TransformTable<AddPointer_Fn, detail::NLambdaRecorder, int, float, char, long> TA;
+	
+	
 
 	//Apply< Lambda<Add<_1, _2>>, Int_<21>, Int_<22> >::type::value;
 	int a = 0;
