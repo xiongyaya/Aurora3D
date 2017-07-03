@@ -34,6 +34,7 @@ using namespace std;
 #include<Core/preprocessor/range_declare.h>
 #include<Core/preprocessor/range_wrap.h>
 #include<Core/preprocessor/range_call.h>
+#include<Core/preprocessor/range_fore_index_call.h>
 #include<Core/preprocessor/uint8_comma_if.h>
 #include<Core/preprocessor/bool_if.h>
 #include<Core/preprocessor/seq_unpack.h>
@@ -139,6 +140,11 @@ inline void TestProprecessor()
 	cout << A3D_PP_STRINGIZE(A3D_PP_RANGE_WRAP(typename T, 6, 0, =ingore_t, (, ))) << endl;
 	cout << A3D_PP_STRINGIZE(A3D_PP_RANGE_DECLARE(typedef A, ::type, B, 0, 6, (;))) << endl;
 	cout << A3D_PP_STRINGIZE(A3D_PP_RANGE_CHAIN_DECLARE(typedef A, A3D_PP_NULL,  B, 1, 6, (;))) << endl;
+
+#define A3D_PP_TEST_FORE_INDEX(Index, ForeIndex, Split) Index ForeIndex Split
+#define DERIVE_IF_FORMAT(ForeIndex, Index, _ ) typedef DeriveIf<Judge ## ForeIndex ## , Next<C ## ForeIndex ## >, C ## ForeIndex ## > C ## Index ##;
+
+	cout << A3D_PP_STRINGIZE(A3D_PP_RANGE_FORE_INDEX_CALL(1, 3, DERIVE_IF_FORMAT, (;))) << endl;
 
 
 	cout << "==== test  seq_unpack ====" << endl;

@@ -21,7 +21,7 @@
 				A3D_PP_RANGE_DECLARE_CONNECT, prefix, suffix, second, split)
 
 // for(int i=start; i<=end; ++i)
-//      first ## i-1 ## _ ## second ## i ## split
+//      first ## i-1 ## suffix ## second ## i ## split
 #define A3D_PP_RANGE_CHAIN_DECLARE(prefix, suffix, second, start, end, split)   \
 			A3D_PP_RANGE_INNER_CALL(start, end, 1,                              \
 				A3D_PP_RANGE_CHAIN_DECLARE_CONNECT, prefix, suffix, second, split)

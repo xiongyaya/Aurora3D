@@ -16,7 +16,6 @@ namespace Aurora3D
 		template<int64 T>
 		struct Arg
 		{
-			static constexpr int64 value = T;
 		};
 
 		template<typename T> struct IsPlaceholder :public False_ {};
@@ -24,14 +23,14 @@ namespace Aurora3D
 		
 #define A3D_PP_PLACEHOLDER_MAX 16
 
-		template<>
-		struct Arg<-1>
-		{
-			template<int64 Pos, A3D_PP_RANGE_WRAP(typename T,
-				1, A3D_PP_PLACEHOLDER_MAX, = ingore_t, (, )), typename... TS>
-			struct Apply:public Arg<Pos>:: template Apply<Pos,
-				A3D_PP_RANGE_PREFIX(T,1, A3D_PP_PLACEHOLDER_MAX, (,)), TS...>{};
-		};
+		//template<>
+		//struct Arg<-1>
+		//{
+		//	template<int64 Pos, A3D_PP_RANGE_WRAP(typename T,
+		//		1, A3D_PP_PLACEHOLDER_MAX, = ingore_t, (, )), typename... TS>
+		//	struct Apply:public Arg<Pos>:: template Apply<Pos,
+		//		A3D_PP_RANGE_PREFIX(T,1, A3D_PP_PLACEHOLDER_MAX, (,)), TS...>{};
+		//};
 
 		template<> struct IsPlaceholder<Arg<-1>> :public True_ {};
 		template<typename T> struct IsNPlaceholder :public False_ {};
@@ -45,7 +44,7 @@ namespace Aurora3D
 		template<>                                          \
 		struct Arg<N>                                       \
 		{											        \
-			template<int64 Pos, A3D_PP_RANGE_PREFIX(        \
+			template<A3D_PP_RANGE_PREFIX(                   \
 				typename T,1, N, (,)), typename... TS>      \
 			struct Apply                                    \
 			{                                               \

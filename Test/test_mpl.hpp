@@ -55,16 +55,19 @@ inline void TestMpl()
 	cout << IsPlaceholder<Arg<17>>::value << endl;
 	cout << ContainNPlaceholder<_n>::value << endl;
 	cout << ContainNPlaceholder<_1, _2>::value << endl;
-	cout << ContainNPlaceholder<_1, _2, _n>::value << endl;
+	cout << ContainNPlaceholder<_1, _2, _n>::value << endl << endl;;
 	
 
 	//Apply< Lambda<add_pointer<_1>>, int>::
 	Apply< Lambda<AddPointer<_1>>, int>::type pint_a;
 	Apply< Lambda<AddPointer<float>>, int>::type pfloat_a;
-	//Lambda<Add<_1, _2>>::Apply<int, float>::type a;
-	typedef TransformTable<AddPointer_Fn, detail::NLambdaRecorder, int, float, char, long> TA;
+	typedef Apply< Lambda<Add<_1, _2>>, Int_<3>, Int_<4> > L2;
+	cout << Apply< AddApply<Add>, Int_<5>, Int_<3> >::type::value << endl;
 	
-	
+	NormalTypeName<typename L2::P1>{}();
+	NormalTypeName<typename L2::P2>{}();
+	cout << L2::type::value << endl;
+	cout << Add<Int_<5>, Int_<3> >::type::value << endl;
 
 	//Apply< Lambda<Add<_1, _2>>, Int_<21>, Int_<22> >::type::value;
 	int a = 0;

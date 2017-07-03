@@ -5,7 +5,16 @@ namespace Aurora3D
 {
 	namespace mpl
 	{
-		template<typename MataFnType, typename... Args> 
-		struct Apply:public MataFnType::template Apply<Args...> {};
+		//for template mata function
+		template<template<typename T, typename... TArgs> typename Fn>
+		struct AddApply
+		{
+			template<typename N, typename... NArgs>
+			struct Apply :public Fn<N, NArgs...> {};
+		};
+
+		template<typename Fn, typename... Args> 
+		struct Apply:public Fn::template Apply<Args...> {};
+
 	}
 }
