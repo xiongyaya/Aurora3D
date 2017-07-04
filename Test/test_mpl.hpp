@@ -21,7 +21,6 @@ using namespace std;
 #include<Core/mpl/mata_function/placeholder.h>
 #include<Core/mpl/type_traits/add_pointer.h>
 #include<Core/mpl/arithmatic_add.h>
-#include<Core/mpl/transform_vargs.h>
 #include"print_type.h"
 
 
@@ -47,6 +46,13 @@ struct AddPointer_Fn
 	};
 };
 
+
+template<typename T1,typename T2,typename T3>
+struct Select3
+{
+	typedef T3 type;
+};
+
 inline void TestMpl()
 {
 	cout << "==== Placeholder/Lambda/Apply ====" << endl;
@@ -57,45 +63,30 @@ inline void TestMpl()
 	cout << ContainNPlaceholder<_1, _2>::value << endl;
 	cout << ContainNPlaceholder<_1, _2, _n>::value << endl << endl;;
 	
-
-	//Apply< Lambda<add_pointer<_1>>, int>::
-	Apply< Lambda<AddPointer<_1>>, int>::type pint_a;
-	Apply< Lambda<AddPointer<float>>, int>::type pfloat_a;
 	typedef Apply< Lambda<Add<_1, _2>>, Int_<3>, Int_<4> > L2;
+	//typedef Apply< Lambda<Add<_n, _n>>, Int_<12>, Int_<13> > N2;
+	typedef Apply< Lambda<Add<_1, _2, _3>>, Int_<3>, Int_<4>, Int_<5> >L3;
+	typedef Apply< Lambda<Add<_1, _2, _3, _4>>, Int_<3>, Int_<4>, Int_<5>, Int_<6> >L4;
+	typedef Apply< Lambda<Add<_1, Int_<2>>>, Int_<3>> P1;
+	typedef Apply< Lambda<Add<_1, _1>>, Int_<3>> P2;
+
+	Apply<AddApply<AddPointer>, int>::type Test = new int;
+	Apply<AddApply<Select3>, char, int, int*>::type Test2= new int;
+
+	//AddApply
 	cout << Apply< AddApply<Add>, Int_<5>, Int_<3> >::type::value << endl;
-	
-	NormalTypeName<typename L2::P1>{}();
-	NormalTypeName<typename L2::P2>{}();
+	//Lambda
 	cout << L2::type::value << endl;
+	cout << L3::type::value << endl;
+	cout << L4::type::value << endl;
+	cout << P1::type::value << endl;
+	cout << P2::type::value << endl;
+	//cout << N2::type::value << endl;
+	//
 	cout << Add<Int_<5>, Int_<3> >::type::value << endl;
 
-	//Apply< Lambda<Add<_1, _2>>, Int_<21>, Int_<22> >::type::value;
-	int a = 0;
-	float b = 0.0f;
-	pint_a = &a;
-	pfloat_a = &b;
-	//test replace_type
-	//TypeName<replace_type<const int, int, long>::type>{}();
-	//TypeName<replace_type< volatile int, int, long>::type>{}();
-	//TypeName<replace_type<const volatile int, int, long>::type>{}();
-	//TypeName<replace_type< int&, int, long>::type>{}();
-	//TypeName<replace_type<const int&, int, long>::type>{}();
-	//TypeName<replace_type<const volatile int&, int, long>::type>{}();
-	//TypeName<replace_type<volatile int&, int, long>::type>{}();
-	//TypeName<replace_type< int*, int, long>::type>{}();
-	//TypeName<replace_type<const int*, int, long>::type>{}();
-	//TypeName<replace_type<const volatile int*, int, long>::type>{}();
-	//TypeName<replace_type<volatile int*, int, long>::type>{}();
-	//TypeName<replace_type<int[10], int, long>::type>{}();
-	//TypeName<replace_type<const int[10], int, long>::type>{}();
-	//TypeName<replace_type<volatile int[10], int, long>::type>{}();
-	//TypeName<replace_type<const volatile int[10], int, long>::type>{}();
-	//TypeName<replace_type<int*[10], int, long>::type>{}();
-	//TypeName<replace_type<const int*[10], int, long>::type>{}();
-	//TypeName<replace_type<volatile int*[10], int, long>::type>{}();
-	//TypeName<replace_type<const volatile int*[10], int, long>::type>{}();
-	//TypeName<replace_type<int*[10], int*, long>::type>{}();
-
+	cout << (1 << (2 << 3));
+	cout << ((1 << 2) << 3);
 	cout << "==== Or/And ====" << endl;
 	cout << "value£º" << Or<False_>::value << endl;
 	cout << "value£º" << Or<False_, False_>::value << endl;
@@ -115,11 +106,7 @@ inline void TestMpl()
 	cout << "value:" << Max<Int_<1>, Sizet_<2>, Int_<3>, Sizet_<2>, Int_<1> >::value << endl;
 	cout << "value:" << IntMin<4u, 2, 3, 2, 4>::value << endl;
 	cout << "value:" << Min<Int_<3>, Int_<2>, Sizet_<3>, Int_<2>, Int_<1> >::value << endl;
-	cout << Min_Fn::Apply<Int_<3>, Int_<2>, Sizet_<3>>::value << endl;
-	cout << Apply< Min_Fn, Int_<3>, Int_<1>, Sizet_<3>>::value << endl;
-
-	//MinTest< Int_<3>, Int_<2>, Sizet_<3>, Int_<2>, Int_<1>>::value;
-
+	
 	cout << "==== BitCompose ====" << endl;
 	cout << IntBitCompose<7,0,3,5>::value << endl;
 	cout << BitCompose< Int_<0>, Int_<1>, Int_<2>, Int_<3> >::value << endl;
@@ -131,10 +118,7 @@ inline void TestMpl()
 	cout << BitSequence<1>::value << endl;
 
 	cout << "==== BitOr/BitAnd ====" << endl;
-	cout << IntBitOr<1, 2, 4, 7>::value << endl;
 	cout << BitOr< Int_<1>, Int_<2>, Int_<4>, Int_<8> >::value << endl;
-
-	cout << IntBitAnd<15, 7>::value << endl;
 	cout << BitAnd< Int_<7>, Int_<15>, Int_<1>>::value << endl;
 
 
@@ -148,13 +132,5 @@ inline void TestMpl()
 	cout << DeriveIf<IsIntegral<float>, True_, False_>::value << endl;
 	cout << BoolDeriveIf<false, True_, False_>::value << endl;
 	cout << BoolDeriveIf<true, True_, False_>::value << endl;
-
-	//cout << "value" << Max<int, 1>::value << endl;
-	//cout << "value" << Max<int, 1, 2>::value << endl;
-	
-	//cout << "value" << TypeMax<Int_<1> >::value << endl;
-	//cout << "value" << TypeMax<Int_<1>, Int_<2>>::value << endl;
-
-
 
 }

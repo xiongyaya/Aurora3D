@@ -20,17 +20,9 @@ namespace Aurora3D
 
 		template<typename T> struct IsPlaceholder :public False_ {};
 		typedef Arg<-1> _n;
+		typedef Arg<0>  __;  //to do mapping all or Args...
 		
 #define A3D_PP_PLACEHOLDER_MAX 16
-
-		//template<>
-		//struct Arg<-1>
-		//{
-		//	template<int64 Pos, A3D_PP_RANGE_WRAP(typename T,
-		//		1, A3D_PP_PLACEHOLDER_MAX, = ingore_t, (, )), typename... TS>
-		//	struct Apply:public Arg<Pos>:: template Apply<Pos,
-		//		A3D_PP_RANGE_PREFIX(T,1, A3D_PP_PLACEHOLDER_MAX, (,)), TS...>{};
-		//};
 
 		template<> struct IsPlaceholder<Arg<-1>> :public True_ {};
 		template<typename T> struct IsNPlaceholder :public False_ {};
@@ -38,7 +30,6 @@ namespace Aurora3D
 
 		template<typename T,typename... Args> struct ContainNPlaceholder
 			:public Or<IsNPlaceholder<T>, IsNPlaceholder<Args>...>{};
-
 
 #define PLACEHOLDER_SPECIALIZATION_DECL(N, index, _)        \
 		template<>                                          \
@@ -56,8 +47,5 @@ namespace Aurora3D
 
 A3D_PP_RANGE_CALL(1, A3D_PP_PLACEHOLDER_MAX, 1, PLACEHOLDER_SPECIALIZATION_DECL, _)
 #undef PLACEHOLDER_SPECIALIZATION_DECL
-		
-
-		
 	}
 }

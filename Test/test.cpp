@@ -24,9 +24,9 @@ using namespace std;
 int main()
 {
 	//ProcessTool();
-	TestProprecessor();
+	//TestProprecessor();
 	//TestTypeTraits();
-	//TestMpl();
+	TestMpl();
 	//TestVector();
 	//TestFloat();
 	getchar();

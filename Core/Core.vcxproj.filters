@@ -789,20 +789,23 @@
     <ClInclude Include="preprocessor\range_wrap.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\transform_vargs.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
     <ClInclude Include="preprocessor\range_declare.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
     <ClInclude Include="mpl\mata_function\identity.h">
       <Filter>mpl\mata_function</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\mata_function\next.h">
-      <Filter>mpl\mata_function</Filter>
-    </ClInclude>
     <ClInclude Include="preprocessor\range_fore_index_call.h">
       <Filter>preprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\next.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\prior.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\deref.h">
+      <Filter>mpl\container</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
