@@ -1,6 +1,5 @@
 #pragma once
 
-
 #define HAS_MEMBER_FN_DECL(OpSign, OpName )                               \
 		namespace detail                                                  \
 		{                                                                 \

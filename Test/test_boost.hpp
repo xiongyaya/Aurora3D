@@ -1,0 +1,16 @@
+#pragma once
+
+#include<boost/mpl/lambda.hpp>
+#include<Core/mpl/mata_function/lambda.h>
+
+#define A 10
+
+
+struct B {};
+
+inline void TestBoost()
+{
+	using namespace boost::mpl;
+
+	return;
+}

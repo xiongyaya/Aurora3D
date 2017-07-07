@@ -16,6 +16,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Lua544", "Lua544\Lua544.vcx
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LuaTest", "LuaTest\LuaTest.vcxproj", "{41E0B3FE-9BD2-4C71-9230-3D69E25937D0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestBoost", "TestBoost\TestBoost.vcxproj", "{1CCE193C-1899-40AD-BD02-E0567883995C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -60,6 +62,14 @@ Global
 		{41E0B3FE-9BD2-4C71-9230-3D69E25937D0}.Release|Win32.Build.0 = Release|Win32
 		{41E0B3FE-9BD2-4C71-9230-3D69E25937D0}.Release|x64.ActiveCfg = Release|x64
 		{41E0B3FE-9BD2-4C71-9230-3D69E25937D0}.Release|x64.Build.0 = Release|x64
+		{1CCE193C-1899-40AD-BD02-E0567883995C}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1CCE193C-1899-40AD-BD02-E0567883995C}.Debug|Win32.Build.0 = Debug|Win32
+		{1CCE193C-1899-40AD-BD02-E0567883995C}.Debug|x64.ActiveCfg = Debug|x64
+		{1CCE193C-1899-40AD-BD02-E0567883995C}.Debug|x64.Build.0 = Debug|x64
+		{1CCE193C-1899-40AD-BD02-E0567883995C}.Release|Win32.ActiveCfg = Release|Win32
+		{1CCE193C-1899-40AD-BD02-E0567883995C}.Release|Win32.Build.0 = Release|Win32
+		{1CCE193C-1899-40AD-BD02-E0567883995C}.Release|x64.ActiveCfg = Release|x64
+		{1CCE193C-1899-40AD-BD02-E0567883995C}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,7 +3,7 @@ namespace Aurora3D
 {
 	namespace mpl
 	{
-		///for non-inner-contained-type type
+		// for non-inner-contained-type type
 		// if(B) type = T1
 		// else type = T2
 		template<bool B, typename T1, typename T2>
@@ -16,7 +16,7 @@ namespace Aurora3D
 		template<typename C, typename T1, typename T2>
 		struct If :public BoolIf<C::value, T1, T2> {};
 
-		/// for inner-contained-type type
+		// for inner-contained-type type
 		// if(B) derive T1
 		// else  derive T2
 		template<bool B, typename T1, typename T2> 

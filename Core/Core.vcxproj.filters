@@ -807,6 +807,12 @@
     <ClInclude Include="mpl\container\deref.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
+    <ClInclude Include="mpl\type_traits\has_inner_decl.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\has_inner_type.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\Users\xiongya\Desktop\testccpuid\ccpuid.cpp">

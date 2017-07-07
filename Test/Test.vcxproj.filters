@@ -41,5 +41,8 @@
     <ClInclude Include="test_float.hpp">
       <Filter>源文件</Filter>
     </ClInclude>
+    <ClInclude Include="test_boost.hpp">
+      <Filter>源文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

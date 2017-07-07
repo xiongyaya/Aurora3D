@@ -176,6 +176,8 @@
     <ClInclude Include="mpl\type_traits\declval.h" />
     <ClInclude Include="mpl\type_traits\first_template.h" />
     <ClInclude Include="mpl\type_traits\has_assigner.h" />
+    <ClInclude Include="mpl\type_traits\has_inner_decl.h" />
+    <ClInclude Include="mpl\type_traits\has_inner_type.h" />
     <ClInclude Include="mpl\type_traits\has_new_delete_decl.h" />
     <ClInclude Include="mpl\type_traits\has_operator_decl.h" />
     <ClInclude Include="mpl\type_traits\has_bit_and.h" />

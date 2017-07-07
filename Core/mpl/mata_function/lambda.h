@@ -8,18 +8,19 @@
 #include<Core/mpl/next.h>
 #include<Core/mpl/mata_function/placeholder.h>
 #include<Core/mpl/mata_function/identity.h>
-
+#include<Core/mpl/type_traits/has_inner_type.h>
 
 namespace Aurora3D
 {
 	namespace mpl
 	{
+		//hide helper function
 		namespace detail
 		{
-			template<typename Index, typename Judge, typename T, typename... Args>
+			template<typename Index, typename IsNPlaceholder, typename T, typename... Args>
 			struct LambdaGetParameter :
 				public DeriveIf<IsPlaceholder<T>,
-						DeriveIf<Judge, Apply< Arg<Index::value>, Args...>, Apply< T, Args...>>,
+						DeriveIf<IsNPlaceholder, Apply< Arg<Index::value>, Args...>, Apply< T, Args...>>,
 					    Identity<T>>
 			{};
 
@@ -41,6 +42,7 @@ namespace Aurora3D
 			template<int TCount, typename Fn>
 			struct LambdaHelper {};
 
+			//example 
 			template<template<typename F, typename... FArgs> typename Fn, typename T1, typename... TArgs>
 			struct LambdaHelper<2, Fn<T1, TArgs...>>
 			{
@@ -49,15 +51,20 @@ namespace Aurora3D
 				typedef typename N1::next N2;
 				typedef typename N1::type T2;
 				typedef IsNPlaceholder<T1> Judge1;
-				typedef IsNPlaceholder<T2> Judge2;;
+				typedef IsNPlaceholder<T2> Judge2;
 				typedef DeriveIf<Judge1, Next<C0>, C0> C1;
 				typedef DeriveIf<Judge2, Next<C1>, C1> C2;
 				template<typename N, typename... NArgs>
 				struct Apply
 				{
 					typedef typename LambdaGetParameter<C1, Judge1, T1, N, NArgs...>::type P1;
-					typedef typename LambdaGetParameter<C2, Judge2, T2, N, NArgs...>::type P2;;
-					typedef typename Fn<P1, P2 >::type type;
+					typedef typename LambdaGetParameter<C2, Judge2, T2, N, NArgs...>::type P2;
+
+					//if   Fn<...>::type is exists return Fn<...>::type
+					//else return Fn<...> 
+					typedef Fn<P1, P2 > ResultFn;
+					typedef typename DeriveIf< HasInnerType<ResultFn>, 
+						ResultFn, Identity<ResultFn>>::type type;
 				};
 			};
 
@@ -71,9 +78,11 @@ namespace Aurora3D
 	#define IS_NPLACEHOLDER_DECL(Start, End) A3D_PP_RANGE_INNER_CALL(Start, End, 1, IS_NPLACEHOLDER_FORMAT, _)
 
 			//typedef typename LambdaGetParameter<C1, T1, N, NArgs...>::type P1;
-#define LAMBDA_GET_PARAMETER_FORMAT(Index, _1, _2)  typedef typename LambdaGetParameter<C## Index ##, Judge ## Index ##, T## Index ##, N, NArgs...>::type P## Index ##;
+	#define LAMBDA_GET_PARAMETER_FORMAT(Index, _1, _2)  typedef typename LambdaGetParameter<C## Index ##, Judge ## Index ##, T## Index ##, N, NArgs...>::type P## Index ##;
 	#define LAMBDA_GET_PARAMETER_DECL(Start, End) A3D_PP_RANGE_INNER_CALL(Start, End, 1, LAMBDA_GET_PARAMETER_FORMAT, _)
 
+
+			//LambdaHelper<Index[3-A3D_PP_PLACEHOLDER_MAX], Fn<T1, TArgs...>>
 	#define LAMBDA_HELPER_SPECIALIZATION_DECL(Index, _1, _2)                               \
 			template<template<typename F, typename... FArgs> typename Fn,                  \
 				typename T1, typename... TArgs>                                            \
@@ -89,7 +98,9 @@ namespace Aurora3D
 				struct Apply                                                               \
 				{                                                                          \
 					LAMBDA_GET_PARAMETER_DECL(1, Index);                                   \
-					typedef typename Fn<A3D_PP_RANGE_PREFIX(P,1,Index,(,))>::type type;    \
+					typedef Fn<A3D_PP_RANGE_PREFIX(P,1,Index,(,))> ResultFn;               \
+					typedef typename DeriveIf< HasInnerType<ResultFn>,                     \
+						ResultFn, Identity<ResultFn>>::type type;                          \
 				};                                                                         \
 			}; 
 
@@ -116,7 +127,7 @@ namespace Aurora3D
 		// 4. support container operationm like transform< vector, deriveif<isXX<_>, do1<_>,do2<_>>>
 
 		// cons
-		// 1. compile slow
+		// 1. may compile slow than AddApply, Mata_Fn
 
 		//for Mata-Function Class
 		template<typename T>

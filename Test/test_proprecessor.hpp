@@ -142,9 +142,9 @@ inline void TestProprecessor()
 	cout << A3D_PP_STRINGIZE(A3D_PP_RANGE_CHAIN_DECLARE(typedef A, A3D_PP_NULL,  B, 1, 6, (;))) << endl;
 
 #define A3D_PP_TEST_FORE_INDEX(Index, ForeIndex, Split) Index ForeIndex Split
-#define DERIVE_IF_FORMAT(ForeIndex, Index, _ ) typedef DeriveIf<Judge ## ForeIndex ## , Next<C ## ForeIndex ## >, C ## ForeIndex ## > C ## Index ##;
+#define TEST_DERIVE_IF_FORMAT(ForeIndex, Index, _ ) typedef DeriveIf<Judge ## ForeIndex ## , Next<C ## ForeIndex ## >, C ## ForeIndex ## > C ## Index ##;
 
-	cout << A3D_PP_STRINGIZE(A3D_PP_RANGE_FORE_INDEX_CALL(1, 3, DERIVE_IF_FORMAT, (;))) << endl;
+	cout << A3D_PP_STRINGIZE(A3D_PP_RANGE_FORE_INDEX_CALL(1, 3, TEST_DERIVE_IF_FORMAT, (;))) << endl;
 
 
 	cout << "==== test  seq_unpack ====" << endl;

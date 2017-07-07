@@ -1,10 +1,10 @@
 #include<iostream>
+#include<vector>
 using namespace std;
 
 #include"print_type.h"
 #include<Core/mpl/logic_and.h>
 #include<Core/mpl/logic_or.h>
-#include<Core/mpl/logic_not.h>
 #include<Core/mpl/bool_.h>
 #include<Core/mpl/arithmetic_max.h>
 #include<Core/mpl/arithmetic_min.h>
@@ -21,6 +21,7 @@ using namespace std;
 #include<Core/mpl/mata_function/placeholder.h>
 #include<Core/mpl/type_traits/add_pointer.h>
 #include<Core/mpl/arithmatic_add.h>
+#include<Core/mpl/type_traits/has_inner_type.h>
 #include"print_type.h"
 using namespace Aurora3D::mpl;
 
@@ -28,68 +29,36 @@ using namespace Aurora3D::mpl;
 struct HasType { typedef int type; };
 struct NoType{};
 
-namespace dt
-{
-	class converion
-	{
-	public:
-		template<typename T>
-		converion(T t)
-		{
-
-		}
-		typedef int type;
-	};
-
-	template<typename T>
-	struct HasInnerType
-	{
-		static constexpr bool value = sizeof(decltype(declval<T>())::type) == 4;
-	};
-}
-
-template<typename T>
-class TestF final
-{
-
-};
-
-//class TestE :public TestF<int> {};
-
 inline void TestMpl()
 {
-	cout << "==== HasType ====" << endl;
-	//cout << dt::HasInnerType<NoType>::value << endl;
-	//cout << dt::HasInnerType<HasType>::value << endl;
-	//declval<HasType>()
-	//cout << sizeof( )::type)
-	//typedef std::remove_reference_t< decltype(declval<NoType>())> P;
-	//NormalTypeName<P>{}();
-	//typedef typename P::type T;
+	cout << "==== HasInnerType ====" << endl;
+	cout << HasInnerType<HasType>::value << endl;
+	cout << HasInnerType<NoType>::value << endl;
 
-	cout << "==== Placeholder/Lambda/Apply ====" << endl;
+
+	cout << "==== Placeholder Traits ====" << endl;
 	cout << IsPlaceholder<_1>::value << endl;
 	cout << IsPlaceholder<_2>::value << endl;
 	cout << IsPlaceholder<Arg<17>>::value << endl;
-	cout << ContainNPlaceholder<_n>::value << endl;
+	cout << ContainNPlaceholder<_>::value << endl;
 	cout << ContainNPlaceholder<_1, _2>::value << endl;
-	cout << ContainNPlaceholder<_1, _2, _n>::value << endl << endl;;
-	
-	NormalTypeName<typename detail::LambdaGetParameter<Int_<2>, _n, int, char>::type >{}();
-	cout << Next< Int_<0> >::value << endl;
+	cout << ContainNPlaceholder<_1, _2, _>::value << endl << endl;;
 
+	cout << "==== AddApply ====" << endl;
+	cout << Apply< AddApply<Add>, Int_<5>, Int_<3> >::type::value << endl;
+	
+	cout << "==== Lambda ====" << endl;
 	typedef Apply< Lambda<Add<_1, _2>>, Int_<3>, Int_<4> > L2;
 	typedef Apply< Lambda<Add<_1, _2, _3>>, Int_<3>, Int_<4>, Int_<5> >L3;
 	typedef Apply< Lambda<Add<_1, _2, _3, _4>>, Int_<3>, Int_<4>, Int_<5>, Int_<6> >L4;
-	typedef Apply< Lambda<Add<_n, _n>>, Int_<12>, Int_<13> > N2;
-	typedef Apply< Lambda<Add<_n, _n, _n>>, Int_<12>, Int_<13>, Int_<14> > N3;
+	typedef Apply< Lambda<Add<_, _>>, Int_<12>, Int_<13> > N2;
+	typedef Apply< Lambda<Add<_, _, _>>, Int_<12>, Int_<13>, Int_<14> > N3;
 	typedef Apply< Lambda<Add<_1, Int_<2>>>, Int_<3>> P1;
 	typedef Apply< Lambda<Add<_1, _1>>, Int_<3>> P2;
 
-	Apply<AddApply<AddPointer>, int>::type Test = new int;
+	typedef Apply< Lambda<std::vector<_>>, int>::type replace_vector_type;
+	NormalTypeName<replace_vector_type>{}();
 
-	//AddApply
-	cout << Apply< AddApply<Add>, Int_<5>, Int_<3> >::type::value << endl;
 	//Lambda
 	cout << L2::type::value << endl;
 	cout << L3::type::value << endl;
