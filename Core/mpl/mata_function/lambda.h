@@ -16,12 +16,12 @@ namespace Aurora3D
 	{
 		namespace detail
 		{
-			template<typename Index, typename T, typename... Args>
+			template<typename Index, typename Judge, typename T, typename... Args>
 			struct LambdaGetParameter :
 				public DeriveIf<IsPlaceholder<T>,
-				DeriveIf<IsNPlaceholder<T>,
-				Apply< Arg<Index::value>, Args...>,
-				Apply< T, Args...>>, Identity<T>>{};
+						DeriveIf<Judge, Apply< Arg<Index::value>, Args...>, Apply< T, Args...>>,
+					    Identity<T>>
+			{};
 
 			template<typename T,typename... TArgs>
 			struct VArgExpand
@@ -41,8 +41,29 @@ namespace Aurora3D
 			template<int TCount, typename Fn>
 			struct LambdaHelper {};
 
+			template<template<typename F, typename... FArgs> typename Fn, typename T1, typename... TArgs>
+			struct LambdaHelper<2, Fn<T1, TArgs...>>
+			{
+				typedef VArgExpand<TArgs...> N1;
+				typedef Int_<0> C0;
+				typedef typename N1::next N2;
+				typedef typename N1::type T2;
+				typedef IsNPlaceholder<T1> Judge1;
+				typedef IsNPlaceholder<T2> Judge2;;
+				typedef DeriveIf<Judge1, Next<C0>, C0> C1;
+				typedef DeriveIf<Judge2, Next<C1>, C1> C2;
+				template<typename N, typename... NArgs>
+				struct Apply
+				{
+					typedef typename LambdaGetParameter<C1, Judge1, T1, N, NArgs...>::type P1;
+					typedef typename LambdaGetParameter<C2, Judge2, T2, N, NArgs...>::type P2;;
+					typedef typename Fn<P1, P2 >::type type;
+				};
+			};
+
+
 			//typedef DeriveIf<Judge1, Next<C1>, C1> C2;
-	#define DERIVE_IF_FORMAT(ForeIndex, Index, _ ) typedef DeriveIf<Judge ## ForeIndex ## , Next<C ## ForeIndex ## >, C ## ForeIndex ## > C ## Index ##;
+	#define DERIVE_IF_FORMAT(ForeIndex, Index, _ ) typedef DeriveIf<Judge ## Index ## , Next<C ## ForeIndex ## >, C ## ForeIndex ## > C ## Index ##;
 	#define DERIVE_IF_DECL(Start, End) A3D_PP_RANGE_FORE_INDEX_CALL(Start,End, DERIVE_IF_FORMAT, _)
 
 			//typedef IsNPlaceholder<T1> Judge1;
@@ -50,7 +71,7 @@ namespace Aurora3D
 	#define IS_NPLACEHOLDER_DECL(Start, End) A3D_PP_RANGE_INNER_CALL(Start, End, 1, IS_NPLACEHOLDER_FORMAT, _)
 
 			//typedef typename LambdaGetParameter<C1, T1, N, NArgs...>::type P1;
-	#define LAMBDA_GET_PARAMETER_FORMAT(Index, _1, _2)  typedef typename LambdaGetParameter<C## Index ##, T## Index ##, N, NArgs...>::type P## Index ##;
+#define LAMBDA_GET_PARAMETER_FORMAT(Index, _1, _2)  typedef typename LambdaGetParameter<C## Index ##, Judge ## Index ##, T## Index ##, N, NArgs...>::type P## Index ##;
 	#define LAMBDA_GET_PARAMETER_DECL(Start, End) A3D_PP_RANGE_INNER_CALL(Start, End, 1, LAMBDA_GET_PARAMETER_FORMAT, _)
 
 	#define LAMBDA_HELPER_SPECIALIZATION_DECL(Index, _1, _2)                               \
@@ -59,11 +80,11 @@ namespace Aurora3D
 			struct LambdaHelper<Index, Fn<T1,TArgs...>>                                    \
 			{                                                                              \
 				typedef VArgExpand<TArgs...> N1;                                           \
-				typedef Int_<0> C1;                                                        \
+				typedef Int_<0> C0;                                                        \
 				A3D_PP_RANGE_CHAIN_DECLARE(typedef typename N, ::next, N, 2, Index, (;));  \
 				A3D_PP_RANGE_CHAIN_DECLARE(typedef typename N, ::type, T, 2, Index, (;));  \
 				IS_NPLACEHOLDER_DECL(1, Index);                                            \
-				DERIVE_IF_DECL(2, Index);                                                  \
+				DERIVE_IF_DECL(1, Index);                                                  \
 				template<typename N, typename... NArgs>                                    \
 				struct Apply                                                               \
 				{                                                                          \
@@ -72,7 +93,7 @@ namespace Aurora3D
 				};                                                                         \
 			}; 
 
-			A3D_PP_RANGE_CALL(2, A3D_PP_PLACEHOLDER_MAX, 1, LAMBDA_HELPER_SPECIALIZATION_DECL, _);
+			A3D_PP_RANGE_CALL(3, A3D_PP_PLACEHOLDER_MAX, 1, LAMBDA_HELPER_SPECIALIZATION_DECL, _);
 
 #undef DERIVE_IF_FORMAT
 #undef DERIVE_IF_DECL
@@ -88,10 +109,14 @@ namespace Aurora3D
 		//Add<P1,P2> Can be Match By specalization of template< template<typename F1,typename F2> typename Fn, typename F1, typename F2>
 		//Add Can be Match By main template< template<typename F1,typename F2> typename Fn >
 
-		//1. in Partial Function,like Add<_1,_1>, Add<_1, Int_<20>>
-		//2. In Nesting template Function, like Mul<Add<_,_>,Sub<_,_>>
-		//3. replace template Function, if no type in Fn,  Apply<Lambda<Fn<_>>,T>::type ===Fn<T> 
-		//4. support container operationm like transform< vector, deriveif<isXX<_>, do1<_>,do2<_>>>
+		// pros
+		// 1. in Partial Function,like Add<_1,_1>, Add<_1, Int_<20>>
+		// 2. In Nesting template Function, like Mul<Add<_,_>,Sub<_,_>>
+		// 3. replace template Function, if no type in Fn,  Apply<Lambda<Fn<_>>,T>::type ===Fn<T> 
+		// 4. support container operationm like transform< vector, deriveif<isXX<_>, do1<_>,do2<_>>>
+
+		// cons
+		// 1. compile slow
 
 		//for Mata-Function Class
 		template<typename T>

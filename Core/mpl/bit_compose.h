@@ -17,7 +17,7 @@ namespace Aurora3D
 		// Lazy
 		// value = 1 << T1::value | ( 1<< T2::value ) | (1<<T3::value) | ...
 		template<typename T1, typename... TS> struct BitCompose
-			:public BitOr2< TypeShiftLeft<One_, T1>, BitCompose< TS...> > {};
-		template<typename T> struct BitCompose<T> :public TypeShiftLeft< One_, T> {};
+			:public BitOr2< ShiftLeft<One_, T1>, BitCompose< TS...> > {};
+		template<typename T> struct BitCompose<T> :public ShiftLeft< One_, T> {};
 	}
 }

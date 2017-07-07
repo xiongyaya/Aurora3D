@@ -22,7 +22,7 @@ namespace Aurora3D
 		typedef Arg<-1> _n;
 		typedef Arg<0>  __;  //to do mapping all or Args...
 		
-#define A3D_PP_PLACEHOLDER_MAX 16
+#define A3D_PP_PLACEHOLDER_MAX 6
 
 		template<> struct IsPlaceholder<Arg<-1>> :public True_ {};
 		template<typename T> struct IsNPlaceholder :public False_ {};
