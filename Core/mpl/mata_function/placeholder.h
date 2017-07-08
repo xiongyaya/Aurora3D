@@ -20,14 +20,25 @@ namespace Aurora3D
 		//is _x ?
 		template<typename T> struct IsPlaceholder :public False_ {};
 		template<> struct IsPlaceholder<Arg<-1>> :public True_ {};
+		template<> struct IsPlaceholder<Arg<-2>> :public True_ {};
 
 		//is Arg<-1>?
 		template<typename T> struct IsNPlaceholder :public False_ {};
 		template<> struct IsNPlaceholder<Arg<-1>> :public True_ {};
 
+		//is Arg<-2>?
+		template<typename T> struct IsAPlaceholder :public False_ {};
+		template<> struct IsAPlaceholder<Arg<-2>> : public True_ {};
+
 		//T...Args contain Arg<-1> ?
 		template<typename T,typename... Args> struct ContainNPlaceholder
 			:public Or<IsNPlaceholder<T>, IsNPlaceholder<Args>...>{};
+
+		//T...Args contain Arg<-2> ?
+		template<typename T, typename... Args> struct ContainAPlaceholder
+			:public Or<IsAPlaceholder<T>, IsAPlaceholder<Args>...> {};
+
+
 
 #define A3D_PP_PLACEHOLDER_MAX 6
 

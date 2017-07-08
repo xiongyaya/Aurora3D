@@ -813,6 +813,15 @@
     <ClInclude Include="mpl\type_traits\has_inner_type.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
+    <ClInclude Include="mpl\mata_function\lambda2.h">
+      <Filter>mpl\mata_function</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\mata_function\varg_list.h">
+      <Filter>mpl\mata_function</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\choose.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\Users\xiongya\Desktop\testccpuid\ccpuid.cpp">

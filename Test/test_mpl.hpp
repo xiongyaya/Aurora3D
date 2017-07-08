@@ -18,6 +18,7 @@ using namespace std;
 #include<Core/mpl/type_traits/is_integral.h>
 #include<Core/mpl/mata_function/apply.h>
 #include<Core/mpl/mata_function/lambda.h>
+#include<Core/mpl/mata_function/lambda2.h>
 #include<Core/mpl/mata_function/placeholder.h>
 #include<Core/mpl/type_traits/add_pointer.h>
 #include<Core/mpl/arithmatic_add.h>
@@ -67,6 +68,9 @@ inline void TestMpl()
 	cout << P2::type::value << endl;
 	cout << N2::type::value << endl;
 	cout << N3::type::value << endl;
+	cout << "==== Lambda2 ====" << endl;
+	typedef  Apply<Lambda2<Add<_1, _2>>, int1_, int2_> type;
+	
 	
 	cout << "==== Or/And ====" << endl;
 	cout << "value£º" << Or<False_>::value << endl;

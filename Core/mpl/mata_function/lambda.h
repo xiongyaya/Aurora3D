@@ -142,7 +142,7 @@ namespace Aurora3D
 		struct Lambda< Fn<T> >
 		{
 			template<typename N, typename... NArgs>
-			struct Apply : public Fn < typename detail::LambdaGetParameter<One_, T, N, NArgs...>::type > {};
+			struct Apply : public Fn < typename detail::LambdaGetParameter<int1_, T, N, NArgs...>::type > {};
 		};
 
 		template< template<typename T, typename... TArgs> typename Fn, typename T, typename... TArgs>
