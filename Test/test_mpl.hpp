@@ -15,10 +15,10 @@ using namespace std;
 #include<Core/mpl/bit_or.h>
 #include<Core/mpl/bit_and.h>
 #include<Core/mpl/bit_sequence.h>
+#include<Core/mpl/arithmatic_mul.h>
 #include<Core/mpl/type_traits/is_integral.h>
 #include<Core/mpl/mata_function/apply.h>
 #include<Core/mpl/mata_function/lambda.h>
-#include<Core/mpl/mata_function/lambda2.h>
 #include<Core/mpl/mata_function/placeholder.h>
 #include<Core/mpl/type_traits/add_pointer.h>
 #include<Core/mpl/arithmatic_add.h>
@@ -47,31 +47,39 @@ inline void TestMpl()
 
 	cout << "==== AddApply ====" << endl;
 	cout << Apply< AddApply<Add>, Int_<5>, Int_<3> >::type::value << endl;
-	
+
 	cout << "==== Lambda ====" << endl;
-	typedef Apply< Lambda<Add<_1, _2>>, Int_<3>, Int_<4> > L2;
-	typedef Apply< Lambda<Add<_1, _2, _3>>, Int_<3>, Int_<4>, Int_<5> >L3;
-	typedef Apply< Lambda<Add<_1, _2, _3, _4>>, Int_<3>, Int_<4>, Int_<5>, Int_<6> >L4;
-	typedef Apply< Lambda<Add<_, _>>, Int_<12>, Int_<13> > N2;
-	typedef Apply< Lambda<Add<_, _, _>>, Int_<12>, Int_<13>, Int_<14> > N3;
-	typedef Apply< Lambda<Add<_1, Int_<2>>>, Int_<3>> P1;
-	typedef Apply< Lambda<Add<_1, _1>>, Int_<3>> P2;
+	//2
+	typedef  Apply<Lambda<Add<_1>>, int1_, int2_> choose21;
+	typedef  Apply<Lambda<Add<_2>>, int1_, int2_> choose22;
+	//1+2
+	typedef  Apply<Lambda<Add<_1, _2>>, int1_, int2_> first21;
+	//1+2
+	typedef  Apply<Lambda<Add<_, _>>, int1_, int2_> first22;
+	//1+2
+	typedef  Apply<Lambda<Add<__>>, int1_, int2_> first23;
+	//(1+2)+(1*2*3*4) =27
+	typedef  Apply<Lambda<Add<Add<_1, _2>, Mul<_1, _2, _3, _>>>, int1_, int2_, int3_, int4_> second21;
+	// 1+2+1*2*5 = 13
+	typedef  Apply<Lambda<Add<Add<_, _>, Mul<__>>>, int1_, int2_, int5_> second22;
+	// 1+2 + 1*2
+	typedef  Apply<Lambda<Add<Add<__>, Mul<__>>>, int1_, int2_> second23;
+	//1+(2+(3+4+(1+2+3+4+5+6))) = 31
+	typedef Apply<Lambda<Add<_1, Add<_2, Add<_3, Add<_4, Add<__>>>>>>, int1_, int2_, int3_, int4_, int5_, int6_> six21;
+	//replace vector<_> with type
+	typedef typename Apply<Lambda<std::vector<_3>>, int, char, short>::type  int_of_vector;
 
-	typedef Apply< Lambda<std::vector<_>>, int>::type replace_vector_type;
-	NormalTypeName<replace_vector_type>{}();
+	cout << choose21::value << endl;
+	cout << choose22::value << endl;
+	cout << first21::type::value << endl;
+	cout << first22::type::value << endl;
+	cout << first23::type::value << endl;
+	cout << second21::type::value << endl;
+	cout << second22::type::value << endl;
+	cout << second23::type::value << endl;
+	cout << six21::type::value << endl;
+	NormalTypeName<int_of_vector>{}();
 
-	//Lambda
-	cout << L2::type::value << endl;
-	cout << L3::type::value << endl;
-	cout << L4::type::value << endl;
-	cout << P1::type::value << endl;
-	cout << P2::type::value << endl;
-	cout << N2::type::value << endl;
-	cout << N3::type::value << endl;
-	cout << "==== Lambda2 ====" << endl;
-	typedef  Apply<Lambda2<Add<_1, _2>>, int1_, int2_> type;
-	
-	
 	cout << "==== Or/And ====" << endl;
 	cout << "value£º" << Or<False_>::value << endl;
 	cout << "value£º" << Or<False_, False_>::value << endl;

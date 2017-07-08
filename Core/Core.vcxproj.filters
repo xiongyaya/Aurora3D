@@ -768,9 +768,6 @@
     <ClInclude Include="mpl\mata_function\apply.h">
       <Filter>mpl\mata_function</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\mata_function\lambda.h">
-      <Filter>mpl\mata_function</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\mata_function\placeholder.h">
       <Filter>mpl\mata_function</Filter>
     </ClInclude>
@@ -813,14 +810,17 @@
     <ClInclude Include="mpl\type_traits\has_inner_type.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\mata_function\lambda2.h">
-      <Filter>mpl\mata_function</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\mata_function\varg_list.h">
       <Filter>mpl\mata_function</Filter>
     </ClInclude>
     <ClInclude Include="mpl\choose.h">
       <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\type_traits\has_inner_template_apply.h">
+      <Filter>mpl\type_traits</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\mata_function\lambda.h">
+      <Filter>mpl\mata_function</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

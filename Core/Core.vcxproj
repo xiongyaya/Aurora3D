@@ -153,7 +153,6 @@
     <ClInclude Include="mpl\mata_function\apply.h" />
     <ClInclude Include="mpl\mata_function\identity.h" />
     <ClInclude Include="mpl\mata_function\lambda.h" />
-    <ClInclude Include="mpl\mata_function\lambda2.h" />
     <ClInclude Include="mpl\mata_function\placeholder.h" />
     <ClInclude Include="mpl\mata_function\varg_list.h" />
     <ClInclude Include="mpl\next.h" />
@@ -180,6 +179,7 @@
     <ClInclude Include="mpl\type_traits\first_template.h" />
     <ClInclude Include="mpl\type_traits\has_assigner.h" />
     <ClInclude Include="mpl\type_traits\has_inner_decl.h" />
+    <ClInclude Include="mpl\type_traits\has_inner_template_apply.h" />
     <ClInclude Include="mpl\type_traits\has_inner_type.h" />
     <ClInclude Include="mpl\type_traits\has_new_delete_decl.h" />
     <ClInclude Include="mpl\type_traits\has_operator_decl.h" />

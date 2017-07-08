@@ -38,6 +38,8 @@ namespace Aurora3D
 		template<typename T, typename... Args> struct ContainAPlaceholder
 			:public Or<IsAPlaceholder<T>, IsAPlaceholder<Args>...> {};
 
+		template<typename T> struct ContainAPlaceholder<T> :public IsAPlaceholder<T> {};
+
 
 
 #define A3D_PP_PLACEHOLDER_MAX 6
