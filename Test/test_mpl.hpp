@@ -23,6 +23,7 @@ using namespace std;
 #include<Core/mpl/type_traits/add_pointer.h>
 #include<Core/mpl/arithmatic_add.h>
 #include<Core/mpl/type_traits/has_inner_type.h>
+#include<Core/mpl/container/vector.h>
 #include"print_type.h"
 using namespace Aurora3D::mpl;
 
@@ -30,8 +31,38 @@ using namespace Aurora3D::mpl;
 struct HasType { typedef int type; };
 struct NoType{};
 
+template<typename T>
+struct TestInnerType {
+	//typedef typename T::type1 type1;     //cause error
+	typedef typename T::type type;
+
+	template<typename U>
+	struct TestInnerFunc
+	{
+		typedef typename T::type2 type2;   //not cause error
+	};
+
+
+};
+
 inline void TestMpl()
 {
+	cout << "==== Test type ====" << endl;
+	typedef TestInnerType<HasType> test_type;
+	test_type::type a;
+
+
+	typedef VectorIterator<Int_<0>, Vector_<int>> vector_it;
+	typedef VectorIterator<Int_<1>, Vector_<int>> vector_it2;
+	NormalTypeName<typename vector_it::vector>{}();
+	typedef vector_it::template Distance<vector_it2> Distance;
+	NormalTypeName<typename Distance::type>{}();
+	cout << Distance::type::value << endl;
+
+	NormalTypeName<typename vector_it::Deref::type>{}();
+	//NormalTypeName<typename vector_it2::Deref::type>{}();
+
+
 	cout << "==== HasInnerType ====" << endl;
 	cout << HasInnerType<HasType>::value << endl;
 	cout << HasInnerType<NoType>::value << endl;

@@ -822,6 +822,12 @@
     <ClInclude Include="mpl\mata_function\lambda.h">
       <Filter>mpl\mata_function</Filter>
     </ClInclude>
+    <ClInclude Include="mpl\container\vector10.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\pair.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\Users\xiongya\Desktop\testccpuid\ccpuid.cpp">

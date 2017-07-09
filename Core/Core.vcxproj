@@ -136,7 +136,9 @@
     <ClInclude Include="mpl\bit_shift_right.h" />
     <ClInclude Include="mpl\choose.h" />
     <ClInclude Include="mpl\container\deref.h" />
+    <ClInclude Include="mpl\container\pair.h" />
     <ClInclude Include="mpl\container\vector.h" />
+    <ClInclude Include="mpl\container\vector10.h" />
     <ClInclude Include="mpl\enable_if.h" />
     <ClInclude Include="mpl\ingore_t.h" />
     <ClInclude Include="mpl\integral_.h" />
