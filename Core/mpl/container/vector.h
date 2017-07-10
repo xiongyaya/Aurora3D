@@ -143,14 +143,14 @@ namespace Aurora3D
 		};
 
 		//back element
-		template<typename V> struct VectorBack
+		template<typename S> struct VectorBack
 		{
 			static_assert(S::size > 0, "VectorBack, vector size must greater than 0.");
 			typedef typename VectorAt<S, S::size - 1>::type type;
 		};
 
 		//back element
-		template<typename V> struct VectorFront
+		template<typename S> struct VectorFront
 		{
 			static_assert(S::size > 0, "VectorBack, vector size must greater than 0.");
 			typedef typename VectorAt<S, 0>::type type;
@@ -206,7 +206,7 @@ namespace Aurora3D
 
 			//must be another VectorIterator
 			template<typename Pos2>
-			struct Distance< VectorIterator<Pos2, vector>>
+			struct Distance< VectorIterator<vector, Pos2>>
 			{
 				typedef Sub<position, Pos2> type;
 			};

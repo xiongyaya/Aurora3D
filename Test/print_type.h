@@ -111,8 +111,9 @@ struct TypeName
 template<typename T>
 struct NormalTypeName
 {
-	void operator()()
+	void operator()(const char* prefix)
 	{
-		cout << "      " << left << setw(40) <<"type name:" << TypeNameHelper<T>{}() << endl;
+		cout << prefix << ":" << endl;
+		cout << setw(30) <<"type name:" << TypeNameHelper<T>{}() << endl;
 	}
 };

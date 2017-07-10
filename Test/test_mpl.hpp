@@ -48,19 +48,29 @@ struct TestInnerType {
 inline void TestMpl()
 {
 	cout << "==== Test type ====" << endl;
-	typedef TestInnerType<HasType> test_type;
-	test_type::type a;
+	typedef Vector_<int> vector1;
+	typedef typename VectorPushBack<vector1, char>::type vector2;
+	typedef typename VectorPushFront<vector2, short>::type vector3;
+	typedef typename VectorInsert<vector3, 1, unsigned short>::type vector4;
+	typedef typename VectorInsert<vector4, 3, unsigned int>::type vector5;
+	typedef typename VectorInsert<vector5, 5, unsigned char>::type vector6;
+	typedef typename VectorInsert<vector6, 6, float>::type vector7;
+	typedef typename VectorPopBack<vector7>::type vector8;
+	typedef typename VectorPopFront<vector8>::type vector9;
+	typedef typename VectorErase<vector9, 3>::type vector10;
+	typedef typename VectorAt<vector10, 1>::type elem1;
+	NormalTypeName<vector1>{}("original-");
+	NormalTypeName<vector2>{}("push back char-");
+	NormalTypeName<vector3>{}("push front short-");
+	NormalTypeName<vector4>{}("insert 1 ushort-");
+	NormalTypeName<vector5>{}("insert 3 uint-");
+	NormalTypeName<vector6>{}("insert 5 uchar-");
+	NormalTypeName<vector7>{}("insert 6 float-");
+	NormalTypeName<vector8>{}("pop back-");
+	NormalTypeName<vector9>{}("pop front-");
+	NormalTypeName<vector10>{}("erase at 3-");
+	NormalTypeName<elem1>{}("at 1-");
 
-
-	typedef VectorIterator<Int_<0>, Vector_<int>> vector_it;
-	typedef VectorIterator<Int_<1>, Vector_<int>> vector_it2;
-	NormalTypeName<typename vector_it::vector>{}();
-	typedef vector_it::template Distance<vector_it2> Distance;
-	NormalTypeName<typename Distance::type>{}();
-	cout << Distance::type::value << endl;
-
-	NormalTypeName<typename vector_it::Deref::type>{}();
-	//NormalTypeName<typename vector_it2::Deref::type>{}();
 
 
 	cout << "==== HasInnerType ====" << endl;
@@ -109,7 +119,7 @@ inline void TestMpl()
 	cout << second22::type::value << endl;
 	cout << second23::type::value << endl;
 	cout << six21::type::value << endl;
-	NormalTypeName<int_of_vector>{}();
+	NormalTypeName<int_of_vector>{}("");
 
 	cout << "==== Or/And ====" << endl;
 	cout << "value£º" << Or<False_>::value << endl;
