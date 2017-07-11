@@ -25,7 +25,6 @@ namespace Aurora3D
 			struct LambdaN;
 		}
 
-
 		template<typename T>
 		struct Lambda
 		{
@@ -50,6 +49,10 @@ namespace Aurora3D
 				CallApply< detail::LambdaN<TCount, L>, AddApply<Fn>, N, NArgs...> >
 			{};
 		};
+
+		template<typename Fn, typename... Args>
+		struct ApplyLambda :public CallApply<Lambda<Fn>, Args...> {};
+
 
 		namespace detail
 		{
@@ -201,9 +204,6 @@ namespace Aurora3D
 					CallApply<LambdaN<TCount, L>, AddApply<Fn>, N, NArgs...> > {};
 			};
 		}//detail end
-		
-
-		
 	}	 
 
 }

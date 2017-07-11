@@ -16,7 +16,7 @@ namespace Aurora3D
 		struct VArgList<T>
 		{
 			typedef T type;
-			typedef ingore_t next;
+			typedef null_t next;
 		};
 	}
 }

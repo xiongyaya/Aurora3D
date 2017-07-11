@@ -23,7 +23,10 @@ using namespace std;
 #include<Core/mpl/type_traits/add_pointer.h>
 #include<Core/mpl/arithmatic_add.h>
 #include<Core/mpl/type_traits/has_inner_type.h>
-#include<Core/mpl/container/vector.h>
+#include<Core/mpl/container/vector_.h>
+#include<Core/mpl/container/set_.h>
+
+#include<Core/mpl/container/at.h>
 #include"print_type.h"
 using namespace Aurora3D::mpl;
 
@@ -58,7 +61,7 @@ inline void TestMpl()
 	typedef typename VectorPopBack<vector7>::type vector8;
 	typedef typename VectorPopFront<vector8>::type vector9;
 	typedef typename VectorErase<vector9, 3>::type vector10;
-	typedef typename VectorAt<vector10, 1>::type elem1;
+	typedef typename At<vector10, Int_<1>>::type elem1;
 	NormalTypeName<vector1>{}("original-");
 	NormalTypeName<vector2>{}("push back char-");
 	NormalTypeName<vector3>{}("push front short-");
@@ -71,6 +74,16 @@ inline void TestMpl()
 	NormalTypeName<vector10>{}("erase at 3-");
 	NormalTypeName<elem1>{}("at 1-");
 
+	typedef Set_<int, char> set2;
+	Set_<int> a;
+	//std::string
+
+
+	cout << "==== Test Macro Define ====" << endl;
+#define ATEST 20
+	cout << ATEST << endl;
+#define ATEST 30
+	cout << ATEST << endl;
 
 
 	cout << "==== HasInnerType ====" << endl;

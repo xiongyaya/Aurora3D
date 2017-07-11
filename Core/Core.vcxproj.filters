@@ -753,9 +753,6 @@
     <ClInclude Include="mpl\binary_op_decl.h">
       <Filter>mpl</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\container\vector.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\units\base_demension.h">
       <Filter>mpl\units</Filter>
     </ClInclude>
@@ -826,6 +823,87 @@
       <Filter>mpl\container</Filter>
     </ClInclude>
     <ClInclude Include="mpl\container\pair.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\advance.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\at.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\back.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\begin.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\clear.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\distance.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\empty.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\end.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\erase.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\front.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\has_key.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\insert.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\insert_range.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\pop_back.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\pop_front.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\push_back.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\push_front.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\size.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\tuple.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\vector_.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\vector_decl.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\set_.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\low_bound.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\upper_bound.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\category.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\random_iterator.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\list_.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
   </ItemGroup>

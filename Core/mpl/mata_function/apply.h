@@ -23,13 +23,6 @@ namespace Aurora3D
 		template<typename Fn, typename... Args>
 		struct CallApply :public Fn::template Apply<Args...> {};
 
-		
-
-
-		
-
-
-
 		template<typename T>
 		struct IdentityApply
 		{
