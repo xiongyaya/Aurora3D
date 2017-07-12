@@ -906,6 +906,9 @@
     <ClInclude Include="mpl\container\list_.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
+    <ClInclude Include="mpl\container\length.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="C:\Users\xiongya\Desktop\testccpuid\ccpuid.cpp">

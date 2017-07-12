@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 
 #include<Core/mpl/int_.h>
 #include<Core/mpl/category.h>

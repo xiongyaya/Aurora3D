@@ -8,6 +8,8 @@
 
 //runtime
 #include<Core/mpl/category.h>
+#include<Core/mpl/container/length.h>
+#include<Core/mpl/container/list_.h>
 
 namespace Aurora3D
 {
@@ -44,8 +46,32 @@ namespace Aurora3D
 			A3D_PP_RANGE_CALL(1, 9, 1, MPL_RANDOM_AT_SPECIALIZATION_DECL, _)
 #undef		MPL_VECTOR_AT_SPECIALIZATION_DECL
 
+			//for normal Bidirectional Container
+			template<typename S, typename Pos>
+			struct BidirectionalAt
+			{
+				static constexpr int length = LengthImpl<S>::value;
+			};
 			
-			template<typename S, typename Pos, typename 
+			//specialization for BiList<..>
+			template<typename Head, typename Tail, typename Pos>
+			struct BidirectionalAt<BiList<Head,Tail>, Pos>
+			{
+				static constexpr int length = LengthImpl<S>::value;
+				static_assert(Pos::value < length,"bidirection");
+				static constexpr int back_pos = length - Pos::value;
+
+				//true near head, false near tail
+				static constexpr bool front_to_back = Pos::value <= back_pos;
+
+				//near head but head_length < Pos::value
+				//or near tail but tail_length < back_pos
+				static constexpr bool need_sync = (front_to_back && Head::length < Pos::value) ||
+					(!front_to_back && Tail::length < back_pos);
+
+
+
+			};
 
 
 			//random access at Pos

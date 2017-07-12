@@ -150,6 +150,7 @@
     <ClInclude Include="mpl\container\has_key.h" />
     <ClInclude Include="mpl\container\insert.h" />
     <ClInclude Include="mpl\container\insert_range.h" />
+    <ClInclude Include="mpl\container\length.h" />
     <ClInclude Include="mpl\container\list_.h" />
     <ClInclude Include="mpl\container\low_bound.h" />
     <ClInclude Include="mpl\container\pair.h" />
