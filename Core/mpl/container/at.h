@@ -61,15 +61,8 @@ namespace Aurora3D
 				static_assert(Pos::value < length,"bidirection");
 				static constexpr int back_pos = length - Pos::value;
 
-				//true near head, false near tail
-				static constexpr bool front_to_back = Pos::value <= back_pos;
-
-				//near head but head_length < Pos::value
-				//or near tail but tail_length < back_pos
-				static constexpr bool need_sync = (front_to_back && Head::length < Pos::value) ||
-					(!front_to_back && Tail::length < back_pos);
-
-
+				//near head and head is long enough to contain element at Pos
+				static constexpr bool front_to_back = (Pos::value <= back_pos && Pos::value < Head::length);
 
 			};
 
