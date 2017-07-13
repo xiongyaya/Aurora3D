@@ -1,12 +1,12 @@
 #pragma once
 
 #include<Core/mpl/int_.h>
-#include<Core/mpl/category.h>
+//#include<Core/mpl/category.h>
 
 namespace Aurora3D
 {
 	namespace mpl
-	{
+	{/*
 		namespace detail
 		{
 			template<typename S, typename Tag = S::tag> struct LengthImpl{};
@@ -20,7 +20,7 @@ namespace Aurora3D
 			template<typename S> struct LengthImpl<S, ForwardCategoryTag> :
 				Int_<S::length> {};
 		}
-
-		template<typename S> struct Length: detail::LengthImpl<S>{};
+*/
+		template<typename S> struct Length: public Int_<S::length>{};
 	}
 }

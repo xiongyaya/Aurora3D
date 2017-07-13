@@ -15,5 +15,6 @@ namespace Aurora3D
 			typedef S base;
 			typedef Pos pos;
 		};
+		template<typename Node> struct ForwardIterator: public Node{};
 	}
 }
