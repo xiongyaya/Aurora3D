@@ -834,22 +834,13 @@
     <ClInclude Include="mpl\container\bilist_.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\container\clear.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\container\empty.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\erase.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
     <ClInclude Include="mpl\container\front.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
     <ClInclude Include="mpl\container\has_key.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\insert.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
     <ClInclude Include="mpl\container\insert_range.h">
@@ -861,25 +852,7 @@
     <ClInclude Include="mpl\container\list_.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\container\merge.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\container\pair.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\pop_back.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\pop_front.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\push_back.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\push_front.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\reverse.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
     <ClInclude Include="mpl\container\set_.h">
@@ -945,17 +918,62 @@
     <ClInclude Include="mpl\container\container_decl.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\container\construct.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\zero_length.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\container\node.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
     <ClInclude Include="mpl\iterator\forward_iterator.h">
       <Filter>mpl\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\iterator\insert.h">
+      <Filter>mpl\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\insert_at.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\push_front.h">
+      <Filter>mpl\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\pop_back.h">
+      <Filter>mpl\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\pop_front.h">
+      <Filter>mpl\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\push_back.h">
+      <Filter>mpl\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\merge.h">
+      <Filter>mpl\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\erase.h">
+      <Filter>mpl\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\reverse.h">
+      <Filter>mpl\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\vector_at.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\vector_decl.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\vector_front.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\vector_insert.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\vector_erase.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\vector_post_part.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\vector_fore_part.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\vector_append.h">
+      <Filter>mpl\container</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

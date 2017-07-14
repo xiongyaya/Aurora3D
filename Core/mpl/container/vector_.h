@@ -13,19 +13,15 @@
 #include<Core/mpl/category.h>
 
 #include<Core/mpl/container/pair.h>
-#include<Core/mpl/container/deref.h>
-#include<Core/mpl/container/begin.h>
-#include<Core/mpl/container/end.h>
 #include<Core/mpl/container/at.h>
+
+#include<Core/mpl/container/vector_decl.h>
 
 namespace Aurora3D
 {
 	namespace mpl
 	{
-		//capacity = 10
-#define A3D_MPL_VECTOR_CAPACITY 10
-
-		//vector 
+		//vector
 		template<typename... TArgs> struct Vector_ {};
 
 		//empty Vector
@@ -33,7 +29,7 @@ namespace Aurora3D
 		struct Vector_<>
 		{
 			typedef RandomCategoryTag tag;
-			static const int size = 0;
+			static const int length = 0;
 			typedef Vector_<> type;
 			typedef Vector_<> reverse;
 		};
@@ -52,47 +48,9 @@ namespace Aurora3D
 		A3D_PP_RANGE_CALL(0, A3D_PP_SUB1( A3D_MPL_VECTOR_CAPACITY), 1, MPL_VECTOR_SEPCIALIZATION_DECL, _)
 #undef  MPL_VECTOR_SEPCIALIZATION_DECL
 
-		//main vector insert at Pos [0, size]
-		template<typename S, int Pos, typename U> struct VectorInsert
-		{
-			//check
-			static_assert(Pos <= S::size && Pos >= 0, "VectorInert  Pos out of range.");
-			static_assert(S::size < A3D_MPL_VECTOR_CAPACITY, "VectorInsert vector capacity is full.");
-		};
+	
 
-		//VectorInsert at Pos 0
-		template<typename U, typename... TArgs>
-		struct VectorInsert<Vector_<TArgs...>, 0, U>
-		{ typedef Vector_<U, TArgs...> type; };
-
-		//insert at 1 ~ A3D_MPL_VECTOR_CAPACITY
-#define MPL_VECTOR_INSERT_SPECIALIZATION_DECL(Index, _1, _2)                                                  \
-		template<typename U, A3D_PP_RANGE_PREFIX(typename T, 0, Index, (,)), typename... TArgs>               \
-		struct VectorInsert<Vector_<A3D_PP_RANGE_PREFIX(T, 0, Index, (,)), TArgs...>, A3D_PP_ADD1(Index), U>  \
-		{                                                                                                     \
-			typedef Vector_<A3D_PP_RANGE_PREFIX(typename T, 0, Index, (,)), U, TArgs...> type;                \
-		};
-		A3D_PP_RANGE_CALL(0, A3D_PP_SUB1(A3D_MPL_VECTOR_CAPACITY), 1, MPL_VECTOR_INSERT_SPECIALIZATION_DECL, _)
-#undef  MPL_VECTOR_INSERT_SPECIALIZATION_DECL
-
-		//main vector erase at Pos [0, size)
-		template<typename S, int Pos> struct VectorErase
-		{
-			static_assert(Pos <= S::size && Pos >= 0, "VectorErase Pos out of range.");
-			static_assert(S::size != 0, "VectorErase vector size need be greater than 0.");
-		};
-
-		//erase 0
-		template<typename T0, typename... TArgs>
-		struct VectorErase< Vector_<T0, TArgs...>, 0> { typedef Vector_<TArgs...> type; };
-
-		//erase 1~ A3D_MPL_VECTOR_CAPACITY-1
-#define MPL_VECTOR_ERASE_SEPCIALIZATION_DECL(Index, _1,_2)                                       \
-		template<A3D_PP_RANGE_PREFIX(typename T, 0, Index, (,)), typename... TArgs>              \
-		struct VectorErase< Vector_<A3D_PP_RANGE_PREFIX(T, 0, Index, (,)), TArgs...>, Index>     \
-		{ typedef Vector_<A3D_PP_RANGE_PREFIX(T, 0, A3D_PP_SUB1(Index), (,)), TArgs...> type; };  
-		A3D_PP_RANGE_CALL(1, A3D_PP_SUB1(A3D_MPL_VECTOR_CAPACITY), 1, MPL_VECTOR_ERASE_SEPCIALIZATION_DECL, (,))
-#undef  MPL_VECTOR_ERASE_SEPCIALIZATION_DECL
+		
 	
 		//push back one element 
 		template<typename S, typename T>
@@ -101,7 +59,6 @@ namespace Aurora3D
 			static_assert(S::size < A3D_MPL_VECTOR_CAPACITY, "VectorPushBack vector capacity is full.");
 		};
 
-		
 		template<typename T, typename... TArgs>
 		struct VectorPushBack< Vector_<TArgs...>, T>
 		{
@@ -225,32 +182,10 @@ namespace Aurora3D
 		struct Equal<VectorIterator<S, Pos1>, VectorIterator<S, Pos2>>:
 			public Equal<Pos1,Pos2>{};
 		
-		//
-		template<typename S,typename Pos>
-		struct Deref<VectorIterator<S, Pos>>
-		{
-			typedef typename At<S, Pos>::type type;
-		};
-
 		template<typename S,typename Pos>
 		struct Next<VectorIterator<S, Pos>>
 		{
 			typedef VectorIterator<S, Next<Pos>> type;
 		};
-
-		template<typename... Args>
-		struct Begin<Vector_<Args...>>
-		{
-			typedef Vector_<Args...> vector;
-			typedef VectorIterator<vector, Int_<0>> type;
-		};
-
-		template<typename... Args>
-		struct End<Vector_<Args...>>
-		{
-			typedef Vector_<Args...> vector;
-			typedef VectorIterator<vector, Int_<vector::size>> type;
-		};
-
 	}
 }

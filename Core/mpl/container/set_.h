@@ -6,9 +6,6 @@
 #include<Core/mpl/logic_not_equal.h>
 #include<Core/mpl/next.h>
 #include<Core/mpl/container/vector_.h>
-#include<Core/mpl/container/deref.h>
-#include<Core/mpl/container/begin.h>
-#include<Core/mpl/container/end.h>
 #include<Core/mpl/mata_function/placeholder.h>
 #include<Core/mpl/mata_function/apply.h>
 
@@ -19,20 +16,20 @@ namespace Aurora3D
 		//depends on Vector_
 		template<typename... Args> struct Set_:public Vector_<Args...>{};
 
-		// while( It != End && *It < U ) It = ++It;
-		template<typename U, typename It, typename End, typename Cmp,
-			bool Condition = And< NotEqual<It, End>,
-			CallApply<Cmp, U, Deref_t<It> > >::value >
-		struct BinarySearch :public BinarySearch<U,
-			typename Next<It>::next, End, Cmp>
-		{};
+		//// while( It != End && *It < U ) It = ++It;
+		//template<typename U, typename It, typename End, typename Cmp,
+		//	bool Condition = And< NotEqual<It, End>,
+		//	CallApply<Cmp, U, Deref_t<It> > >::value >
+		//struct BinarySearch :public BinarySearch<U,
+		//	typename Next<It>::next, End, Cmp>
+		//{};
 
-		//It == End or *It >=U , return It
-		template<typename U, typename It, typename End, typename Cmp>
-		struct BinarySearch<U, It, End, Cmp, false>
-		{
-			typedef It type;
-		};
+		////It == End or *It >=U , return It
+		//template<typename U, typename It, typename End, typename Cmp>
+		//struct BinarySearch<U, It, End, Cmp, false>
+		//{
+		//	typedef It type;
+		//};
 
 
 		template<typename Begin, typename End, typename T, typename Cmp = AddApply<Less>>
@@ -52,7 +49,7 @@ namespace Aurora3D
 		template<typename S, typename U, typename Cmp = AddApply<Less> > 
 		struct SetInsert 
 		{
-			typedef typename BinarySearch<U, BeginT<S>, EndT<S>, Cmp>::type pos;
+			//typedef typename BinarySearch<U, BeginT<S>, EndT<S>, Cmp>::type pos;
 		};
 
 		

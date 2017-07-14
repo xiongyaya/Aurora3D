@@ -7,7 +7,6 @@ namespace Aurora3D
 		struct Integral_
 		{
 			static constexpr T value = N;
-			typedef Integral_<T, N> type;
 			typedef T value_type;
 			constexpr operator T() const
 			{

@@ -24,6 +24,12 @@ using namespace std;
 #include<Core/mpl/arithmatic_add.h>
 #include<Core/mpl/type_traits/has_inner_type.h>
 #include<Core/mpl/container/vector_.h>
+#include<Core/mpl/container/vector_insert.h>
+#include<Core/mpl/container/vector_at.h>
+#include<Core/mpl/container/vector_erase.h>
+#include<Core/mpl/container/vector_fore_part.h>
+#include<Core/mpl/container/vector_post_part.h>
+#include<Core/mpl/container/vector_append.h>
 #include<Core/mpl/container/set_.h>
 
 #include<Core/mpl/container/at.h>
@@ -44,8 +50,6 @@ struct TestInnerType {
 	{
 		typedef typename T::type2 type2;   //not cause error
 	};
-
-
 };
 
 
@@ -62,8 +66,11 @@ inline void TestMpl()
 	typedef typename VectorPopBack<vector7>::type vector8;
 	typedef typename VectorPopFront<vector8>::type vector9;
 	typedef typename VectorErase<vector9, 3>::type vector10;
-	
-	typedef typename At<Vector_<int,char>, Int_<0>>::type elem1;
+	typedef typename VectorAt<Vector_<int,char>, 0>::type elem1;
+	typedef typename VectorForePart<vector10, 2>::type vector11;
+	typedef typename VectorPostPart<vector10, 2>::type vector12;
+	typedef typename VectorAppend<vector11, vector12>::type vector13;
+
 	NormalTypeName<vector1>{}("original-");
 	NormalTypeName<vector2>{}("push back char-");
 	NormalTypeName<vector3>{}("push front short-");
@@ -74,7 +81,11 @@ inline void TestMpl()
 	NormalTypeName<vector8>{}("pop back-");
 	NormalTypeName<vector9>{}("pop front-");
 	NormalTypeName<vector10>{}("erase at 3-");
+	NormalTypeName<vector11>{}("[0,2)  part-");
+	NormalTypeName<vector12>{}("[2,end) part-");
+	NormalTypeName<vector13>{}("append vector11 and vector12");
 	NormalTypeName<elem1>{}("at 1-");
+	
 
 	typedef Set_<int, char> set2;
 	Set_<int> a;
@@ -181,5 +192,4 @@ inline void TestMpl()
 	cout << DeriveIf<IsIntegral<float>, True_, False_>::value << endl;
 	cout << BoolDeriveIf<false, True_, False_>::value << endl;
 	cout << BoolDeriveIf<true, True_, False_>::value << endl;
-
 }

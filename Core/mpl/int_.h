@@ -8,9 +8,21 @@ namespace Aurora3D
 	namespace mpl
 	{
 		template<int64 N> struct Int_:public Integral_<int64, N>
-		{
+		{ 
+			typedef Int_<N> type;
 			typedef Int_<N + 1> next;
 			typedef Int_<N - 1> prior;
+			typedef Int_<-N> reverse;
+		
+			template<typename T> struct add  :Int_<N + T::value> {};
+			template<typename T> struct sub  :Int_<N - T::value> {};
+			template<typename T> struct div  :Int_<N / T::value> {};
+			template<typename T> struct mul  :Int_<N * T::value> {};
+			template<typename T> struct mod  :Int_<N % T::value> {};
+			template<typename T> struct band :Int_<N & T::value> {};
+			template<typename T> struct bor  :Int_<N | T::value> {};
+			template<typename T> struct bxor :Int_<N ^ T::value> {};
+			struct bnot :Int_<~N> {};
 		};
 
 		typedef Int_<-1> intn1_;

@@ -1,48 +1,21 @@
 #pragma once
 
-//preprocessor
-#include<Core/preprocessor/range_call.h>
-#include<Core/preprocessor/range_prefix.h>
-#include<Core/preprocessor/uint8_add_one.h>
-#include<Core/preprocessor/uint8_sub_one.h>
+
 
 //runtime
 #include<Core/mpl/category.h>
 #include<Core/mpl/container/length.h>
 #include<Core/mpl/container/list_.h>
+#include<Core/mpl/container/container_decl.h>
 
 namespace Aurora3D
 {
 	namespace mpl
 	{
-		namespace detail
-		{
-			//At implements
-			template<typename S, typename Pos, typename Tag = typename S::tag> struct AtImpl { };
-		}
-
-		//At declare
-		template<typename S, typename Pos> struct At :public detail::AtImpl<S, Pos, typename S::tag> {};
-
+		
 		//content
 		namespace detail
 		{
-			//main define of RandomAt
-			template<typename S, int Pos> struct RandomAt 
-			{
-				static_assert(Pos < S::length && Pos >= 0, "At pos out of range.");
-			};
-
-			//RandomAt 0		
-			template<typename S>
-			struct RandomAt<S, 0> { typedef typename S::t0 type; };
-
-			//RandomAt 1 ~ 9
-#define		MPL_RANDOM_AT_SPECIALIZATION_DECL(Index, _1, _2)                                              \
-			template<typename S>struct RandomAt<S, Index>{ typedef typename S::t ## Index type; };
-			A3D_PP_RANGE_CALL(1, 9, 1, MPL_RANDOM_AT_SPECIALIZATION_DECL, _)
-#undef		MPL_VECTOR_AT_SPECIALIZATION_DECL
-
 			//for normal Bidirectional Container
 			template<typename S, typename Pos>
 			struct BidirectionalAt
@@ -50,9 +23,12 @@ namespace Aurora3D
 				static constexpr int length = S::length;
 			};
 			
+			//At implements
+			template<typename S, typename Pos, typename Tag> struct AtImpl { };
+
 			//random access at Pos
 			template<typename S, typename Pos> 
-			struct AtImpl<S, Pos, RandomCategoryTag>:public RandomAt<S,Pos::value> {};
+			struct AtImpl<S, Pos, RandomCategoryTag>{};
 
 			template<typename S, typename Pos>
 			struct AtImpl<S, Pos, BidirectionalCategoryTag> :public BidirectionalAt<S, Pos> {};
@@ -62,8 +38,11 @@ namespace Aurora3D
 			{
 
 			};
-
 		}		
+
+		//At declare
+		template<typename S, typename Pos> struct At :public detail::AtImpl<S, Pos, typename S::tag> {};
+
 	}
 }
 

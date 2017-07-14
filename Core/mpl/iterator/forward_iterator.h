@@ -13,7 +13,7 @@ namespace Aurora3D
 			typedef ForwardCategoryTag tag;
 			typedef S base;
 			typedef ForePart forePart;
-			typedef typename Node::type type;
+			typedef ListIterator<Node,S,ForePart> type;
 		}; 
 	}
 }

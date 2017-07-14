@@ -139,8 +139,6 @@
     <ClInclude Include="mpl\container\at.h" />
     <ClInclude Include="mpl\container\back.h" />
     <ClInclude Include="mpl\container\bilist_.h" />
-    <ClInclude Include="mpl\container\clear.h" />
-    <ClInclude Include="mpl\container\construct.h" />
     <ClInclude Include="mpl\container\container_decl.h" />
     <ClInclude Include="mpl\container\empty.h" />
     <ClInclude Include="mpl\container\erase.h" />
@@ -155,7 +153,7 @@
     <ClInclude Include="mpl\container\impl\at70.h" />
     <ClInclude Include="mpl\container\impl\at80.h" />
     <ClInclude Include="mpl\container\impl\at90.h" />
-    <ClInclude Include="mpl\container\insert.h" />
+    <ClInclude Include="mpl\container\insert_at.h" />
     <ClInclude Include="mpl\container\insert_range.h" />
     <ClInclude Include="mpl\container\length.h" />
     <ClInclude Include="mpl\container\list_.h" />
@@ -170,7 +168,14 @@
     <ClInclude Include="mpl\container\set_.h" />
     <ClInclude Include="mpl\container\tuple.h" />
     <ClInclude Include="mpl\container\vector_.h" />
-    <ClInclude Include="mpl\container\zero_length.h" />
+    <ClInclude Include="mpl\container\vector_append.h" />
+    <ClInclude Include="mpl\container\vector_at.h" />
+    <ClInclude Include="mpl\container\vector_decl.h" />
+    <ClInclude Include="mpl\container\vector_erase.h" />
+    <ClInclude Include="mpl\container\vector_fore_part.h" />
+    <ClInclude Include="mpl\container\vector_front.h" />
+    <ClInclude Include="mpl\container\vector_insert.h" />
+    <ClInclude Include="mpl\container\vector_post_part.h" />
     <ClInclude Include="mpl\enable_if.h" />
     <ClInclude Include="mpl\ingore_t.h" />
     <ClInclude Include="mpl\integral_.h" />
@@ -180,6 +185,7 @@
     <ClInclude Include="mpl\iterator\distance.h" />
     <ClInclude Include="mpl\iterator\end.h" />
     <ClInclude Include="mpl\iterator\forward_iterator.h" />
+    <ClInclude Include="mpl\iterator\insert.h" />
     <ClInclude Include="mpl\iterator\random_iterator.h" />
     <ClInclude Include="mpl\iterator\rbegin.h" />
     <ClInclude Include="mpl\iterator\rend.h" />
