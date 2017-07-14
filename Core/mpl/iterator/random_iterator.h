@@ -2,7 +2,6 @@
 
 #include<Core/mpl/int_.h>
 #include<Core/mpl/category.h>
-#include<Core/mpl/container/pair.h>
 
 namespace Aurora3D
 {
@@ -15,6 +14,7 @@ namespace Aurora3D
 			typedef S base;
 			typedef Pos pos;
 		};
-		template<typename Node> struct ForwardIterator: public Node{};
+
+		
 	}
 }

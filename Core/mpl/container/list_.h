@@ -17,26 +17,6 @@ namespace Aurora3D
 {
 	namespace mpl
 	{
-		//mid node
-		template<typename T, typename N>
-		struct Node
-		{
-			typedef T type;
-			typedef N next;
-			static constexpr int length = N::length + 1;
-		};
-
-		//last node
-		template<typename T>
-		struct Node<T, Null_>
-		{
-			typedef T type;
-			typedef Null_ next;
-			static constexpr int length = 1;
-		};
-
-		struct ZeroLength { static constexpr int length = 0; };
-
 		// forward list
 		// PushFront, Front, PopFront O(n) = 1
 		// PushBack,  Back,  PopBack O(n) = n
@@ -73,12 +53,11 @@ namespace Aurora3D
 				typedef Node<typename Head::type, PreNode> type;
 			};
 
-
 			//L1 exists and Length >= 1
 			template<typename L1, typename L2, int Length = L1::length>
 			struct ListMergeImpl
 			{
-				typedef typename ListMerge<L1::next, L2, Length - 1>::type next;
+				typedef typename ListMergeImpl<typename L1::next, L2, Length - 1>::type next;
 				typedef Node<typename L1::type, next> type;
 			};
 
@@ -94,7 +73,7 @@ namespace Aurora3D
 		// if head is Null_, return ForwardList<Null_>
 		// else if length ==1, return ForwardList<Node<Head::type,Null_>>
 		// else return reverse of length elements of L
-		template<typename L, int Length = L::length, typename H = L::head>
+		template<typename L, int Length = L::length, typename H = typename L::head>
 		struct ListReverse : public DeriveChoose3<
 			IsNull_<H>, Bool_<Length==1>,
 			ForwardList<>, L,
@@ -104,7 +83,7 @@ namespace Aurora3D
 		// if      L1::head ==Null_ return ForwardList<L2::head>
 		// else if L2::head ==Null_ return ForwardList<L1::head>
 		// else    return ForwardList<L1::head append L2::head>
-		template<typename L1, typename L2, int Length = L1::length, typename H1=L1::head, typename H2=L2::head>
+		template<typename L1, typename L2, int Length = L1::length, typename H1=typename L1::head, typename H2= typename L2::head>
 		struct ListMerge : public DeriveChoose3<IsNull_<H1>, IsNull_<H2>, L2, L1,
 			ForwardList <typename detail::ListMergeImpl<H1, H2, Length>::type >>{};
 
@@ -124,23 +103,25 @@ namespace Aurora3D
 			typedef Forward  forward;
 			typedef Backward backward;
 			static const int common_length = CommonLength;
+			typedef BiList<backward, forward, CommonLength> reverse;
 			static const int length = Forward::length + Backward::length -  CommonLength;
+
 		};
 
 
 		template<typename S, typename Forward= typename S::forward>
 		struct BiListForwardNeedSync :public Less<Length<Forward>, Length<S>> {};
 
-		template<typename S, typename Backward = S::backward>
+		template<typename S, typename Backward = typename S::backward>
 		struct BiListBackwardNeedSync :public Less<Length<Backward>, Length<S>> {};
 		
 		
 		namespace detail
 		{
 			//sync element between Head And Tail
-			template<typename L1, typename L2, int common_length >
+			template<typename L1, typename L2, int CommonLength >
 			struct BiListSyncImpl:public 
-					ListMerge<L1, ListReverse<L2, L2::length - common_length>>{};
+					ListMerge<L1, ListReverse<L2, L2::length - CommonLength>>{};
 		}
 
 
@@ -154,8 +135,8 @@ namespace Aurora3D
 			DeriveChoose3< 
 				And<BiListForwardNeedSync<S>, Bool_<UpdateForward>>,
 				And<BiListBackwardNeedSync<S>, Bool_<!UpdateForward>>,
-				BiList<detail::BiListSyncImpl<Forward, Backward,S::common_length>, Backward, Length<Backward>>,
-				BiList<Forward, detail::BiListSyncImpl<Backward, Forward, S::common_length>, Length<Forward>>,
+				BiList<detail::BiListSyncImpl<Forward, Backward,S::common_length>, Backward, Backward::length>,
+				BiList<Forward, detail::BiListSyncImpl<Backward, Forward, S::common_length>, Forward::length>,
 				S> {};
 	}
 }

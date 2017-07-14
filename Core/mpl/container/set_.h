@@ -7,6 +7,8 @@
 #include<Core/mpl/next.h>
 #include<Core/mpl/container/vector_.h>
 #include<Core/mpl/container/deref.h>
+#include<Core/mpl/container/begin.h>
+#include<Core/mpl/container/end.h>
 #include<Core/mpl/mata_function/placeholder.h>
 #include<Core/mpl/mata_function/apply.h>
 
@@ -46,19 +48,14 @@ namespace Aurora3D
 
 		};
 
-
-
 		//binary search and insert
 		template<typename S, typename U, typename Cmp = AddApply<Less> > 
 		struct SetInsert 
 		{
-			typedef typename BinarySearch<U, Begin_t<S>, End_t<S>, Cmp>::type pos;
-
+			typedef typename BinarySearch<U, BeginT<S>, EndT<S>, Cmp>::type pos;
 		};
 
-		//binary search 
-
-
+		
 
 	}
 }

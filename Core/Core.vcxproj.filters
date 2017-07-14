@@ -34,6 +34,12 @@
     <Filter Include="mpl\container">
       <UniqueIdentifier>{c22c21cd-b6ac-4e6e-ba3d-246e170cccc3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="mpl\iterator">
+      <UniqueIdentifier>{b81717a4-601d-434a-920b-037eeb6c0f80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mpl\container\impl">
+      <UniqueIdentifier>{85398bff-a435-4a43-80ec-17f3cc08767a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="compile.h" />
@@ -798,9 +804,6 @@
     <ClInclude Include="mpl\prior.h">
       <Filter>mpl</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\container\deref.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\type_traits\has_inner_decl.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
@@ -819,14 +822,8 @@
     <ClInclude Include="mpl\mata_function\lambda.h">
       <Filter>mpl\mata_function</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\container\vector10.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\pair.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\advance.h">
-      <Filter>mpl\container</Filter>
+    <ClInclude Include="mpl\category.h">
+      <Filter>mpl</Filter>
     </ClInclude>
     <ClInclude Include="mpl\container\at.h">
       <Filter>mpl\container</Filter>
@@ -834,19 +831,13 @@
     <ClInclude Include="mpl\container\back.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\container\begin.h">
+    <ClInclude Include="mpl\container\bilist_.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
     <ClInclude Include="mpl\container\clear.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\container\distance.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\container\empty.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\end.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
     <ClInclude Include="mpl\container\erase.h">
@@ -864,6 +855,18 @@
     <ClInclude Include="mpl\container\insert_range.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
+    <ClInclude Include="mpl\container\length.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\list_.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\merge.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\pair.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
     <ClInclude Include="mpl\container\pop_back.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
@@ -876,7 +879,10 @@
     <ClInclude Include="mpl\container\push_front.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\container\size.h">
+    <ClInclude Include="mpl\container\reverse.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\set_.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
     <ClInclude Include="mpl\container\tuple.h">
@@ -885,29 +891,71 @@
     <ClInclude Include="mpl\container\vector_.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\container\vector_decl.h">
+    <ClInclude Include="mpl\iterator\advance.h">
+      <Filter>mpl\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\iterator\begin.h">
+      <Filter>mpl\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\iterator\deref.h">
+      <Filter>mpl\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\iterator\distance.h">
+      <Filter>mpl\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\iterator\end.h">
+      <Filter>mpl\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\iterator\random_iterator.h">
+      <Filter>mpl\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\iterator\rbegin.h">
+      <Filter>mpl\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\iterator\rend.h">
+      <Filter>mpl\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\impl\at20.h">
+      <Filter>mpl\container\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\impl\at30.h">
+      <Filter>mpl\container\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\impl\at40.h">
+      <Filter>mpl\container\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\impl\at50.h">
+      <Filter>mpl\container\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\impl\at60.h">
+      <Filter>mpl\container\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\impl\at70.h">
+      <Filter>mpl\container\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\impl\at80.h">
+      <Filter>mpl\container\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\impl\at90.h">
+      <Filter>mpl\container\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\impl\at100.h">
+      <Filter>mpl\container\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\container_decl.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\container\set_.h">
+    <ClInclude Include="mpl\container\construct.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\container\low_bound.h">
+    <ClInclude Include="mpl\container\zero_length.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\container\upper_bound.h">
+    <ClInclude Include="mpl\container\node.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\category.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\random_iterator.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\list_.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\length.h">
-      <Filter>mpl\container</Filter>
+    <ClInclude Include="mpl\iterator\forward_iterator.h">
+      <Filter>mpl\iterator</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

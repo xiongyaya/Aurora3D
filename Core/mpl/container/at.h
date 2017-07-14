@@ -22,27 +22,24 @@ namespace Aurora3D
 		}
 
 		//At declare
-		template<typename S, typename Pos> struct At :public detail::AtImpl<S, Pos> {};
+		template<typename S, typename Pos> struct At :public detail::AtImpl<S, Pos, typename S::tag> {};
 
 		//content
 		namespace detail
 		{
 			//main define of RandomAt
-			template<typename S, typename Pos> struct RandomAt 
+			template<typename S, int Pos> struct RandomAt 
 			{
-				static_assert(Pos::value < S::size && Pos::value >= 0, "At pos out of range.");
+				static_assert(Pos < S::length && Pos >= 0, "At pos out of range.");
 			};
 
 			//RandomAt 0		
-			template<template<typename T0,typename... Args> typename S, typename T0,typename... Args>
-			struct RandomAt< S<T0,Args...>, 0> { typedef T0 type; };
+			template<typename S>
+			struct RandomAt<S, 0> { typedef typename S::t0 type; };
 
 			//RandomAt 1 ~ 9
 #define		MPL_RANDOM_AT_SPECIALIZATION_DECL(Index, _1, _2)                                              \
-			template<template<A3D_PP_RANGE_PREFIX(typename T,0,Index,(,)), typename... TArgs> typename S, \
-				A3D_PP_RANGE_PREFIX(typename T,0,Index,(,)), typename... TArgs>                           \
-			struct RandomAt<S<A3D_PP_RANGE_PREFIX(typename T, 0, Index, (, )), TArgs...>, Index>          \
-			{ typedef T ## Index type; };
+			template<typename S>struct RandomAt<S, Index>{ typedef typename S::t ## Index type; };
 			A3D_PP_RANGE_CALL(1, 9, 1, MPL_RANDOM_AT_SPECIALIZATION_DECL, _)
 #undef		MPL_VECTOR_AT_SPECIALIZATION_DECL
 
@@ -50,29 +47,22 @@ namespace Aurora3D
 			template<typename S, typename Pos>
 			struct BidirectionalAt
 			{
-				static constexpr int length = LengthImpl<S>::value;
+				static constexpr int length = S::length;
 			};
 			
-			//specialization for BiList<..>
-			template<typename Head, typename Tail, typename Pos>
-			struct BidirectionalAt<BiList<Head,Tail>, Pos>
-			{
-				static constexpr int length = LengthImpl<S>::value;
-				static_assert(Pos::value < length,"bidirection");
-				static constexpr int back_pos = length - Pos::value;
-
-				//near head and head is long enough to contain element at Pos
-				static constexpr bool front_to_back = (Pos::value <= back_pos && Pos::value < Head::length);
-
-			};
-
-
 			//random access at Pos
 			template<typename S, typename Pos> 
-			struct AtImpl<S, Pos, RandomCategoryTag>:public RandomAt<S,Pos> {};
+			struct AtImpl<S, Pos, RandomCategoryTag>:public RandomAt<S,Pos::value> {};
 
 			template<typename S, typename Pos>
 			struct AtImpl<S, Pos, BidirectionalCategoryTag> :public BidirectionalAt<S, Pos> {};
+
+			template<typename S, typename Pos>
+			struct AtImpl<S, Pos, ForwardCategoryTag>
+			{
+
+			};
+
 		}		
 	}
 }

@@ -2,6 +2,7 @@
 
 #include<Core/preprocessor/range_call.h>
 #include<Core/preprocessor/range_prefix.h>
+#include<Core/preprocessor/range_declare.h>
 #include<Core/preprocessor/uint8_add_one.h>
 #include<Core/preprocessor/uint8_sub_one.h>
 #include<Core/mpl/int_.h>
@@ -15,6 +16,7 @@
 #include<Core/mpl/container/deref.h>
 #include<Core/mpl/container/begin.h>
 #include<Core/mpl/container/end.h>
+#include<Core/mpl/container/at.h>
 
 namespace Aurora3D
 {
@@ -33,6 +35,7 @@ namespace Aurora3D
 			typedef RandomCategoryTag tag;
 			static const int size = 0;
 			typedef Vector_<> type;
+			typedef Vector_<> reverse;
 		};
 
 		//vector size 1 ~ A3D_MPL_VECTOR_CAPACITY-1
@@ -41,8 +44,10 @@ namespace Aurora3D
 		struct Vector_<A3D_PP_RANGE_PREFIX(T, 0, Index, (, ))>            \
 		{                                                                 \
 			typedef RandomCategoryTag tag;                                \
-			static const int size = A3D_PP_ADD1(Index);                   \
+			static const int length = A3D_PP_ADD1(Index);                 \
 			typedef Vector_<A3D_PP_RANGE_PREFIX(T, 0, Index, (,))> type;  \
+			typedef Vector_<A3D_PP_RANGE_PREFIX(T, Index, 0, (,))> reverse;\
+			A3D_PP_RANGE_DECLARE(typedef T,,t,0,Index,(;))                \
 		};
 		A3D_PP_RANGE_CALL(0, A3D_PP_SUB1( A3D_MPL_VECTOR_CAPACITY), 1, MPL_VECTOR_SEPCIALIZATION_DECL, _)
 #undef  MPL_VECTOR_SEPCIALIZATION_DECL
@@ -119,29 +124,29 @@ namespace Aurora3D
 		//pop back one element
 		template<typename S> struct VectorPopFront
 		{
-			static_assert(S::size > 0, "VectorPopFront, vector size must greater than 0.");
+			static_assert(S::length > 0, "VectorPopFront, vector size must greater than 0.");
 			typedef typename VectorErase<S, 0>::type type;
 		};
 
 		//pop back one element
 		template<typename S> struct VectorPopBack 
 		{
-			static_assert(S::size > 0, "VectorPopBack, vector size must greater than 0.");
-			typedef typename VectorErase<S, S::size-1>::type type;
+			static_assert(S::length > 0, "VectorPopBack, vector size must greater than 0.");
+			typedef typename VectorErase<S, S::length -1>::type type;
 		};
 
 		//back element
 		template<typename S> struct VectorBack
 		{
 			static_assert(S::size > 0, "VectorBack, vector size must greater than 0.");
-			typedef typename VectorAt<S, S::size - 1>::type type;
+			typedef typename At<S, Int_<S::size - 1>>::type type;
 		};
 
 		//back element
 		template<typename S> struct VectorFront
 		{
 			static_assert(S::size > 0, "VectorBack, vector size must greater than 0.");
-			typedef typename VectorAt<S, 0>::type type;
+			typedef typename At<S, Int_<0>>::type type;
 		};
 
 		//vector iterator 
@@ -191,7 +196,7 @@ namespace Aurora3D
 			// *iterator
 			struct Deref
 			{
-				typedef typename VectorAt<vector, position::value>::type type;
+				typedef typename At<vector, position>::type type;
 			};
 
 			template<typename T> struct Equal {};
@@ -224,7 +229,7 @@ namespace Aurora3D
 		template<typename S,typename Pos>
 		struct Deref<VectorIterator<S, Pos>>
 		{
-			typedef typename VectorAt<S, Pos::value>::type type;
+			typedef typename At<S, Pos>::type type;
 		};
 
 		template<typename S,typename Pos>

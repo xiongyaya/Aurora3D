@@ -30,14 +30,6 @@ namespace Aurora3D
 
 		//for type trait
 		template<typename S> struct End :public detail::EndImpl<S> {};
-	}
-}
-namespace Aurora3D
-{
-	namespace mpl
-	{
-		//for type trait
-		template<typename T> struct End { typedef typename T type; };
-		template<typename T> using End_t = typename End<T>::type;
+		template<typename S> using EndT = typename End<S>::type;
 	}
 }

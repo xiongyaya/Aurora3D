@@ -48,6 +48,7 @@ struct TestInnerType {
 
 };
 
+
 inline void TestMpl()
 {
 	cout << "==== Test type ====" << endl;
@@ -61,7 +62,8 @@ inline void TestMpl()
 	typedef typename VectorPopBack<vector7>::type vector8;
 	typedef typename VectorPopFront<vector8>::type vector9;
 	typedef typename VectorErase<vector9, 3>::type vector10;
-	typedef typename At<vector10, Int_<1>>::type elem1;
+	
+	typedef typename At<Vector_<int,char>, Int_<0>>::type elem1;
 	NormalTypeName<vector1>{}("original-");
 	NormalTypeName<vector2>{}("push back char-");
 	NormalTypeName<vector3>{}("push front short-");

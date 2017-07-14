@@ -9,22 +9,23 @@ namespace Aurora3D
 	{
 		namespace detail
 		{
-			template<typename S, typename Tag = S::tag> struct BackImpl {};
+			template<typename S, typename Tag> struct BackImpl {};
 
 			// O(t) = 1
-			template<typename S> struct BackImpl<S, RandomCategoryTag>:public At<S,S::size> {};
+			template<typename S> struct BackImpl<S, RandomCategoryTag>
+				:public RandomAt<S,S::length-1> {};
 
 			// O(t) = 1
 			template<typename S> struct BackImpl<S, BidirectionalCategoryTag>
 			{
-				typedef typename S::tail tail;
-				typedef typename tail::type type;
+				
 			};
 
 			// O(t) = S::length
-			template<typename S>struct BackImpl<S, ForwardCategoryTag> :public AtImpl<S, Int_<S::length>> {};
+			template<typename S>struct BackImpl<S, ForwardCategoryTag> 
+				:public AtImpl<S, Int_<S::length>> {};
 		}
 		//depend on At
-		template<typename S> struct Back :public detail::BackImpl<S> {};
+		template<typename S> struct Back :public detail::BackImpl<S, typename S::tag> {};
 	}
 }

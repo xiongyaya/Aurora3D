@@ -29,6 +29,7 @@ namespace Aurora3D
 		}
 
 		//for type trait
-		template<typename S> struct Begin :public detail::BeginImpl<S> {};
+		template<typename S> struct Begin  :public detail::BeginImpl<S> {};
+		template<typename S> using BeginT = typename Begin<S>::type;
 	}
 }
