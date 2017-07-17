@@ -114,9 +114,6 @@
     <ClInclude Include="mpl\logic_and.h">
       <Filter>mpl</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\logic_not_equal.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\logic_less.h">
       <Filter>mpl</Filter>
     </ClInclude>
@@ -762,9 +759,6 @@
     <ClInclude Include="mpl\container\vector_.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\iterator\advance.h">
-      <Filter>mpl\iterator</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\iterator\begin.h">
       <Filter>mpl\iterator</Filter>
     </ClInclude>
@@ -864,37 +858,6 @@
     <ClInclude Include="mpl\meta_function\varg_list.h">
       <Filter>mpl\meta_function</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\iterator\step_forward.h" />
-    <ClInclude Include="mpl\iterator\next.h">
-      <Filter>mpl\iterator</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\next.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\prior.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\add.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\div.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\mod.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\mul.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\sub.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\max.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\min.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\bit_and.h">
       <Filter>mpl</Filter>
     </ClInclude>
@@ -908,6 +871,33 @@
       <Filter>mpl</Filter>
     </ClInclude>
     <ClInclude Include="mpl\bit_xor.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\add.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\div.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\logic.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\max.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\min.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\mod.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\mul.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\operator_sub.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\sub.h">
       <Filter>mpl</Filter>
     </ClInclude>
   </ItemGroup>

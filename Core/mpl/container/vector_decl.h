@@ -11,9 +11,9 @@ namespace Aurora3D
 		template<typename... TArgs> struct Vector_;
 
 		//iterator
-		template<typename S, typename Pos>
-		struct VectorIterator;
+		template<typename S, int P> struct VectorIterator;
 
+		template<typename S, int P> struct VectorReverseIterator;
 
 		//access vector element
 		template<typename S, int Pos> struct VectorAt;

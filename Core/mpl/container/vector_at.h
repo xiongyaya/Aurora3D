@@ -10,9 +10,9 @@ namespace Aurora3D
 	namespace mpl
 	{
 		//main define of RandomAt
-		template<typename S, int Pos> struct VectorAt
+		template<typename S, int P> struct VectorAt
 		{
-			static_assert(Pos < S::length && Pos >= 0, "At pos out of range.");
+			static_assert(P < LengthV(S) && P >= 0, "At pos out of range.");
 		};
 
 		//RandomAt 0

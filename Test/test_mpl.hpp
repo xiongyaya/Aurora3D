@@ -18,8 +18,6 @@ using namespace std;
 #include<Core/mpl/math/bit_compose.h>
 #include<Core/mpl/math/bit_sequence.h>
 
-
-
 #include<Core/mpl/type_traits/is_integral.h>
 #include<Core/mpl/meta_function/apply.h>
 #include<Core/mpl/meta_function/lambda.h>
@@ -166,20 +164,20 @@ inline void TestMpl()
 	cout << "value£º" << And<True_, False_, True_>::value << endl;
 
 	cout << "==== Max/Min ====" << endl;
-	cout << "value:" << IntMax<1, 2, 3, 2, 1>::value << endl;
+	cout << "value:" << MaxV( 1, 2, 3, 2, 1) << endl;
 	cout << "value:" << Max<Int_<1>, Int_<2>, Int_<3>, Int_<2>, Int_<1> >::value << endl;
-	cout << "value:" << IntMin<4u, 2, 3, 2, 4>::value << endl;
+	cout << "value:" << MinV( 4u, 2, 3, 2, 4)<< endl;
 	cout << "value:" << Min<Int_<3>, Int_<2>, Int_<3>, Int_<2>, Int_<1> >::value << endl;
 	
 	cout << "==== BitCompose ====" << endl;
-	cout << IntBitCompose<7,0,3,5>::value << endl;
-	cout << BitCompose< Int_<0>, Int_<1>, Int_<2>, Int_<3> >::value << endl;
+	//cout << IntBitCompose<7,0,3,5>::value << endl;
+	//cout << BitCompose< Int_<0>, Int_<1>, Int_<2>, Int_<3> >::value << endl;
 
 	cout << "==== BitSequence ====" << endl;
-	cout << BitSequence<1101>::value << endl;
+	/*cout << BitSequence<1101>::value << endl;
 	cout << BitSequence<111>::value << endl;
 	cout << BitSequence<11>::value << endl;
-	cout << BitSequence<1>::value << endl;
+	cout << BitSequence<1>::value << endl;*/
 
 	cout << "==== BitOr/BitAnd ====" << endl;
 	cout << BitOr< Int_<1>, Int_<2>, Int_<4>, Int_<8> >::value << endl;

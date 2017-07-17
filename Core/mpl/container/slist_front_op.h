@@ -2,6 +2,7 @@
 
 #include<Core/mpl/container/slist_decl.h>
 #include<Core/mpl/container/node_.h>
+#include<Core/mpl/short_inner_type_decl.h>
 
 namespace Aurora3D
 {
@@ -10,22 +11,21 @@ namespace Aurora3D
 		template<typename S>
 		struct SlistFront
 		{
-			static_assert(S::length != 0, "Slist length can't be zero.");
-			typedef typename S::head head;
-			typedef typename head::type type;
+			static_assert(LengthV(S) != 0, "Slist length can't be zero.");
+			typedef Type<Head<S>> type;
 		};
 
 		template<typename S, typename T>
 		struct SlistPushFront
 		{
-			typedef Slist_<Node_<T, typename S::head>> type;
+			typedef Slist_<Node_<T, Head<S>>> type;
 		};
 
 		template<typename S> 
 		struct SlistPopFront
 		{
-			static_assert(S::length != 0, "Slist length can't be zero.");
-			typedef Slist_<typename S::next> type;
+			static_assert(LengthV(S) != 0, "Slist length can't be zero.");
+			typedef Slist_<Next<S>> type;
 		};
 	}
 }

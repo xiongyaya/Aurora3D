@@ -13,23 +13,23 @@ namespace Aurora3D
 		//else O(n)
 		template<typename S>
 		struct BilistBack :
-			DeriveIf<IsNull_< TailT<S>>,
-			NodeLast< HeadT<S> >,
-			NodeFirst< TailT<S>> >
+			DeriveIf<IsNull_< Tail<S>>,
+			NodeLast< Head<S> >,
+			NodeFirst< Tail<S>> >
 		{
-			static_assert(S::length != 0, "S can't be empty");
+			static_assert(LengthV(S) != 0, "S can't be empty");
 		};
 
 		//always O(1)
 		template<typename S, typename T>
-		struct BilistPushBack :public Bilist_< HeadT<S>,Node_<T, TailT<S> >> {};
+		struct BilistPushBack :public Bilist_< Head<S>,Node_<T, Tail<S> >> {};
 
 		namespace detail
 		{
 			//pop 1 element from S::head
 			template<typename S>
 			struct BilistPopBackImpl
-				:public Bilist_< HeadT<S>, NextT<TailT<S>>,
+				:public Bilist_< Head<S>, Next<Tail<S>>,
 				BoolIfV(LengthV(S) == CommonLengthV(S),
 					CommonLengthV(S)-1, CommonLengthV(S)) >
 			{};
@@ -42,7 +42,7 @@ namespace Aurora3D
 			public detail::BilistPopBackImpl<
 			BoolDeriveIf< GreaterV(TailLengthV(S),0), S, BilistSyncT<S, false> >>
 		{
-			static_assert(S::length != 0, "bilist can't be empty");
+			static_assert(LengthV(S) != 0, "bilist can't be empty");
 		};
 	}
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include<core/mpl/int_.h>
-#include<Core/mpl/arithmetic_max.h>
+#include<Core/mpl/max.h>
 namespace Aurora3D
 {
 	namespace mpl
@@ -10,8 +10,8 @@ namespace Aurora3D
 		template<int64 MinAlign, typename First, typename... Others>
 		struct AlignedMax
 		{
-			static constexpr int64 maxSize = Max<MinAlign, sizeof(First), sizeof(Others)...>::value;
-			static constexpr int64 maxAlign = Max<alignof(First), alignof(Others)...>::value;
+			static constexpr int64 maxSize = MaxV(MinAlign, sizeof(First), sizeof(Others)...);
+			static constexpr int64 maxAlign = MaxV(alignof(First), alignof(Others)...);
 			struct type
 			{
 				alignas(maxAlign) char padding[maxSize];

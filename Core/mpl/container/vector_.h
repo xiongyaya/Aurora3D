@@ -7,11 +7,10 @@
 #include<Core/preprocessor/uint8_sub_one.h>
 #include<Core/mpl/int_.h>
 #include<Core/mpl/null_.h>
-#include<Core/mpl/arithmatic_add.h>
-#include<Core/mpl/arithmatic_sub.h>
+#include<Core/mpl/add.h>
+#include<Core/mpl/sub.h>
 #include<Core/mpl/logic_and.h>
 #include<Core/mpl/logic_equal.h>
-#include<Core/mpl/logic_not_equal.h>
 #include<Core/mpl/category.h>
 #include<Core/mpl/type_traits/is_same.h>
 #include<Core/mpl/container/vector_decl.h>
@@ -32,10 +31,10 @@ namespace Aurora3D
 			static const int length = 0;
 			typedef Vector_<> type;
 			typedef Vector_<> reverse;
-			typedef VectorIterator<type, Int_<0>>        begin;
-			typedef VectorIterator<type, Int_<length>>   end;
-			typedef VectorIterator<type, Int_<length-1>> rbegin;
-			typedef VectorIterator<type, Int_<-1>>       rend;
+			typedef VectorIterator<type, 0>        begin;
+			typedef VectorIterator<type, length>   end;
+			typedef VectorIterator<type, length-1> rbegin;
+			typedef VectorIterator<type, -1>       rend;
 		};
 
 		//vector size 1 ~ A3D_MPL_VECTOR_CAPACITY-1
@@ -44,113 +43,113 @@ namespace Aurora3D
 		struct Vector_<A3D_PP_RANGE_PREFIX(T, 0, Index, (, ))>             \
 		{                                                                  \
 			typedef RandomCategoryTag tag;                                 \
-			static const int length = A3D_PP_ADD1(Index);                  \
+			static constexpr int length = A3D_PP_ADD1(Index);              \
 			typedef Vector_<A3D_PP_RANGE_PREFIX(T, 0, Index, (,))> type;   \
 			typedef Vector_<A3D_PP_RANGE_PREFIX(T, Index, 0, (,))> reverse;\
 			A3D_PP_RANGE_DECLARE(typedef T,,t,0,Index,(;))                 \
-			typedef T ## Index back;                                       \
-			typedef VectorIterator<type, Int_<0>>          begin;          \
-			typedef VectorIterator<type, Int_<length>>     end;            \
-			typedef VectorReverseIterator<type, Int_<length - 1>> rbegin;  \
-			typedef VectorReverseIterator<type, Int_<-1>>         rend;    \
+			typedef T ## Index                              back;          \
+			typedef VectorIterator<type, 0>                 begin;         \
+			typedef VectorIterator<type, length>            end;           \
+			typedef VectorReverseIterator<type, length - 1> rbegin;        \
+			typedef VectorReverseIterator<type, -1>         rend;          \
 		};
 		A3D_PP_RANGE_CALL(0, A3D_PP_SUB1( A3D_MPL_VECTOR_CAPACITY), 1, MPL_VECTOR_SEPCIALIZATION_DECL, _)
 #undef  MPL_VECTOR_SEPCIALIZATION_DECL
 
-		template<typename S, typename Pos>
+		template<typename S, int P>
 		struct VectorIterator
 		{
 			typedef RandomCategoryTag tag;
 			typedef S base;
-			typedef Pos pos;
-			typedef VectorIterator<S, Pos> type;
+			typedef VectorIterator<S, P> type;
+			static constexpr int pos = P;
 
 			//it ++
-			struct next :public VectorIterator<S, typename Pos::next>
+			struct next :public VectorIterator<S, P+1>
 			{
-				static_assert(Pos::value < S::length, "move forward will be out of range.");
+				static_assert(P < LengthV(S), "move forward will be out of range.");
 			};
 
 			//it += n
-			template<typename N>
-			struct add :public VectorIterator<S, Add2<Pos, N>>
+			template<int N>
+			struct add :public VectorIterator<S, P+N>
 			{
-				static_assert(Pos::value + N::value <= S::length, "move forward will be out of range.");
+				static_assert(P+N <= LengthV(S), "move forward will be out of range.");
 			};
 
 			// it--
-			struct prior :public VectorIterator<S, typename Pos::prior>
+			struct prior :public VectorIterator<S,P-1>
 			{
-				static_assert(Pos::value >0, "move backward will be out of range.");
+				static_assert(P>0, "move backward will be out of range.");
 			};
 
 			// it -= n
-			template<typename N>
-			struct sub :public VectorIterator<S, Sub2<Pos, N>>
+			template<int N>
+			struct sub :public VectorIterator<S, P-N>
 			{
-				static_assert(ValueV(Pos) > 0, "move backward will be out of range.");
+				static_assert(P > 0, "move backward will be out of range.");
 			};
 
 			// it1 - it2
 			template<typename It>
-			struct distance :public Sub2<typename It::pos, Pos>
+			struct distance :public Int_<P - It::pos>
 			{
-				static_assert(IsSameV(BaseT<It>, S), "iterator base type not same.");
+				static_assert(IsSameV(Base<It>, S), "iterator base type not same.");
 			};
 
 			// *it
-			struct deref :public VectorAt<S, Pos::value> {};
+			struct deref :public VectorAt<S,P> {};
 
 		};
 
 		//same as VectorIterator
-		template<typename S, typename Pos>
+		template<typename S, int P>
 		struct VectorReverseIterator
 		{
 			typedef RandomCategoryTag tag;
 			typedef S base;
-			typedef Pos pos;
-			typedef VectorReverseIterator<S, Pos> type;
+			static constexpr int pos = P;
+			typedef VectorReverseIterator<S, P> type;
 
 			//it++
-			struct next :public VectorReverseIterator<S, typename Pos::prior>
+			struct next :public VectorReverseIterator<S, P-1>
 			{
-				static_assert(Pos::value < S::length, "move forward will be out of range.");
+				static_assert(P < LengthV(S), "move forward will be out of range.");
 			};
 
 			//it += n
-			template<typename N>
-			struct add :public VectorIterator<S, Sub2<Pos, N>>
+			template<int N>
+			struct add :public VectorIterator<S, P-N>
 			{
-				static_assert(Pos::value + N::value <= S::length, "move forward will be out of range.");
+				static_assert(P + N <= LengthV(S), "move forward will be out of range.");
 			};
 
 			// it--
-			struct prior :public VectorIterator<S, typename Pos::prior>
+			struct prior :public VectorIterator<S, P+1>
 			{
-				static_assert(Pos::value >0, "move backward will be out of range.");
+				static_assert(P >0, "move backward will be out of range.");
 			};
 
 			// it -= n
-			template<typename N>
-			struct sub :public VectorIterator<S, Add2<Pos, N>>
+			template<int N>
+			struct sub :public VectorIterator<S, P+N>
 			{
-				static_assert(Pos::value >0, "move backward will be out of range.");
+				static_assert(P >0, "move backward will be out of range.");
 			};
 
 			// it1 - it2
 			template<typename It>
-			struct distance :public Sub2<Pos, typename It::pos>
+			struct distance :public Int_<It::pos - P>
 			{
-				static_assert(IsSameV(typename It::base, S), "iterator base type not same.");
+				static_assert(IsSameV(Base<It>, S), "iterator base type not same.");
 			};
 
 			// *it
-			struct deref :public VectorAt<S, Pos::value> {};
+			struct deref :public VectorAt<S, P> {};
 
 			// it1 == it2
 			template<typename It>
-			struct equal : public And<IsSame<S, BaseT<It>>, Equal<Pos, typename It::pos>> {};
+			struct equal : public And< IsSame<S, Base<It>>, Bool_<P == It::pos> > {};
 		};
 
 	}

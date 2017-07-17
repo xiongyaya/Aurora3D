@@ -14,22 +14,22 @@ namespace Aurora3D
 		template<typename S>
 		struct BilistFront :
 			DeriveIf< HeadLengthV(S)==0,
-			NodeLast<TailT<S>>,
-			NodeFirst<HeadT<S>> >
+			NodeLast<Tail<S>>,
+			NodeFirst<Head<S>> >
 		{
 			static_assert(S::length != 0, "S can't be empty");
 		};
 
 		//always O(1)
 		template<typename S, typename T>
-		struct BilistPushFront :public Bilist_< Node_<T, HeadT<S> >, TailT<S> > {};
+		struct BilistPushFront :public Bilist_< Node_<T, Head<S> >, Tail<S> > {};
 
 		namespace detail
 		{
 			//pop 1 element from S::head
 			template<typename S>
 			struct BilistPopFrontImpl
-				:public Bilist_< NextT<HeadT<S>>, TailT<S>,
+				:public Bilist_< Next<Head<S>>, Tail<S>,
 				BoolIfV(HeadLengthV(S)==CommonLengthV(S),
 					CommonLengthV(S)-1,CommonLengthV(S))>
 			{};

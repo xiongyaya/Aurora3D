@@ -11,13 +11,13 @@ namespace Aurora3D
 		// Lazy
 		// value = 1 << V1 | ( 1<< V2 ) | (1<<V3) | ...
 		template<uint32 V1, uint32... VS> struct IntBitCompose
-			:public BitOr2< Int_< (1 << V1) >, IntBitCompose< VS...> > {};
+			:public BitOr< Int_< (1 << V1) >, IntBitCompose< VS...> > {};
 		template<uint32 V> struct IntBitCompose<V> :Int_< (1 << V) > {};
 
 		// Lazy
 		// value = 1 << T1::value | ( 1<< T2::value ) | (1<<T3::value) | ...
 		template<typename T1, typename... TS> struct BitCompose
-			:public BitOr2< ShiftLeft<int1_, T1>, BitCompose< TS...> > {};
-		template<typename T> struct BitCompose<T> :public ShiftLeft< int1_, T> {};
+			:public BitOr< Shl<int1_, T1>, BitCompose< TS...> > {};
+		template<typename T> struct BitCompose<T> :public Shl< int1_, T> {};
 	}
 }

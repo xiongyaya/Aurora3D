@@ -7,16 +7,16 @@ namespace Aurora3D
 {
 	namespace mpl
 	{
-#define GreaterV(a, b)   ((a)>(b))
-#define GreaterEqV(a, b) ((a)>=(b))
-#define LessV(a, b)      ((a)<(b))
-#define LessEqV(a,b)     ((a)<=(b))
-#define EqualV(a,b)      ((a)==(b))
-#define NotEqV(a,b)      ((a)!=(b))
-#define ShlV(a,b)        ((a)<<(b))
-#define ShrV(a,b)        ((a)>>(b))
-#define MaxV(a,b)        ((a)>(b)?(a):(b))
-#define MinV(a,b)        ((a)<(b)?(a):(b))
+#define GreaterV(a, b)    ((a)>(b))
+#define GreaterEqV(a, b)  ((a)>=(b))
+#define LessV(a, b)       ((a)<(b))
+#define LessEqV(a,b)      ((a)<=(b))
+#define EqualV(a,b)       ((a)==(b))
+#define NotEqV(a,b)       ((a)!=(b))
+#define ShlV(a,b)         ((a)<<(b))
+#define ShrV(a,b)         ((a)>>(b))
+#define Max2V(a,b)        ((a)>(b)?(a):(b))
+#define Min2V(a,b)        ((a)<(b)?(a):(b))
 
 		template<int64 N> struct Int_:public Integral_<int64, N>
 		{ 
@@ -28,12 +28,12 @@ namespace Aurora3D
 			typedef Int_<N + 1> next;
 			typedef Int_<N - 1> prior;
 			template<typename T> struct add :public Int_<N + ValueV(T)> {};
-			template<typename T> struct sub :Int_<N - ValueV(T)> {};
-			template<typename T> struct div :Int_<N * ValueV(T)> {};
-			template<typename T> struct mul :Int_<N / ValueV(T)> {};
-			template<typename T> struct mod :Int_<N % ValueV(T)> {};
-			template<typename T> struct max :Int_< MaxV(N, ValueV(T))> {};
-			template<typename T> struct min :Int_< MinV(N, ValueV(T))> {};
+			template<typename T> struct sub :public Int_<N - ValueV(T)> {};
+			template<typename T> struct mul :public Int_<N * ValueV(T)> {};
+			template<typename T> struct div :public Int_<N / ValueV(T)> {};
+			template<typename T> struct mod :public Int_<N % ValueV(T)> {};
+			template<typename T> struct max :public Int_< Max2V(N, ValueV(T))> {};
+			template<typename T> struct min :public Int_< Min2V(N, ValueV(T))> {};
 
 			//cmp
 			template<typename T> struct less :public Bool_<LessV(N, ValueV(T))> {};

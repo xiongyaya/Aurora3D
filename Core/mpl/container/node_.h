@@ -15,7 +15,7 @@ namespace Aurora3D
 		{
 			typedef T type;
 			typedef N next;
-			static constexpr int length = N::length + 1;
+			static constexpr int length = LengthV(N) + 1;
 		};
 
 		//last node
@@ -33,7 +33,7 @@ namespace Aurora3D
 
 		//Node can't be Null_
 		template<typename Node, int Length = LengthV(Node) >
-		struct NodeLast:public NodeLast< NextT<Node>, Length-1>{};
+		struct NodeLast:public NodeLast< Next<Node>, Length-1>{};
 
 		template<typename Node>
 		struct NodeLast<Node, 1>
@@ -58,7 +58,7 @@ namespace Aurora3D
 		struct NodeReverse
 		{
 			typedef Node_<typename Node::type, PreNode> node;
-			typedef typename NodeReverse< NextT<Node>, Length - 1, node>::type type;
+			typedef Type< NodeReverse< Next<Node>, Length - 1, node>> type;
 		};
 
 		//last node

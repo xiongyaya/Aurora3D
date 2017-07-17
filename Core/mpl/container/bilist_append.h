@@ -16,7 +16,7 @@ namespace Aurora3D
 			{
 				typedef BilistSyncT<L1, true> newL1;
 				typedef BilistSyncT<L2, true> newL2;
-				typedef NodeAppend< HeadT<newL1>, HeadT<newL2> > newHead;
+				typedef NodeAppend< Head<newL1>, Head<newL2> > newHead;
 				typedef NodeReverseT<newHead> newTail;
 				typedef Bilist_<newHead, newTail, LengthV(newHead) > type;
 			};
@@ -26,7 +26,7 @@ namespace Aurora3D
 			{
 				typedef BilistSyncT<L1, false> newL1;
 				typedef BilistSyncT<L2, false> newL2;
-				typedef NodeAppend< TailT<newL1>, TailT<newL2>> newTail;
+				typedef NodeAppend< Tail<newL1>, Tail<newL2>> newTail;
 				typedef NodeReverseT<newTail> newHead;
 				typedef Bilist_<newHead, newTail, LengthV(newHead) > type;
 			};

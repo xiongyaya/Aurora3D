@@ -4,7 +4,6 @@
 #include<Core/preprocessor/range_declare.h>  //chain declare
 #include<Core/preprocessor/range_call.h>
 #include<Core/preprocessor/range_wrap.h>
-
 #include<Core/mpl/int_.h>
 #include<Core/mpl/if.h>
 #include<Core/mpl/short_inner_type_decl.h>
@@ -88,7 +87,7 @@ namespace Aurora3D
 				typedef typename N0::next N1;
 				typedef typename N0::type L1;
 
-				typedef DeriveIf<IsNPlaceholder<L1>, NextT<C0>, C0> C1;
+				typedef DeriveIf<IsNPlaceholder<L1>, Next<C0>, C0> C1;
 				typedef Lambda1<L1, C1> P1;
 
 				template<typename Fn, typename N, typename... NArgs>
@@ -106,8 +105,8 @@ namespace Aurora3D
 				typedef typename N1::next N2;
 				typedef typename N1::type T2;
 
-				typedef DeriveIf<IsPlaceholder<T1>, NextT<C0>, C0> C1;
-				typedef DeriveIf<IsPlaceholder<T2>, NextT<C1>, C1> C2;
+				typedef DeriveIf<IsPlaceholder<T1>, Next<C0>, C0> C1;
+				typedef DeriveIf<IsPlaceholder<T2>, Next<C1>, C1> C2;
 
 				typedef Lambda1<T1, C1> P1;
 				typedef Lambda1<T2, C2> P2;
@@ -120,7 +119,7 @@ namespace Aurora3D
 			};
 
 			//typedef DeriveIf<IsNPlaceholder<Tn>, Next<Cn-1>, Cn-1> Cn;
-#define MPL_TYPEDEF_DERIVE_IF_FORMAT(ForeIndex, Index, _ ) typedef DeriveIf<IsPlaceholder<T ## Index ##> , NextT<C ## ForeIndex ## >, C ## ForeIndex ## > C ## Index ##;
+#define MPL_TYPEDEF_DERIVE_IF_FORMAT(ForeIndex, Index, _ ) typedef DeriveIf<IsPlaceholder<T ## Index ##> , Next<C ## ForeIndex ## >, C ## ForeIndex ## > C ## Index ##;
 #define MPL_TYPEDEF_DERIVE_IF_DECL(Start, End) A3D_PP_RANGE_FORE_INDEX_CALL(Start,End, MPL_TYPEDEF_DERIVE_IF_FORMAT, _)
 
 			//typedef Lambda1<Tn, Cn> Pn;

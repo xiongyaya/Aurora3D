@@ -15,8 +15,8 @@ namespace Aurora3D
 		template<typename S, bool SyncHead>
 		struct BilistSync :
 			public BoolDeriveIf< GreaterV(LengthV(S),HeadLengthV(S)),
-			Bilist_<NodeAppendT< HeadT<S>, NodeReverseT<TailT<S>, TailLengthV(S) - LengthV(S)> >,
-			TailT<S>, TailLengthV(S)>,S>{};
+			Bilist_<NodeAppendT< Head<S>, NodeReverseT<Tail<S>, TailLengthV(S) - LengthV(S)> >,
+			Tail<S>, TailLengthV(S)>,S>{};
 
 		//sync tail from head
 		//if   S::length > S::tailLength return synchoronized Bilist_
@@ -24,7 +24,7 @@ namespace Aurora3D
 		template<typename S>
 		struct BilistSync<S,false>:
 			public BoolDeriveIf< GreaterV(LengthV(S), TailLengthV(S)),
-			Bilist_<HeadT<S>, NodeAppendT<TailT<S>, NodeReverseT<HeadT<S>, HeadLengthV(S) - LengthV(S)> >,
+			Bilist_<Head<S>, NodeAppendT<Tail<S>, NodeReverseT<Head<S>, HeadLengthV(S) - LengthV(S)> >,
 			HeadLengthV(S)>, S>{};
 	}
 }

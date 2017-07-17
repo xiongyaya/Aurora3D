@@ -13,7 +13,7 @@ namespace Aurora3D
 	{
 		template<typename S,int Pos> struct VectorInsertImpl
 		{
-			static_assert(Pos <= S::size && Pos >= 0, "VectorInsert Pos out of range.");
+			static_assert(Pos <= S::length && Pos >= 0, "VectorInsert Pos out of range.");
 		};
 
 		//VectorInsert at Pos 0

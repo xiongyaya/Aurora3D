@@ -12,11 +12,11 @@ namespace Aurora3D
 	namespace mpl
 	{
 		//main vector erase at Pos [0, size)
-		template<typename S, int Pos>
+		template<typename S, int P>
 		struct VectorEraseAt
 		{
-			static_assert(Pos <= S::length && Pos >= 0, "VectorErase Pos out of range.");
-			static_assert(S::length != 0, "VectorErase vector size need be greater than 0.");
+			static_assert(P <= LengthV(S) && P >= 0, "VectorErase Pos out of range.");
+			static_assert(LengthV(S) != 0, "VectorErase vector size need be greater than 0.");
 		};
 
 		//erase 0

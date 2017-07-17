@@ -13,7 +13,7 @@ namespace Aurora3D
 		// else return reverse Length elements of L
 		template<typename L, int Length>
 		struct SlistReverse : public BoolDeriveIf<
-			L::length <= 1, L,
-			Slist_<typename NodeReverse<typename L::head>::type >>{};
+			LengthV(L) <= 1, L, 
+			Slist_<Type<NodeReverse<Head<L>>>>>{};
 	}
 }
