@@ -1,29 +1,55 @@
 #pragma once
 
 #include<Core/type.h>
-#include<Core/mpl/integral_.h>
+#include<Core/mpl/integral_decl.h>
 
 namespace Aurora3D
 {
 	namespace mpl
 	{
+#define GreaterV(a, b)   ((a)>(b))
+#define GreaterEqV(a, b) ((a)>=(b))
+#define LessV(a, b)      ((a)<(b))
+#define LessEqV(a,b)     ((a)<=(b))
+#define EqualV(a,b)      ((a)==(b))
+#define NotEqV(a,b)      ((a)!=(b))
+#define ShlV(a,b)        ((a)<<(b))
+#define ShrV(a,b)        ((a)>>(b))
+#define MaxV(a,b)        ((a)>(b)?(a):(b))
+#define MinV(a,b)        ((a)<(b)?(a):(b))
+
 		template<int64 N> struct Int_:public Integral_<int64, N>
 		{ 
-			typedef Int_<N> type;
+			typedef Int_<N>       type;
+			typedef Int_<-N>      not;
+			typedef Bool_<N != 0> to_bool;
+			
+			//arithmatic
 			typedef Int_<N + 1> next;
 			typedef Int_<N - 1> prior;
-			typedef Int_<-N> reverse;
-		
-			template<typename T> struct add  :Int_<N + T::value> {};
-			template<typename T> struct sub  :Int_<N - T::value> {};
-			template<typename T> struct div  :Int_<N / T::value> {};
-			template<typename T> struct mul  :Int_<N * T::value> {};
-			template<typename T> struct mod  :Int_<N % T::value> {};
-			template<typename T> struct band :Int_<N & T::value> {};
-			template<typename T> struct bor  :Int_<N | T::value> {};
-			template<typename T> struct bxor :Int_<N ^ T::value> {};
-			struct bnot :Int_<~N> {};
+			template<typename T> struct add :public Int_<N + ValueV(T)> {};
+			template<typename T> struct sub :Int_<N - ValueV(T)> {};
+			template<typename T> struct div :Int_<N * ValueV(T)> {};
+			template<typename T> struct mul :Int_<N / ValueV(T)> {};
+			template<typename T> struct mod :Int_<N % ValueV(T)> {};
+			template<typename T> struct max :Int_< MaxV(N, ValueV(T))> {};
+			template<typename T> struct min :Int_< MinV(N, ValueV(T))> {};
+
+			//cmp
+			template<typename T> struct less :public Bool_<LessV(N, ValueV(T))> {};
+			template<typename T> struct less_eq :public Bool_<LessEqV(N, ValueV(T))> {};
+			template<typename T> struct equal :public Bool_<N == ValueV(T)> {};
+
+			//bit op
+			typedef Int_<~N> bitnot;
+			template<typename T> struct bitand :Int_<N & ValueV(T)> {};
+			template<typename T> struct bitor  :Int_<N | ValueV(T)> {};
+			template<typename T> struct bitxor :Int_<N ^ ValueV(T)> {};
+			template<typename T> struct bitshl :Int_<ShlV(N, ValueV(T))> {};
+			template<typename T> struct bitshr :Int_<ShrV(N, ValueV(T))> {};
 		};
+
+		template<typename T> using IntT = typename T::to_int;
 
 		typedef Int_<-1> intn1_;
 		typedef Int_<0>  int0_;

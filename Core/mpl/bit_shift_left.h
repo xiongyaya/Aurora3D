@@ -7,7 +7,7 @@ namespace Aurora3D
 {
 	namespace mpl
 	{
-		template<uint64 Base, uint64 Shift> struct IntShiftLeft :public Int_< (Base << Shift) > {};
-		template<typename TBase, typename TShift> struct ShiftLeft :public Int_< (TBase::value << TShift::value) > {};
+		//T1 << T2
+		template<typename T1, typename T2> struct Shl :public T1::template shl<T2> {};
 	}
 }

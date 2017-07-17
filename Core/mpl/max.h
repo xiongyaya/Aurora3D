@@ -7,7 +7,7 @@ namespace Aurora3D
 {
 	namespace mpl
 	{
-		//T1 & T2 & T3 ...
-		A3D_MPL_BINARY_OP_DECL(BitAnd, bitand);
+		//max(T1 ,T2, T3 ...)
+		A3D_MPL_BINARY_OP_DECL(Max, max);
 	}
 }

@@ -3,8 +3,8 @@ namespace Aurora3D
 {
 	namespace mpl
 	{
-
 #define BoolIfV(c,a,b)   ((c)?(a)::(b))
+
 		// for non-inner-contained-type type
 		// if(B) type = T1
 		// else type = T2

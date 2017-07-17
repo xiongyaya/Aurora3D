@@ -6,9 +6,9 @@ namespace Aurora3D
 {
 	namespace mpl
 	{
-		//lazy
+		//T1 && T2 && T3 ...
 		template<typename... Args> struct Or:public False_ {};
-		template<typename First, typename... Other> struct Or<First, Other...> 
-			: public DeriveIf<First, True_, Or<Other...>>{};
+		template<typename T, typename... TArgs> struct Or<T, TArgs...> 
+			: public DeriveIf<T, True_, Or<TArgs...>>{};
 	}
 }

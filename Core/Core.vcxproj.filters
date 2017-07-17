@@ -291,9 +291,6 @@
     <ClInclude Include="preprocessor\uint8_comma_if.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\arithmetic_min.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\logic_equal.h">
       <Filter>mpl</Filter>
     </ClInclude>
@@ -540,9 +537,6 @@
     <ClInclude Include="mpl\type_traits\decay.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\integral_.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\type_traits\declval.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
@@ -699,46 +693,13 @@
     <ClInclude Include="mpl\type_traits\is_value_type_same.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\arithmetic_max.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\enable_if.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\bit_or.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\bit_not.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\bit_compose.h">
       <Filter>mpl</Filter>
     </ClInclude>
     <ClInclude Include="mpl\bit_shift_left.h">
       <Filter>mpl</Filter>
     </ClInclude>
     <ClInclude Include="mpl\bit_shift_right.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\bit_sequence.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\arithmatic_add.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\arithmatic_div.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\arithmatic_mod.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\arithmatic_mul.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\arithmatic_sub.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\bit_and.h">
       <Filter>mpl</Filter>
     </ClInclude>
     <ClInclude Include="mpl\binary_op_decl.h">
@@ -798,9 +759,6 @@
     <ClInclude Include="mpl\container\pair.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\container\set_.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\container\vector_.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
@@ -852,9 +810,6 @@
     <ClInclude Include="mpl\container\vector_back_op.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\container\set_has_key.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\container\node_.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
@@ -894,24 +849,6 @@
     <ClInclude Include="mpl\null_.h">
       <Filter>mpl</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\container\set_union.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\set_insersect.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\set_insert.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\set_substract.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\set_search.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\set_decl.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\meta_function\apply.h">
       <Filter>mpl\meta_function</Filter>
     </ClInclude>
@@ -926,6 +863,52 @@
     </ClInclude>
     <ClInclude Include="mpl\meta_function\varg_list.h">
       <Filter>mpl\meta_function</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\iterator\step_forward.h" />
+    <ClInclude Include="mpl\iterator\next.h">
+      <Filter>mpl\iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\next.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\prior.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\add.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\div.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\mod.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\mul.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\sub.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\max.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\min.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\bit_and.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\bit_not.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\bit_or.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\integral_decl.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\bit_xor.h">
+      <Filter>mpl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

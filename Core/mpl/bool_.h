@@ -1,6 +1,6 @@
 #pragma once
 
-#include<Core/mpl/integral_.h>
+#include<Core/mpl/integral_decl.h>
 
 namespace Aurora3D
 {
@@ -11,9 +11,12 @@ namespace Aurora3D
 			typedef Bool_<T>  type;
 			typedef Bool_<!T> next;
 			typedef Bool_<!T> prior;
-			typedef Bool_<!T> reverse;
+			typedef Bool_<!T> not;
 		};
 		typedef Bool_<true>  True_;
 		typedef Bool_<false> False_;
+
+		template<typename T>
+		using BoolT = typename T::to_bool;
 	}
 }

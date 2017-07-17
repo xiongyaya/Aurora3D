@@ -7,6 +7,7 @@ namespace Aurora3D
 {
 	namespace mpl
 	{
-		template<typename T> struct TypeBitNot :public Int_<~T::value> {};
+		// ~T
+		template<typename T> struct BitNot :public T::bitnot {};
 	}
 }

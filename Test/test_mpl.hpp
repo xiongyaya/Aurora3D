@@ -3,24 +3,29 @@
 using namespace std;
 
 #include"print_type.h"
+#include<Core/mpl/int_.h>
 #include<Core/mpl/logic_and.h>
 #include<Core/mpl/logic_or.h>
 #include<Core/mpl/bool_.h>
-#include<Core/mpl/arithmetic_max.h>
-#include<Core/mpl/arithmetic_min.h>
-#include<Core/mpl/int_.h>
-#include<Core/mpl/enable_if.h>
-#include<Core/mpl/bit_compose.h>
+#include<Core/mpl/max.h>
+#include<Core/mpl/min.h>
+#include<Core/mpl/mul.h>
+#include<Core/mpl/add.h>
 #include<Core/mpl/bit_or.h>
 #include<Core/mpl/bit_and.h>
-#include<Core/mpl/bit_sequence.h>
-#include<Core/mpl/arithmatic_mul.h>
+
+#include<Core/mpl/enable_if.h>
+#include<Core/mpl/math/bit_compose.h>
+#include<Core/mpl/math/bit_sequence.h>
+
+
+
 #include<Core/mpl/type_traits/is_integral.h>
 #include<Core/mpl/meta_function/apply.h>
 #include<Core/mpl/meta_function/lambda.h>
 #include<Core/mpl/meta_function/placeholder.h>
 #include<Core/mpl/type_traits/add_pointer.h>
-#include<Core/mpl/arithmatic_add.h>
+
 #include<Core/mpl/type_traits/has_inner_type.h>
 #include<Core/mpl/container/vector_.h>
 #include<Core/mpl/container/vector_insert.h>
@@ -135,8 +140,8 @@ inline void TestMpl()
 	//replace vector<_> with type
 	typedef typename Apply<Lambda<std::vector<_3>>, int, char, short>::type  int_of_vector;
 
-	cout << choose21::value << endl;
-	cout << choose22::value << endl;
+	cout << choose21::type::value << endl;
+	cout << choose22::type::value << endl;
 	cout << first21::type::value << endl;
 	cout << first22::type::value << endl;
 	cout << first23::type::value << endl;

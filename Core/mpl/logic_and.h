@@ -9,6 +9,7 @@ namespace Aurora3D
 	{
 		//lazy 
 		template<typename... Args> struct And : public True_ {};
+
 		template<typename First, typename... Other> struct And<First, Other...> 
 			: public DeriveIf<First, And<Other...>, False_>{};
 	}

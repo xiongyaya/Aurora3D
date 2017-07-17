@@ -6,9 +6,7 @@ namespace Aurora3D
 {
 	namespace mpl
 	{
-		template<typename  T1, typename T2> struct BitOr2 :public Int_<T1::value | T2::value> {};
-		template<typename T, typename... TArgs> struct BitOr :public BinaryOperator<BitOr2, T, TArgs...> {};
-		
-
+		//T1 | T2 | T3 ...
+		A3D_MPL_BINARY_OP_DECL(BitOr, bitor);
 	}
 }

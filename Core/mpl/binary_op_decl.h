@@ -8,15 +8,14 @@ namespace Aurora3D
 		// +,-,*,/,%,|,&,^
 		// >>, << not suppert Orderless
 		template<template<typename P1,typename P2> typename Binary,typename T1, typename... TArgs>
-		struct BinaryOperator :public Binary<T1, BinaryOperator<Binary, TArgs...>> {};
+		struct BinaryOperator :public Binary<T1, typename BinaryOperator<Binary, TArgs...>::type > {};
 
 		template<template<typename P1, typename P2> typename Binary,typename T>
-		struct BinaryOperator<Binary,T> :public T {};
+		struct BinaryOperator<Binary, T> { typedef T type; };
 
-		template<template<typename P> typename Unary, typename T1, typename... TArgs>
-		struct UnaryOperator :public Unary<UnaryOperator<Unary, TArgs...>> {};
-
-		template<template<typename P> typename Unary, typename T>
-		struct UnaryOperator<Unary, T> :public T {};
+#define  A3D_MPL_BINARY_OP_DECL(OpName, InnerOp)                                                                   \
+		template<typename T1, typename T2> struct OpName##2 :public T1::template InnerOp<T2>{};                    \
+		template<typename T, typename... TArgs> struct OpName : public BinaryOperator<OpName##2, T, TArgs...> {};  \
+		template<typename T, typename... TArgs> using OpName##T = typename OpName<T, TArgs...>::type;
 	}
 }
