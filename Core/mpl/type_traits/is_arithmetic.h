@@ -11,7 +11,7 @@ namespace Aurora3D
 		//lazy
 		template<typename T> struct IsArithmetic :public Or< IsFloat<T>, IsIntegral<T> > {};
 		
-#define IsArithmetic_v(T)     IsArithmetic<T>::value
-#define NotArithmetic_v(T)    (!IsArithmetic<T>::value)
+#define IsArithmeticV(T)     (IsArithmetic<T>::value)
+#define NotArithmeticV(T)    (!IsArithmetic<T>::value)
 	}
 }

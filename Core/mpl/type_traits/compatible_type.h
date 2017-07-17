@@ -20,6 +20,6 @@ namespace Aurora3D
 		};
 
 		template<typename First, typename... Others>
-		using CompatibleType_t = typename CompatibleType<First, Others...>::type;
+		using CompatibleTypeT = typename CompatibleType<First, Others...>::type;
 	}
 }

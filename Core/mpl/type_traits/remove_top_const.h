@@ -12,7 +12,7 @@ namespace Aurora3D
 		template<typename T> struct RemoveTopConst<const T* const volatile> { typedef T* const volatile type; };
 		template<typename T> struct RemoveTopConst<const T&> { typedef T& type; };
 		template<typename T> struct RemoveTopConst<const T&&> { typedef T&& type; };
-		template<typename T> using RemoveTopConst_t = typename RemoveTopConst<T>::type;
+		template<typename T> using RemoveTopConstT = typename RemoveTopConst<T>::type;
 
 	}
 }

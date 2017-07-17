@@ -15,16 +15,16 @@ namespace Aurora3D
 
 		template<typename T, typename... Args> struct HasConstructor :public Bool_<HAS_CONSTRUCTOR(T, Args...)> {};
 		template<typename T> struct HasDefaultConstructor :public HasConstructor<T> {};
-		template<typename T> struct HasCopyConstructor :public HasConstructor<T, ConvertConstLRef_t<T>> {};
-		template<typename T> struct HasMoveConstructor :public HasConstructor<T, AddRValueRef_t<T>> {};
+		template<typename T> struct HasCopyConstructor :public HasConstructor<T, ConvertConstLRefT<T>> {};
+		template<typename T> struct HasMoveConstructor :public HasConstructor<T, AddRValueRefT<T>> {};
 
 		template<typename T, typename... Args> struct HasTrivialConstructor :public Bool_<HAS_TRIVIAL_CONSTRUCTOR(T, Args...)> {};
-		template<typename T> struct HasTrivialCopyConstructor :public HasTrivialConstructor<T, ConvertConstLRef_t<T> > {};
-		template<typename T> struct HasTrivialMoveConstructor :public HasTrivialConstructor<T, AddRValueRef_t<T> > {};
+		template<typename T> struct HasTrivialCopyConstructor :public HasTrivialConstructor<T, ConvertConstLRefT<T> > {};
+		template<typename T> struct HasTrivialMoveConstructor :public HasTrivialConstructor<T, AddRValueRefT<T> > {};
 
 		template<typename T, typename... Args> struct HasNothrowConstructor :public Bool_<HAS_NOTHROW_CONSTRUCTOR(T, Args...)> {};
-		template<typename T> struct HasNotrowCopyConstructor  :public HasNothrowConstructor<T, ConvertConstLRef_t<T>> {};
-		template<typename T> struct HasNotrowMoveConstructor :public HasNothrowConstructor<T, AddRValueRef_t<T>> {};
+		template<typename T> struct HasNotrowCopyConstructor  :public HasNothrowConstructor<T, ConvertConstLRefT<T>> {};
+		template<typename T> struct HasNotrowMoveConstructor :public HasNothrowConstructor<T, AddRValueRefT<T>> {};
 		
 #undef HAS_CONSTRUCTOR
 #undef HAS_TRIVIAL_CONSTRUCTOR

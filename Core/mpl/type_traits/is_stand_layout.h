@@ -16,7 +16,7 @@ namespace Aurora3D
 		//7. data member and base class are NOT standard layout
 		template<typename T> struct IsStandLayout :public Bool_<__is_standard_layout(T)> {};
 		template<typename T> using IsStandLayout_t = typename IsStandLayout<T>::type;
-#define IsStandLayout_v(T)   IsStandLayout<T>::value
-#define NotStandLayout_v(T)  (!IsStandLayout<T>::value)
+#define IsStandLayoutV(T)   (IsStandLayout<T>::value)
+#define NotStandLayoutV(T)  (!IsStandLayout<T>::value)
 	}
 }

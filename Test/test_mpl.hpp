@@ -9,7 +9,6 @@ using namespace std;
 #include<Core/mpl/arithmetic_max.h>
 #include<Core/mpl/arithmetic_min.h>
 #include<Core/mpl/int_.h>
-#include<Core/mpl/sizet_.h>
 #include<Core/mpl/enable_if.h>
 #include<Core/mpl/bit_compose.h>
 #include<Core/mpl/bit_or.h>
@@ -17,9 +16,9 @@ using namespace std;
 #include<Core/mpl/bit_sequence.h>
 #include<Core/mpl/arithmatic_mul.h>
 #include<Core/mpl/type_traits/is_integral.h>
-#include<Core/mpl/mata_function/apply.h>
-#include<Core/mpl/mata_function/lambda.h>
-#include<Core/mpl/mata_function/placeholder.h>
+#include<Core/mpl/meta_function/apply.h>
+#include<Core/mpl/meta_function/lambda.h>
+#include<Core/mpl/meta_function/placeholder.h>
 #include<Core/mpl/type_traits/add_pointer.h>
 #include<Core/mpl/arithmatic_add.h>
 #include<Core/mpl/type_traits/has_inner_type.h>
@@ -30,9 +29,10 @@ using namespace std;
 #include<Core/mpl/container/vector_fore_part.h>
 #include<Core/mpl/container/vector_post_part.h>
 #include<Core/mpl/container/vector_append.h>
+#include<Core/mpl/container/vector_back_op.h>
+#include<Core/mpl/container/vector_front_op.h>
 #include<Core/mpl/container/set_.h>
 
-#include<Core/mpl/container/at.h>
 #include"print_type.h"
 using namespace Aurora3D::mpl;
 
@@ -51,7 +51,6 @@ struct TestInnerType {
 		typedef typename T::type2 type2;   //not cause error
 	};
 };
-
 
 inline void TestMpl()
 {
@@ -163,9 +162,9 @@ inline void TestMpl()
 
 	cout << "==== Max/Min ====" << endl;
 	cout << "value:" << IntMax<1, 2, 3, 2, 1>::value << endl;
-	cout << "value:" << Max<Int_<1>, Sizet_<2>, Int_<3>, Sizet_<2>, Int_<1> >::value << endl;
+	cout << "value:" << Max<Int_<1>, Int_<2>, Int_<3>, Int_<2>, Int_<1> >::value << endl;
 	cout << "value:" << IntMin<4u, 2, 3, 2, 4>::value << endl;
-	cout << "value:" << Min<Int_<3>, Int_<2>, Sizet_<3>, Int_<2>, Int_<1> >::value << endl;
+	cout << "value:" << Min<Int_<3>, Int_<2>, Int_<3>, Int_<2>, Int_<1> >::value << endl;
 	
 	cout << "==== BitCompose ====" << endl;
 	cout << IntBitCompose<7,0,3,5>::value << endl;

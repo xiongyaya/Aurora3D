@@ -8,7 +8,7 @@ namespace Aurora3D
 	{
 		template<typename T> struct IsFinal :public Bool_<__is_final(T)> {};
 		
-#define IsFinal_v(T)   IsFinal<T>::value
-#define NotFinal_v(T)  (!IsFinal<T>::value)
+#define IsFinalV(T)   (IsFinal<T>::value)
+#define NotFinalV(T)  (!IsFinal<T>::value)
 	}
 }

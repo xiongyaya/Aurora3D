@@ -1,11 +1,11 @@
 #pragma once
 
-#include<core/mpl/sizet_.h>
+#include<core/mpl/int_.h>
 
 namespace Aurora3D
 {
 	namespace mpl
 	{
-		template<typename T> struct AlignOf :public Sizet_<alignof(T)>{};
+		template<typename T> struct AlignOf :public Int_<alignof(T)>{};
 	}
 }

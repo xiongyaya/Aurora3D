@@ -17,12 +17,12 @@ namespace Aurora3D
 		//T*   => const T&
 		namespace detail
 		{ 
-			template<typename T, bool IsVoid = IsVoid_v(T) > struct ConvertConstLRefHelper { typedef AddTopConst_t<AddLValueRef_t<RemovePointer_t<T>>> type; };
+			template<typename T, bool IsVoid = IsVoidV(T) > struct ConvertConstLRefHelper { typedef AddTopConstT<AddLValueRefT<RemovePointerT<T>>> type; };
 			template<typename T> struct ConvertConstLRefHelper<T, true> { typedef void type; };
 		}
 
 		//lazy force convert to const T& form
 		template<typename T> struct ConvertConstLRef :public detail::ConvertConstLRefHelper<T> {};
-		template<typename T> using ConvertConstLRef_t = typename ConvertConstLRef<T>::type;
+		template<typename T> using ConvertConstLRefT = typename ConvertConstLRef<T>::type;
 	}
 }

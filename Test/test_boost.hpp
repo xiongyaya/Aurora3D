@@ -1,7 +1,7 @@
 #pragma once
 
 #include<boost/mpl/lambda.hpp>
-#include<Core/mpl/mata_function/lambda.h>
+#include<Core/mpl/meta_function/lambda.h>
 
 #define A 10
 

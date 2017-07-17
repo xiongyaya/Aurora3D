@@ -26,19 +26,19 @@ namespace Aurora3D
 		//const Left = Right&&  don't work???????? , use IsBaseSame workaround
 		//Base* = Derive*  works
 		//Base =  Derive   works
-		template<typename Left, typename Right> struct HasAssigner : Or< Bool_<HAS_ASSIGNER(AddLValueRef_t<Left>, Right) >, IsBaseSame<Left,Right>> {};
-		template<typename Left, typename Right> struct HasTrivialAssigner :public  Or< Bool_<HAS_TRIVIAL_ASSIGNER(AddLValueRef_t<Left>, Right)>, IsBaseSame<Left, Right>> {};
-		template<typename Left, typename Right> struct HasNothrowAssigner :public  Or< Bool_<HAS_NOTHROW_ASSIGNER(AddLValueRef_t<Left>, Right)>, IsBaseSame<Left, Right>> {};
+		template<typename Left, typename Right> struct HasAssigner : Or< Bool_<HAS_ASSIGNER(AddLValueRefT<Left>, Right) >, IsBaseSame<Left,Right>> {};
+		template<typename Left, typename Right> struct HasTrivialAssigner :public  Or< Bool_<HAS_TRIVIAL_ASSIGNER(AddLValueRefT<Left>, Right)>, IsBaseSame<Left, Right>> {};
+		template<typename Left, typename Right> struct HasNothrowAssigner :public  Or< Bool_<HAS_NOTHROW_ASSIGNER(AddLValueRefT<Left>, Right)>, IsBaseSame<Left, Right>> {};
 
 		//T a = const T& b
-		template<typename T> struct HasCopyAssigner :public Bool_<HAS_ASSIGNER( AddLValueRef_t<T>,  ConvertConstLRef_t<T> )> {};
-		template<typename T> struct HasTrivialCopyAssigner :public Bool_<HAS_TRIVIAL_ASSIGNER(AddLValueRef_t<T>,  ConvertConstLRef_t<T>)> {};
-		template<typename T> struct HasNoThrowCopyAssigner :public Bool_<HAS_NOTHROW_ASSIGNER(AddLValueRef_t<T>,  ConvertConstLRef_t<T>)> {};
+		template<typename T> struct HasCopyAssigner :public Bool_<HAS_ASSIGNER( AddLValueRefT<T>,  ConvertConstLRefT<T> )> {};
+		template<typename T> struct HasTrivialCopyAssigner :public Bool_<HAS_TRIVIAL_ASSIGNER(AddLValueRefT<T>,  ConvertConstLRefT<T>)> {};
+		template<typename T> struct HasNoThrowCopyAssigner :public Bool_<HAS_NOTHROW_ASSIGNER(AddLValueRefT<T>,  ConvertConstLRefT<T>)> {};
 
 		//T a = T&& b
-		template<typename T> struct HasMoveAssigner :public Bool_<HAS_ASSIGNER(AddLValueRef_t<T>, T)> {};
-		template<typename T> struct HasTriviallyMoveAssigner :public Bool_<HAS_TRIVIAL_ASSIGNER(AddLValueRef_t<T>, T)> {};
-		template<typename T> struct HasNoThrowMoveAssigner :public Bool_<HAS_NOTHROW_ASSIGNER(AddLValueRef_t<T>, T)> {};
+		template<typename T> struct HasMoveAssigner :public Bool_<HAS_ASSIGNER(AddLValueRefT<T>, T)> {};
+		template<typename T> struct HasTriviallyMoveAssigner :public Bool_<HAS_TRIVIAL_ASSIGNER(AddLValueRefT<T>, T)> {};
+		template<typename T> struct HasNoThrowMoveAssigner :public Bool_<HAS_NOTHROW_ASSIGNER(AddLValueRefT<T>, T)> {};
 
 #undef HAS_ASSIGNER
 #undef HAS_TRIVIAL_ASSIGNER

@@ -10,7 +10,7 @@ namespace Aurora3D
 	{
 		//lazy 
 		template<typename T> struct IsRef :public Or<IsLValueRef<T>, IsRValueRef<T>> {};
-#define IsRef_v(T)   IsRef<T>::value
-#define NotRef_v(T)  (!IsRef<T>::value)
+#define IsRefV(T)   (IsRef<T>::value)
+#define NotRefV(T)  (!IsRef<T>::value)
 	}
 }

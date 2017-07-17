@@ -13,7 +13,7 @@ namespace Aurora3D
 		//lazy
 		template<typename T> struct IsFundamental :public Or < IsFloat<T>, IsIntegral<T>, IsVoid<T>, IsNullptrType<T> > {};
 		
-#define IsFundamental_v(T)   IsFundamental<T>::value
-#define NotFundamental_v(T)  (!IsFundamental<T>::value)
+#define IsFundamentalV(T)   (IsFundamental<T>::value)
+#define NotFundamentalV(T)  (!IsFundamental<T>::value)
 	}
 }

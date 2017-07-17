@@ -12,9 +12,9 @@ namespace Aurora3D
 			template<typename T> struct IsMemberPtrHelper :public False_ {};
 			template<typename T, typename C> struct IsMemberPtrHelper<T C::*> :public True_ {};
 		}
-		template<typename T> struct IsMemberPtr :public detail::IsMemberPtrHelper<RemoveCV_t<T>> {};
+		template<typename T> struct IsMemberPtr :public detail::IsMemberPtrHelper<RemoveCVT<T>> {};
 		
-#define IsMemberPtr_v(T)   IsMemberPtr<T>::value
-#define NotMemberPtr_v(T)  (!IsMemberPtr<T>::value)
+#define IsMemberPtrV(T)   (IsMemberPtr<T>::value)
+#define NotMemberPtrV(T)  (!IsMemberPtr<T>::value)
 	}
 }

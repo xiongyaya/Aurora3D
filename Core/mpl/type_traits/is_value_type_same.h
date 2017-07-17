@@ -7,6 +7,6 @@ namespace Aurora3D
 	namespace mpl
 	{
 		template<typename T1, typename T2> struct IsValueTypeSame :public IsSame<typename T1::value_type, typename T2::value_type> {};
-#define IsValueTypeSame_v(T1,T2) (IsValueTypeSame<T1,T2>::value)
+#define IsValueTypeSameV(T1,T2) (IsValueTypeSame<T1,T2>::value)
 	}
 }

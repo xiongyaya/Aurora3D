@@ -12,7 +12,7 @@ namespace Aurora3D
 	namespace mpl
 	{
 		template<typename T> struct IsObject :public Or< IsScalar<T>, IsUnion<T>, IsClass<T>, IsArray<T>> {};
-#define IsObject_v(T)   IsObject<T>::value
-#define NotObject_v(T)  (!IsObject<T>::value)
+#define IsObjectV(T)   (IsObject<T>::value)
+#define NotObjectV(T)  (!IsObject<T>::value)
 	}
 }

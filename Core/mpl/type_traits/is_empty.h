@@ -8,7 +8,7 @@ namespace Aurora3D
 	{
 		template<typename T> struct IsEmpty :public Bool_<__is_empty(T)> {};
 		
-#define IsEmpty_v(T)   IsEmpty<T>::value
-#define NotEmpty_v(T)  (!IsEmpty<T>::value)
+#define IsEmptyV(T)   (IsEmpty<T>::value)
+#define NotEmptyV(T)  (!IsEmpty<T>::value)
 	}
 }

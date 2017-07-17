@@ -8,7 +8,7 @@ namespace Aurora3D
 	{
 		template<typename T> struct IsEnum:public Bool_<__is_enum(T)> {};
 		
-#define IsEnum_v(T)   IsEnum<T>::value
-#define NotEnum_v(T)  (!IsEnum<T>::value)
+#define IsEnumV(T)   (IsEnum<T>::value)
+#define NotEnumV(T)  (!IsEnum<T>::value)
 	}
 }

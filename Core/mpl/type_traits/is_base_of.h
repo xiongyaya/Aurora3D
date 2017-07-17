@@ -13,10 +13,9 @@ namespace Aurora3D
 		//T1 derived from T2
 		template<typename T1, typename T2> struct IsChildOf :public And < IsBaseOf<T2, T1>, Not<IsSame<T1, T2>> >{};
 
-		
-#define IsBaseOf_v(T)           IsBaseOf<T>::value
-#define IsChildOf_v(T)          IsChildOf<T>::value
-#define NotBaseOf_v(T)        (!IsBaseOf<T>::value)
-#define NotChildOf_v(T)       (!IsChildOf<T>::value)
+#define IsBaseOfV(T)         (IsBaseOf<T>::value)
+#define IsChildOfV(T)        (IsChildOf<T>::value)
+#define NotBaseOfV(T)        (!IsBaseOf<T>::value)
+#define NotChildOfV(T)       (!IsChildOf<T>::value)
 	}
 }

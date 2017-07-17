@@ -14,7 +14,7 @@ namespace Aurora3D
 		//lazy
 		//remove all bottom-level const/volatile qualifers
 		template<typename T> struct RemoveCV :public detail::RemoveCVHelper<RemoveConst<T>>{};
-		template<typename T> using RemoveCV_t = typename RemoveCV<T>::type;
+		template<typename T> using RemoveCVT = typename RemoveCV<T>::type;
 
 	}
 }

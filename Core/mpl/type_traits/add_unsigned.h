@@ -20,6 +20,6 @@ namespace Aurora3D
 		}
 
 		template<typename T> struct AddUnsigned :public detail::AddUnsignedHelper<typename UnderlyingType<T>::type> {};
-		template<typename T> using AddUnsigned_t = typename AddUnsigned<T>::type;
+		template<typename T> using AddUnsignedT = typename AddUnsigned<T>::type;
 	}
 }

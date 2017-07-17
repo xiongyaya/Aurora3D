@@ -11,7 +11,7 @@ namespace Aurora3D
 		template<> struct IsNullptrType<const std::nullptr_t> :public True_ {};
 		template<> struct IsNullptrType<volatile std::nullptr_t> :public True_ {};
 		template<> struct IsNullptrType<const volatile std::nullptr_t> :public True_ {};
-#define IsNullptrType_v(T)   IsNullptrType<T>::value
-#define NotNullptrType_v(T)  (!IsNullptrType<T>::value)
+#define IsNullptrTypeV(T)   (IsNullptrType<T>::value)
+#define NotNullptrTypeV(T)  (!IsNullptrType<T>::value)
 	}
 }

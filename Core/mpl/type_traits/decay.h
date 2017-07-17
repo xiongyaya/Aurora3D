@@ -13,10 +13,10 @@ namespace Aurora3D
 	{
 		namespace detail
 		{
-			template<typename T, bool IsFunction =IsFunction_v(T), bool IsArray=IsArray_v(T)> 
-								 struct DecayHelper { typedef RemoveCV_t<RemoveRef_t<T>> type; };
-			template<typename T> struct DecayHelper<T,false, true> { typedef AddPointer_t<RemoveDim_t<RemoveRef_t<T>>> type; };
-			template<typename T> struct DecayHelper<T, true, false> { typedef AddPointer_t<T> type; };
+			template<typename T, bool IsFunction =IsFunctionV(T), bool IsArray=IsArrayV(T)> 
+								 struct DecayHelper { typedef RemoveCVT<RemoveRefT<T>> type; };
+			template<typename T> struct DecayHelper<T,false, true> { typedef AddPointerT<RemoveDimT<RemoveRefT<T>>> type; };
+			template<typename T> struct DecayHelper<T, true, false> { typedef AddPointerT<T> type; };
 		}
 
 

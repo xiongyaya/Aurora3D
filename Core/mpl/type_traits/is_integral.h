@@ -27,7 +27,7 @@ namespace Aurora3D
 		template<typename T> struct IsIntegral<volatile T> : public IsIntegral<T> {};
 		template<typename T> struct IsIntegral<const volatile T> : public IsIntegral<T> {};
 
-#define IsIntegral_v(T)   IsIntegral<T>::value
-#define NotIntegral_v(T)  (!IsIntegral<T>::value)
+#define IsIntegralV(T)   (IsIntegral<T>::value)
+#define NotIntegralV(T)  (!IsIntegral<T>::value)
 	}
 }

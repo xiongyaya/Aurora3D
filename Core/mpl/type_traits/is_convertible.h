@@ -10,8 +10,8 @@ namespace Aurora3D
 		//e.g.string a = 1.1; not works  no suitable construction
 		template<typename From, typename To> struct IsConvertible :public Bool_<__is_convertible_to(From,To)> {};
 		
-#define IsConvertible_v(From,To)  IsConvertible<From,To>::value
-#define NotConvertible_v(From,To) (!IsConvertible<From,To>::value)
+#define IsConvertibleV(From,To)  (IsConvertible<From,To>::value)
+#define NotConvertibleV(From,To) (!IsConvertible<From,To>::value)
 
 	}
 }

@@ -11,7 +11,7 @@ namespace Aurora3D
 		//lazy
 		template<typename T> struct IsCompound :Not< IsFundamental<T>> {};
 		
-#define IsCompound_v(T)         IsCompound<T>::value
-#define NotCompound_v(T)       (!IsCompound<T>::value)
+#define IsCompoundV(T)        (IsCompound<T>::value)
+#define NotCompoundV(T)       (!IsCompound<T>::value)
 	}
 }

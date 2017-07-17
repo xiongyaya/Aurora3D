@@ -15,8 +15,8 @@ namespace Aurora3D
 
 		//for non-member-pointer
 		template<typename T> struct IsPointer :public detail::IsPointerHelper< typename RemoveCV<T>::type> {};
-#define IsPointer_v(T)     IsPointer<T>::value
-#define NotPointer_v(T)   (!IsPointer<T>::value)
+#define IsPointerV(T)    (IsPointer<T>::value)
+#define NotPointerV(T)   (!IsPointer<T>::value)
 		
 	}
 }

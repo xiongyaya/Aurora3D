@@ -12,7 +12,7 @@ namespace Aurora3D
 		//3. trivial destructor(not virtual,not user-provided(implicitly or explicitly defaulted))
 		template<typename T> struct IsTrivial :public Bool_<__is_trivial(T)> {};
 		
-#define IsTrivial_v(T)   IsTrivial<T>::value
-#define NotTrivial_v(T)  (!IsTrivial<T>::value)
+#define IsTrivialV(T)   (IsTrivial<T>::value)
+#define NotTrivialV(T)  (!IsTrivial<T>::value)
 	}
 }

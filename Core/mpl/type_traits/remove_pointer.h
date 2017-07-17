@@ -10,7 +10,7 @@ namespace Aurora3D
 		template<typename T> struct RemovePointer<T* volatile> { typedef T type; };
 		template<typename T> struct RemovePointer<T* const volatile> { typedef T type; };
 
-		template<typename T> using RemovePointer_t = typename RemovePointer<T>::type;
+		template<typename T> using RemovePointerT = typename RemovePointer<T>::type;
 
 	}
 }

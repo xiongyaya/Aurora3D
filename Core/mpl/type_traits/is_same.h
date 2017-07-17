@@ -9,8 +9,8 @@ namespace Aurora3D
 		//ingore const volatile
 		template<typename A,typename B> struct IsSame : public False_ {};
 		template<typename T> struct IsSame<T, T> :public True_ {};
-#define IsSame_v(A,B)   IsSame<A,B>::value
-#define NotSame_v(A,B)  (!IsSame<A,B>::value)
+#define IsSameV(A,B)   (IsSame<A,B>::value)
+#define NotSameV(A,B)  (!IsSame<A,B>::value)
 		
 	}
 }

@@ -17,7 +17,7 @@ namespace Aurora3D
 		A3D_PP_FOREACH_ITEM(IS_MEMBER_FUNCTION, A3D_PP_COMPOSE_EX((const, volatile, const volatile), (&, &&, A3D_PP_NULL), A3D_PP_NULL, &, &&))
 #undef IS_FUNCTION
 
-#define IsMemberFnPtr_v(T)   IsMemberFnPtr<T>::value
-#define NotMemberFnPtr_v(T)  (!IsMemberFnPtr<T>::value)
+#define IsMemberFnPtrV(T)   (IsMemberFnPtr<T>::value)
+#define NotMemberFnPtrV(T)  (!IsMemberFnPtr<T>::value)
 	}
 }

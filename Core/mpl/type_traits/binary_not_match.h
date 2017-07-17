@@ -15,19 +15,19 @@ namespace Aurora3D
 		//fundemental(no integral) op pointer
 		//pointer + pointer
 		//+,-
-#define BinaryNotMatchAddSub_v(p, t)      \
-		(IsPointer_v(p) && IsPointer_v(t))  \
-	    || ( IsPointer_v(p) &&  IsFundamental_v(t)  && ( IsVoid_v(RemovePointer_t<p>)|| NotIntegral_v(t)) ) \
-		|| ( IsPointer_v(t) &&  IsFundamental_v(p)  && ( IsVoid_v(RemovePointer_t<t>)|| NotIntegral_v(p)) )
+#define BinaryNotMatchAddSubV(p, t)      \
+		(IsPointerV(p) && IsPointerV(t))  \
+	    || ( IsPointerV(p) &&  IsFundamentalV(t)  && ( IsVoidV(RemovePointerT<p>)|| NotIntegralV(t)) ) \
+		|| ( IsPointerV(t) &&  IsFundamentalV(p)  && ( IsVoidV(RemovePointerT<t>)|| NotIntegralV(p)) )
 		 
 		//forbidden
 		//fundemental op pointer
 		//fundemental op fundemetal (nor one is integral)
 		//pointer op pointer
 		//*,/,%,>,>=,<,<=,==
-#define BinaryNotMatchArithmeticLogic_v(p,t)   ( IsPointer_v(p) && IsPointer_v(t) )                  \
-			|| (IsFundamental_v(p) && (IsPointer_v(t) || (IsFundamental_v(t) && !IsIntegral_v(t)) )) \
-			|| (IsFundamental_v(t) && (IsPointer_v(p) || (IsFundamental_v(p) && !IsIntegral_v(p)) ))
+#define BinaryNotMatchArithmeticLogicV(p,t)   ( IsPointerV(p) && IsPointerV(t) )                  \
+			|| (IsFundamentalV(p) && (IsPointerV(t) || (IsFundamentalV(t) && NotIntegralV(t)) )) \
+			|| (IsFundamentalV(t) && (IsPointerV(p) || (IsFundamentalV(p) && NotIntegralV(p)) ))
 	}
 }
 

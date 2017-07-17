@@ -7,7 +7,7 @@ namespace Aurora3D
 	namespace mpl
 	{
 		template<typename T> struct IsUnsigned :public Bool_ < T(0) < T(-1) > {};
-#define IsUnsigned_v(T)   IsUnsigned<T>::value
-#define NotUnSigned_v(T)  (!IsUnsigned<T>::value)
+#define IsUnsignedV(T)   (IsUnsigned<T>::value)
+#define NotUnSignedV(T)  (!IsUnsigned<T>::value)
 	}
 }

@@ -3,7 +3,7 @@
 #include<Core/compile.h>
 #include<Core/preprocessor/seq_foreach_item.h>
 #include<Core/mpl/bool_.h>
-#include<Core/mpl/ingore_t.h>
+#include<Core/mpl/null_.h>
 #include<Core/mpl/logic_and.h>
 #include<Core/mpl/logic_not.h>
 #include<Core/mpl/type_traits/is_void.h>
@@ -31,14 +31,14 @@ namespace Aurora3D
 			//Left op Right is forbidden
 			template<typename Left, typename Right = Left> struct CheckParameterHelper
 			{
-				typedef typename RemoveCV_t<RemoveRef_t<Left>>   left_nocv_t;
-				typedef typename RemoveCV_t<RemoveRef_t<Right>>  right_nocv_t;
+				typedef typename RemoveCVT<RemoveRefT<Left>>   left_nocv_t;
+				typedef typename RemoveCVT<RemoveRefT<Right>>  right_nocv_t;
 			};
 
 			//both parameter can't be void for unary or binary operation
 			template<typename Left, typename Right = Left> struct CheckParameterNotVoid :public CheckParameterHelper<Left, Right>
 			{
-				static constexpr bool value = !IsVoid_v(left_nocv_t) && !IsVoid_v(right_nocv_t);
+				static constexpr bool value = !IsVoidV(left_nocv_t) && !IsVoidV(right_nocv_t);
 			};
 
 			//if Operation::Op() not defined, will implicitly convert to ImplicitConverted and do operation
@@ -79,7 +79,7 @@ namespace Aurora3D
 			//if    return type is ingored always true
 			template<typename Operation, typename Ret> struct CheckHasReturn :
 				public Bool_< HasOperationValue( ReturnConvert<Ret>::Convert((Operation::Op(), Declval<HasAnyReturn>())) ) > { };
-			template<typename Operation> struct CheckHasReturn<Operation, ingore_t> : public True_ {};
+			template<typename Operation> struct CheckHasReturn<Operation, Null_> : public True_ {};
 
 			//if    BinaryOp::Op() return Non-NoOperation type,  GET NoOperation
 			//else  BinaryOp::Op() return NoOperation type, GET HasVoidReturn
@@ -90,7 +90,7 @@ namespace Aurora3D
 			//for binary operation
 			//operation overload contained in class(member function) left imply type is a left value reference, so Left can't be const T 
 			//Left or Right type qualified with & and && passed to operation will miss
-			template<typename BinaryOp, typename Left, typename Right, typename Ret, bool is_void = IsVoid_v(Ret) >
+			template<typename BinaryOp, typename Left, typename Right, typename Ret, bool isVoid = IsVoidV(Ret) >
 			struct HasBinaryOp :public And<
 				CheckParameterNotVoid<Left, Right>,
 				CheckHasOperation<BinaryOp>,
@@ -105,7 +105,7 @@ namespace Aurora3D
 
 
 			//for unary Operation
-			template<typename UnaryOp, typename OpType, typename Ret, bool is_void = IsVoid_v(Ret)>
+			template<typename UnaryOp, typename OpType, typename Ret, bool isVoid = IsVoidV(Ret)>
 			struct HasUnaryOp :public And<
 				CheckParameterNotVoid<OpType>,
 				CheckHasOperation<UnaryOp>,
@@ -133,7 +133,7 @@ namespace Aurora3D
 					static constexpr bool value = Judgement;                                           \
 				};                                                                                     \
 			}                                                                                          \
-			template<typename Left, typename Right = Left, typename Ret = ingore_t,                    \
+			template<typename Left, typename Right = Left, typename Ret = Null_,                    \
 				bool forbidden = has_operation_detail::Check##OpName##Parameter<Left, Right>::value >  \
 			struct Has##OpName : public has_operation_detail::HasBinaryOp<                             \
 				has_operation_detail::OpName##Operation<Left, Right>, Left, Right, Ret> {};            \
@@ -156,7 +156,7 @@ namespace Aurora3D
 					static const bool value = Judgement;                                         \
 				};                                                                               \
 			}                                                                                    \
-			template<typename OpType, typename Ret = ingore_t,                                   \
+			template<typename OpType, typename Ret = Null_,                                   \
 				bool forbidden = has_operation_detail::Check##OpName##Parameter<OpType>::value>  \
 			struct Has##OpName :public has_operation_detail::HasUnaryOp<                         \
 				has_operation_detail::OpName##Operation<OpType>,OpType,Ret> {};                  \

@@ -28,7 +28,7 @@ namespace Aurora3D
 
 		//add bottom-level const
 		template<typename T> struct AddConst { typedef T const type; };
-		template<typename T> using AddConst_t = typename AddConst<T>::type;
+		template<typename T> using AddConstT = typename AddConst<T>::type;
 
 	}
 }

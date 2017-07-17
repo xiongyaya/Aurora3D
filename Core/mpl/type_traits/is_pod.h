@@ -7,7 +7,7 @@ namespace Aurora3D
 	namespace mpl
 	{
 		template<typename T> struct IsPod :public Bool_<__is_pod(T)> {};
-#define IsPod_v(T)   IsPod<T>::value
-#define NotPod_v(T)  (!IsPod<T>::value)
+#define IsPodV(T)   (IsPod<T>::value)
+#define NotPodV(T)  (!IsPod<T>::value)
 	}
 }

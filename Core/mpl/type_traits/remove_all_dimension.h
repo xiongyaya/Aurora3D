@@ -7,7 +7,7 @@ namespace Aurora3D
 		template<typename T> struct RemoveAllDim { typedef T type; };
 		template<typename T> struct RemoveAllDim<T[]> :public RemoveAllDim<T> {};
 		template<typename T, size_t Len> struct RemoveAllDim<T[Len]> :public RemoveAllDim<T> {};
-		template<typename T> using RemoveAllDim_t = typename RemoveAllDim<T>::type;
+		template<typename T> using RemoveAllDimT = typename RemoveAllDim<T>::type;
 	}
 }
 

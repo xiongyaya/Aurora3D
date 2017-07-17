@@ -25,9 +25,6 @@
     <Filter Include="preprocessor">
       <UniqueIdentifier>{aaa970fb-831d-4f26-8748-97760875ca7f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="mpl\mata_function">
-      <UniqueIdentifier>{3c46b793-a52e-4ac8-9059-8a936f6d4f72}</UniqueIdentifier>
-    </Filter>
     <Filter Include="mpl\units">
       <UniqueIdentifier>{e64c091b-4bcc-4695-b6b9-0198e944e34d}</UniqueIdentifier>
     </Filter>
@@ -37,8 +34,8 @@
     <Filter Include="mpl\iterator">
       <UniqueIdentifier>{b81717a4-601d-434a-920b-037eeb6c0f80}</UniqueIdentifier>
     </Filter>
-    <Filter Include="mpl\container\impl">
-      <UniqueIdentifier>{85398bff-a435-4a43-80ec-17f3cc08767a}</UniqueIdentifier>
+    <Filter Include="mpl\meta_function">
+      <UniqueIdentifier>{3c46b793-a52e-4ac8-9059-8a936f6d4f72}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -546,12 +543,6 @@
     <ClInclude Include="mpl\integral_.h">
       <Filter>mpl</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\sizet_.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\ingore_t.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\type_traits\declval.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
@@ -601,12 +592,6 @@
       <Filter>math</Filter>
     </ClInclude>
     <ClInclude Include="math\float16x16.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\Users\xiongya\Desktop\testccpuid\ccpuid.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="C:\Users\xiongya\Desktop\testccpuid\ccpuid.hpp">
       <Filter>math</Filter>
     </ClInclude>
     <ClInclude Include="math\vector_runtime_support.h">
@@ -768,12 +753,6 @@
     <ClInclude Include="mpl\units\units.h">
       <Filter>mpl\units</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\mata_function\apply.h">
-      <Filter>mpl\mata_function</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\mata_function\placeholder.h">
-      <Filter>mpl\mata_function</Filter>
-    </ClInclude>
     <ClInclude Include="preprocessor\range_call.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
@@ -792,17 +771,8 @@
     <ClInclude Include="preprocessor\range_declare.h">
       <Filter>preprocessor</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\mata_function\identity.h">
-      <Filter>mpl\mata_function</Filter>
-    </ClInclude>
     <ClInclude Include="preprocessor\range_fore_index_call.h">
       <Filter>preprocessor</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\next.h">
-      <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\prior.h">
-      <Filter>mpl</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\has_inner_decl.h">
       <Filter>mpl\type_traits</Filter>
@@ -810,55 +780,25 @@
     <ClInclude Include="mpl\type_traits\has_inner_type.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\mata_function\varg_list.h">
-      <Filter>mpl\mata_function</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\choose.h">
       <Filter>mpl</Filter>
     </ClInclude>
     <ClInclude Include="mpl\type_traits\has_inner_template_apply.h">
       <Filter>mpl\type_traits</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\mata_function\lambda.h">
-      <Filter>mpl\mata_function</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\category.h">
       <Filter>mpl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\at.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\back.h">
-      <Filter>mpl\container</Filter>
     </ClInclude>
     <ClInclude Include="mpl\container\bilist_.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\container\empty.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\front.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\has_key.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\insert_range.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\container\length.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\list_.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
     <ClInclude Include="mpl\container\pair.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
     <ClInclude Include="mpl\container\set_.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\tuple.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
     <ClInclude Include="mpl\container\vector_.h">
@@ -879,85 +819,16 @@
     <ClInclude Include="mpl\iterator\end.h">
       <Filter>mpl\iterator</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\iterator\random_iterator.h">
-      <Filter>mpl\iterator</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\iterator\rbegin.h">
       <Filter>mpl\iterator</Filter>
     </ClInclude>
     <ClInclude Include="mpl\iterator\rend.h">
       <Filter>mpl\iterator</Filter>
     </ClInclude>
-    <ClInclude Include="mpl\container\impl\at20.h">
-      <Filter>mpl\container\impl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\impl\at30.h">
-      <Filter>mpl\container\impl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\impl\at40.h">
-      <Filter>mpl\container\impl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\impl\at50.h">
-      <Filter>mpl\container\impl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\impl\at60.h">
-      <Filter>mpl\container\impl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\impl\at70.h">
-      <Filter>mpl\container\impl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\impl\at80.h">
-      <Filter>mpl\container\impl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\impl\at90.h">
-      <Filter>mpl\container\impl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\impl\at100.h">
-      <Filter>mpl\container\impl</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\container_decl.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\node.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\iterator\forward_iterator.h">
-      <Filter>mpl\iterator</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\iterator\insert.h">
-      <Filter>mpl\iterator</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\insert_at.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\push_front.h">
-      <Filter>mpl\iterator</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\pop_back.h">
-      <Filter>mpl\iterator</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\pop_front.h">
-      <Filter>mpl\iterator</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\push_back.h">
-      <Filter>mpl\iterator</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\merge.h">
-      <Filter>mpl\iterator</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\erase.h">
-      <Filter>mpl\iterator</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\reverse.h">
-      <Filter>mpl\iterator</Filter>
-    </ClInclude>
     <ClInclude Include="mpl\container\vector_at.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
     <ClInclude Include="mpl\container\vector_decl.h">
-      <Filter>mpl\container</Filter>
-    </ClInclude>
-    <ClInclude Include="mpl\container\vector_front.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
     <ClInclude Include="mpl\container\vector_insert.h">
@@ -975,10 +846,86 @@
     <ClInclude Include="mpl\container\vector_append.h">
       <Filter>mpl\container</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="C:\Users\xiongya\Desktop\testccpuid\ccpuid.cpp">
-      <Filter>math</Filter>
-    </ClCompile>
+    <ClInclude Include="mpl\container\vector_front_op.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\vector_back_op.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\set_has_key.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\node_.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\slist_.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\slist_front_op.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\slist_decl.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\slist_reverse.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\slist_append.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\bilist_front_op.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\bilist_decl.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\bilist_sync.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\bilist_back_op.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\bilist_append.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\short_inner_type_decl.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\null_.h">
+      <Filter>mpl</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\set_union.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\set_insersect.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\set_insert.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\set_substract.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\set_search.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\container\set_decl.h">
+      <Filter>mpl\container</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\meta_function\apply.h">
+      <Filter>mpl\meta_function</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\meta_function\identity.h">
+      <Filter>mpl\meta_function</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\meta_function\lambda.h">
+      <Filter>mpl\meta_function</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\meta_function\placeholder.h">
+      <Filter>mpl\meta_function</Filter>
+    </ClInclude>
+    <ClInclude Include="mpl\meta_function\varg_list.h">
+      <Filter>mpl\meta_function</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -28,7 +28,7 @@ namespace Aurora3D
 		A3D_PP_FOREACH_ITEM(IS_FUNCTION, A3D_PP_COMPOSE_EX((const,volatile,const volatile), (&,&&,  A3D_PP_NULL), A3D_PP_NULL, &, &&))
 #undef IS_FUNCTION
 
-#define IsFunction_v(T)   IsFunction<T>::value
-#define NotFunction_v(T)  (!IsFunction<T>::value)
+#define IsFunctionV(T)   (IsFunction<T>::value)
+#define NotFunctionV(T)  (!IsFunction<T>::value)
 	} 
 }

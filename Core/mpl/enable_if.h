@@ -10,9 +10,9 @@ namespace Aurora3D
 		template<typename T> struct DisableIf<false, T> { typedef T type; };
 
 		template<bool B,typename T> 
-		using EnableIf_t = typename EnableIf<B, T>::type;
+		using EnableIfT = typename EnableIf<B, T>::type;
 
 		template<bool B, typename T>
-		using DisableIf_t = typename DisableIf<B, T>::type;
+		using DisableIfT = typename DisableIf<B, T>::type;
 	}
 }

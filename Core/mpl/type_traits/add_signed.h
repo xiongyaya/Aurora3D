@@ -18,6 +18,6 @@ namespace Aurora3D
 #undef  ADD_SIGNED
 		}
 		template<typename T> struct AddSigned :public detail::AddSignedHelper<typename UnderlyingType<T>::type> {};
-		template<typename T> using AddSigned_t = typename AddSigned<T>::type;
+		template<typename T> using AddSignedT = typename AddSigned<T>::type;
 	}
 }

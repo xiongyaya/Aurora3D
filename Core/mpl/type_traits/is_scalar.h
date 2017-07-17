@@ -11,7 +11,7 @@ namespace Aurora3D
 	namespace mpl
 	{
 		template<typename T> struct IsScalar :public Or< IsFundamental<T>, IsPointer<T>, IsMemberPtr<T>, IsEnum<T>> {};
-#define IsScalar_v(T)   IsScalar<T>::value
-#define NotScalar_v(T)  (!IsScalar<T>::value)
+#define IsScalarV(T)   (IsScalar<T>::value)
+#define NotScalarV(T)  (!IsScalar<T>::value)
 	}
 } 

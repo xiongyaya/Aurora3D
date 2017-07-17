@@ -1,7 +1,7 @@
 #pragma once
 
 #include<Core/type.h>
-#include<Core/mpl/sizet_.h>
+#include<Core/mpl/int_.h>
 
 #if defined(AURORA3D_COMPILER_MSVC)
 #pragma warning(push)
@@ -44,37 +44,37 @@ namespace Aurora3D
 				Cache_t    cache;
 			};
 
-			template<size_t Align, size_t Size>
+			template<int64 Align, int64 Size>
 			struct AlignBase_t
 			{
 				alignas(Align) uint8 pad[Size];
 			};
 
-			template<size_t Size, size_t Align, typename T, bool FoundSuitableAlign> struct AlignHelper;
-			template<size_t Size, size_t Align, typename T> struct AlignHelper<Size, Align, T, true > { typedef typename AlignBase_t<Align, Size> type; };
-			template<size_t Size, size_t Align>             struct AlignHelper<Size, Align, Cache_t, false> { typedef typename AlignBase_t<Align, Size> type; };
-			template<size_t Size, size_t Align>             struct AlignHelper<Size, Align, Vector4x2_t, false> { typedef typename AlignHelper<Size, Align, Cache_t, Align <= alignof(Cache_t)>::type type; };
-			template<size_t Size, size_t Align>             struct AlignHelper<Size, Align, Vector4_t, false> { typedef typename AlignHelper<Size, Align, Vector4x2_t, Align <= alignof(Vector4x2_t)>::type type;};
-			template<size_t Size, size_t Align>             struct AlignHelper<Size, Align, hfloat, false> { typedef typename AlignHelper<Size, Align, Vector4_t, Align <= alignof(Vector4_t)>::type type; };
-			template<size_t Size, size_t Align>             struct AlignHelper<Size, Align, int64, false> { typedef typename AlignHelper<Size, Align, hfloat, Align <= alignof(hfloat)>::type type; };
-			template<size_t Size, size_t Align>             struct AlignHelper<Size, Align, int32, false> { typedef typename AlignHelper<Size, Align, int64, Align <= alignof(int64)>::type  type; };
-			template<size_t Size, size_t Align>             struct AlignHelper<Size, Align, int16, false> { typedef typename AlignHelper<Size, Align, int32, Align <= alignof(int32)>::type  type; };
-			template<size_t Size, size_t Align>             struct AlignHelper<Size, Align, int8, false> { typedef typename AlignHelper<Size, Align, int16, Align <= alignof(int16)>::type  type; };
+			template<int64 Size, int64 Align, typename T, bool FoundSuitableAlign> struct AlignHelper;
+			template<int64 Size, int64 Align, typename T> struct AlignHelper<Size, Align, T, true > { typedef typename AlignBase_t<Align, Size> type; };
+			template<int64 Size, int64 Align>             struct AlignHelper<Size, Align, Cache_t, false> { typedef typename AlignBase_t<Align, Size> type; };
+			template<int64 Size, int64 Align>             struct AlignHelper<Size, Align, Vector4x2_t, false> { typedef typename AlignHelper<Size, Align, Cache_t, Align <= alignof(Cache_t)>::type type; };
+			template<int64 Size, int64 Align>             struct AlignHelper<Size, Align, Vector4_t, false> { typedef typename AlignHelper<Size, Align, Vector4x2_t, Align <= alignof(Vector4x2_t)>::type type;};
+			template<int64 Size, int64 Align>             struct AlignHelper<Size, Align, hfloat, false> { typedef typename AlignHelper<Size, Align, Vector4_t, Align <= alignof(Vector4_t)>::type type; };
+			template<int64 Size, int64 Align>             struct AlignHelper<Size, Align, int64, false> { typedef typename AlignHelper<Size, Align, hfloat, Align <= alignof(hfloat)>::type type; };
+			template<int64 Size, int64 Align>             struct AlignHelper<Size, Align, int32, false> { typedef typename AlignHelper<Size, Align, int64, Align <= alignof(int64)>::type  type; };
+			template<int64 Size, int64 Align>             struct AlignHelper<Size, Align, int16, false> { typedef typename AlignHelper<Size, Align, int32, Align <= alignof(int32)>::type  type; };
+			template<int64 Size, int64 Align>             struct AlignHelper<Size, Align, int8, false> { typedef typename AlignHelper<Size, Align, int16, Align <= alignof(int16)>::type  type; };
 		} //detail
 
 
 		  //decare a aligned storage from length and alignment
-		template<size_t Size, size_t Align> struct AlignedStorage :public detail::AlignHelper<Size, Align, int8, (Align <= alignof(int8)) >
+		template<int64 Size, int64 Align> struct AlignedStorage :public detail::AlignHelper<Size, Align, int8, (Align <= alignof(int8)) >
 		{
 			static constexpr int value = alignof(type);
 		};
-		template<size_t Size, size_t Align> using  AlignedStorage_t = typename AlignedStorage<Size, Align>::type;
-#define AlignedStorage_v(Size, Align) (AlignedStorage<Size,Align>::value)
+		template<int64 Size, int64 Align> using  AlignedStorageT = typename AlignedStorage<Size, Align>::type;
+#define AlignedStorageV(Size, Align) (AlignedStorage<Size,Align>::value)
 
 		//simplified declare
 		template<typename T>               struct AlignedTypeStorage :public AlignedStorage<sizeof(T), alignof(T)> {};
-		template<typename T>               using  AlignedTypeStorage_t = typename AlignedTypeStorage<T>::type;
-#define AlignedTypeStorage_v(T) (AlignedTypeStorage<T>::value)
+		template<typename T>               using  AlignedTypeStorageT = typename AlignedTypeStorage<T>::type;
+#define AlignedTypeStorageV(T) (AlignedTypeStorage<T>::value)
 	}
 }
 

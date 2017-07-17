@@ -8,7 +8,7 @@ namespace Aurora3D
 	{
 		template<typename T> struct IsClass:public Bool_<__is_class(T)>{};
 		
-#define IsClass_v(T)         IsClass<T>::value
-#define NotClassOf_v(T)       (!IsClass<T>::value)
+#define IsClassV(T)         (IsClass<T>::value)
+#define NotClassOfV(T)      (!IsClass<T>::value)
 	}
 }
