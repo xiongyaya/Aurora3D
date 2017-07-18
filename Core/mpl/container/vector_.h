@@ -98,7 +98,10 @@ namespace Aurora3D
 			};
 
 			// *it
-			struct deref :public VectorAt<S,P> {};
+			struct deref :public VectorAt<S,P> 
+			{
+				static_assert( P < LengthV(S) && P>=0, "invalid vactor iterator.");
+			};
 
 		};
 

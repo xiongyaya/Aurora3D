@@ -84,8 +84,8 @@ namespace Aurora3D
 		using VectorPopBackT = typename VectorPopBack<S>::type;
 
 		//reverse elements of S
-		template<typename S> struct VectorReverse;
+		//template<typename S> struct VectorReverse;
 		template<typename S>
-		using VectorReverseT = typename VectorReverse<S>::type;
+		using VectorReverseT = typename S::reverse;
 	}
 }

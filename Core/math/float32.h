@@ -70,7 +70,7 @@ namespace Aurora3D
 			struct
 			{
 				uint32 tail : 23;   //hide 1.x and store x
-				uint32 exp : 8;    //range -(2^7-1) ~(2^7) (+offset 2^7-1 => 0~2^8-1)
+				uint32 exp : 8;     //range -(2^7-1) ~(2^7) (+offset 2^7-1 => 0~2^8-1)
 				uint32 sign : 1;    //0 positive, 1 negtive
 			} component;
 		};

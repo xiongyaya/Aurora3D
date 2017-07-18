@@ -36,6 +36,10 @@ using namespace std;
 #include<Core/mpl/container/vector_front_op.h>
 #include<Core/mpl/container/set_.h>
 
+#include<Core/mpl/iterator/begin.h>
+#include<Core/mpl/iterator/deref.h>
+#include<Core/mpl/iterator/end.h>
+
 #include"print_type.h"
 using namespace Aurora3D::mpl;
 
@@ -72,6 +76,8 @@ inline void TestMpl()
 	typedef typename VectorForePart<vector10, 2>::type vector11;
 	typedef typename VectorPostPart<vector10, 2>::type vector12;
 	typedef typename VectorAppend<vector11, vector12>::type vector13;
+	typedef Type<VectorInsert<vector13, 0, float, double, long long>> vector14;
+	typedef VectorReverseT<vector14> vector15;
 
 	NormalTypeName<vector1>{}("original-");
 	NormalTypeName<vector2>{}("push back char-");
@@ -86,19 +92,11 @@ inline void TestMpl()
 	NormalTypeName<vector11>{}("[0,2)  part-");
 	NormalTypeName<vector12>{}("[2,end) part-");
 	NormalTypeName<vector13>{}("append vector11 and vector12");
+	NormalTypeName<vector14>{}("inserted 3 elem at 0-");
+	NormalTypeName<vector15>{}("reverse-");
 	NormalTypeName<elem1>{}("at 1-");
-	
-
-	typedef Set_<int, char> set2;
-	Set_<int> a;
-	//std::string
-
-
-	cout << "==== Test Macro Define ====" << endl;
-#define ATEST 20
-	cout << ATEST << endl;
-#define ATEST 30
-	cout << ATEST << endl;
+	NormalTypeName<Type<Deref<Begin<vector15>>>>{}("iterator begin-");
+	NormalTypeName<Type<Deref<End<vector15>>>>{}("iterator begin-");
 
 
 	cout << "==== HasInnerType ====" << endl;

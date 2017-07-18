@@ -38,10 +38,9 @@ namespace Aurora3D
 			typedef ForePart forePart;
 			typedef ListIterator<PostPart, S, ForePart> type;
 
-			struct next : public ListIterator<NextT<PostPart>, S, Node_<TypeT<PostPart>, ForePart>> {};
+			struct next : public ListIterator<Next<PostPart>, S, Node_<Type<PostPart>, ForePart>> {};
 
-			struct deref : public { typedef TypeT<PostPart> type;  };
-
+			struct deref : public { typedef Type<PostPart> type;  };
 		};
 	}
 }
